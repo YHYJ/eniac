@@ -9,4 +9,5 @@ require (
 	github.com/shirou/gopsutil v3.21.11+incompatible // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/zcalusic/sysinfo v0.9.5 // indirect
+	golang.org/x/sys v0.7.0 // indirect
 )
