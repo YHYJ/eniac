@@ -13,6 +13,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/yhyj/eniac/function"
 )
 
 // 在没有任何子命令的情况下调用时的基本命令
@@ -33,9 +34,11 @@ func Execute() {
 	}
 }
 
-func init() {
-	// 定义全局Flag
-	rootCmd.Flags().BoolP("help", "h", false, "Help for Eniac")
+var varHome = function.GetVariable("HOME")
+var cfgFile = varHome + "/.config/eniac/config.toml"
 
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.scleaner.yaml)")
+func init() {
+	rootCmd.Flags().BoolP("help", "h", false, "help for Eniac")
+
+	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", cfgFile, "Config file")
 }
