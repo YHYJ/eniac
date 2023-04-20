@@ -23,6 +23,17 @@ var getCmd = &cobra.Command{
 	Long:  `Get system information`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// 获取配置项
+		cfgFile, _ := cmd.Flags().GetString("config")
+		confTree, err := function.GetTomlConfig(cfgFile)
+		dataUnit := ""
+		percentUnit := ""
+		if err != nil {
+			fmt.Printf("\x1b[36;1m%s\x1b[0m\n", err)
+		} else {
+			// 获取配置项
+			dataUnit = confTree.Get("memory.data_unit").(string)
+			percentUnit = confTree.Get("memory.percent_unit").(string)
+		}
 		// 解析参数执行对应函数
 		loadFlag, _ := cmd.Flags().GetBool("load")
 		memFlag, _ := cmd.Flags().GetBool("mem")
@@ -33,11 +44,11 @@ var getCmd = &cobra.Command{
 			fmt.Println(loadInfo)
 		}
 		if memFlag {
-			memInfo, _ := function.GetMemoryInfo()
+			memInfo, _ := function.GetMemoryInfo(dataUnit, percentUnit)
 			fmt.Println(memInfo)
 		}
 		if swapFlag {
-			swapInfo, _ := function.GetSwapInfo()
+			swapInfo, _ := function.GetSwapInfo(dataUnit)
 			fmt.Println(swapInfo)
 		}
 		if userFlag {
@@ -48,11 +59,11 @@ var getCmd = &cobra.Command{
 }
 
 func init() {
-	getCmd.Flags().BoolP("load", "l", false, "Get load info")
-	getCmd.Flags().BoolP("mem", "m", false, "Get memory info")
-	getCmd.Flags().BoolP("swap", "s", false, "Get swap info")
-	getCmd.Flags().BoolP("user", "u", false, "Get user info")
+	getCmd.Flags().BoolP("load", "l", false, "Get load information")
+	getCmd.Flags().BoolP("mem", "m", false, "Get memory information")
+	getCmd.Flags().BoolP("swap", "s", false, "Get swap information")
+	getCmd.Flags().BoolP("user", "u", false, "Get user information")
 
-	getCmd.Flags().BoolP("help", "h", false, "Help for get")
+	getCmd.Flags().BoolP("help", "h", false, "help for get")
 	rootCmd.AddCommand(getCmd)
 }
