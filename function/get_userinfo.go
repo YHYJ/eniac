@@ -29,5 +29,5 @@ func GetUserInfo() (userInfo UserInfoStruct, err error) {
 	userInfo.UserGid = info.Gid
 	userInfo.UserHomeDir = info.HomeDir
 
-	return userInfo, nil
+	return userInfo, err
 }

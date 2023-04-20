@@ -25,5 +25,5 @@ func GetLoadInfo() (loadInfo LoadInfoStruct, err error) {
 	loadInfo.Load5 = info.Load5
 	loadInfo.Load15 = info.Load15
 
-	return loadInfo, nil
+	return loadInfo, err
 }

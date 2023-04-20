@@ -49,6 +49,7 @@ func GetMemoryInfo(dataUnit string, percentUnit string) (memoryInfo MemoryInfoSt
 	memoryInfo.MemShared, memoryInfo.MemSharedUnit = dataUnitConvert("B", dataUnit, float64(memInfo.Shared))
 	memoryInfo.MemBuffCache, memoryInfo.MemBuffCacheUnit = dataUnitConvert("B", dataUnit, float64(memInfo.Buffers+memInfo.Cached))
 	memoryInfo.MemAvail, memoryInfo.MemAvailUnit = dataUnitConvert("B", dataUnit, float64(memInfo.Available))
+
 	return memoryInfo, err
 }
 
@@ -56,5 +57,6 @@ func GetMemoryInfo(dataUnit string, percentUnit string) (memoryInfo MemoryInfoSt
 func GetSwapInfo(dataUnit string) (swapInfo SwapInfoStruct, err error) {
 	swapInfo.SwapTotal, swapInfo.SwapTotalUnit = dataUnitConvert("B", dataUnit, float64(memInfo.SwapTotal))
 	swapInfo.SwapFree, swapInfo.SwapFreeUnit = dataUnitConvert("B", dataUnit, float64(memInfo.SwapFree))
+
 	return swapInfo, err
 }
