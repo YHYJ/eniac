@@ -19,4 +19,4 @@
 
 ---
 
-A system information robot
+一个系统交互工具

@@ -18,8 +18,8 @@ import (
 // 在没有任何子命令的情况下调用时的基本命令
 var rootCmd = &cobra.Command{
 	Use:   "eniac",
-	Short: "用于查询系统信息",
-	Long:  `Eniac是一个用于查询系统信息的命令行工具`,
+	Short: "用于系统交互",
+	Long:  `Eniac是一个系统交互命令行工具`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
