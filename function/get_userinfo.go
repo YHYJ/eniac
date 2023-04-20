@@ -22,12 +22,12 @@ type UserInfoStruct struct {
 
 // GetUserInfo 获取用户信息
 func GetUserInfo() (userInfo UserInfoStruct, err error) {
-	user, _ := user.Current()
-	userInfo.User = user.Name
-	userInfo.UserName = user.Username
-	userInfo.UserUid = user.Uid
-	userInfo.UserGid = user.Gid
-	userInfo.UserHomeDir = user.HomeDir
+	info, _ := user.Current()
+	userInfo.User = info.Name
+	userInfo.UserName = info.Username
+	userInfo.UserUid = info.Uid
+	userInfo.UserGid = info.Gid
+	userInfo.UserHomeDir = info.HomeDir
 
 	return userInfo, nil
 }
