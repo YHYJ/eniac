@@ -12,6 +12,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/pelletier/go-toml"
 	"github.com/spf13/cobra"
 	"github.com/yhyj/eniac/function"
 	"github.com/zcalusic/sysinfo"
@@ -26,78 +27,78 @@ var getCmd = &cobra.Command{
 		// 读取配置文件
 		cfgFile, _ := cmd.Flags().GetString("config")
 		confTree, err := function.GetTomlConfig(cfgFile)
-		var dataUnit, percentUnit string
 		if err != nil {
 			fmt.Printf("\x1b[36;1m%s\x1b[0m\n", err)
 		} else {
 			// 获取配置项
-			dataUnit = confTree.Get("memory.data_unit").(string)
-			percentUnit = confTree.Get("memory.percent_unit").(string)
-		}
-		// 获取系统信息（集中获取一次后分配到不同的参数）
-		var sysInfo sysinfo.SysInfo
-		sysInfo.GetSysInfo()
-		// 解析参数
-		biosFlag, _ := cmd.Flags().GetBool("bios")
-		boardFlag, _ := cmd.Flags().GetBool("board")
-		cpuFlag, _ := cmd.Flags().GetBool("cpu")
-		loadFlag, _ := cmd.Flags().GetBool("load")
-		memFlag, _ := cmd.Flags().GetBool("mem")
-		osFlag, _ := cmd.Flags().GetBool("os")
-		procsFlag, _ := cmd.Flags().GetBool("procs")
-		productFlag, _ := cmd.Flags().GetBool("product")
-		storageFlag, _ := cmd.Flags().GetBool("storage")
-		swapFlag, _ := cmd.Flags().GetBool("swap")
-		timeFlag, _ := cmd.Flags().GetBool("time")
-		userFlag, _ := cmd.Flags().GetBool("user")
-		// 执行对应函数
-		if biosFlag {
-			biosInfo, _ := function.GetBIOSInfo(sysInfo)
-			fmt.Println(biosInfo)
-		}
-		if boardFlag {
-			boardInfo, _ := function.GetBoardInfo(sysInfo)
-			fmt.Println(boardInfo)
-		}
-		if cpuFlag {
-			cpuInfo, _ := function.GetCPUInfo(sysInfo)
-			fmt.Println(cpuInfo)
-		}
-		if loadFlag {
-			loadInfo, _ := function.GetLoadInfo()
-			fmt.Println(loadInfo)
-		}
-		if memFlag {
-			memInfo, _ := function.GetMemoryInfo(dataUnit, percentUnit)
-			fmt.Println(memInfo)
-		}
-		if osFlag {
-			osInfo, _ := function.GetOSInfo(sysInfo)
-			fmt.Println(osInfo)
-		}
-		if procsFlag {
-			procsInfo, _ := function.GetProcsInfo()
-			fmt.Println(procsInfo)
-		}
-		if productFlag {
-			productInfo, _ := function.GetProductInfo(sysInfo)
-			fmt.Println(productInfo)
-		}
-		if storageFlag {
-			storageInfo, _ := function.GetStorageInfo(sysInfo)
-			fmt.Println(storageInfo)
-		}
-		if swapFlag {
-			swapInfo, _ := function.GetSwapInfo(dataUnit)
-			fmt.Println(swapInfo)
-		}
-		if timeFlag {
-			timeInfo, _ := function.GetTimeInfo()
-			fmt.Println(timeInfo)
-		}
-		if userFlag {
-			userInfo, _ := function.GetUserInfo()
-			fmt.Println(userInfo)
+			memoryCfg := confTree.Get("memory").(*toml.Tree)
+			dataUnit := memoryCfg.Get("data_unit").(string)
+			percentUnit := memoryCfg.Get("percent_unit").(string)
+			// 获取系统信息（集中获取一次后分配到不同的参数）
+			var sysInfo sysinfo.SysInfo
+			sysInfo.GetSysInfo()
+			// 解析参数
+			biosFlag, _ := cmd.Flags().GetBool("bios")
+			boardFlag, _ := cmd.Flags().GetBool("board")
+			cpuFlag, _ := cmd.Flags().GetBool("cpu")
+			loadFlag, _ := cmd.Flags().GetBool("load")
+			memFlag, _ := cmd.Flags().GetBool("mem")
+			osFlag, _ := cmd.Flags().GetBool("os")
+			procsFlag, _ := cmd.Flags().GetBool("procs")
+			productFlag, _ := cmd.Flags().GetBool("product")
+			storageFlag, _ := cmd.Flags().GetBool("storage")
+			swapFlag, _ := cmd.Flags().GetBool("swap")
+			timeFlag, _ := cmd.Flags().GetBool("time")
+			userFlag, _ := cmd.Flags().GetBool("user")
+			// 执行对应函数
+			if biosFlag {
+				biosInfo, _ := function.GetBIOSInfo(sysInfo)
+				fmt.Println(biosInfo)
+			}
+			if boardFlag {
+				boardInfo, _ := function.GetBoardInfo(sysInfo)
+				fmt.Println(boardInfo)
+			}
+			if cpuFlag {
+				cpuInfo, _ := function.GetCPUInfo(sysInfo)
+				fmt.Println(cpuInfo)
+			}
+			if loadFlag {
+				loadInfo, _ := function.GetLoadInfo()
+				fmt.Println(loadInfo)
+			}
+			if memFlag {
+				memInfo, _ := function.GetMemoryInfo(dataUnit, percentUnit)
+				fmt.Println(memInfo)
+			}
+			if osFlag {
+				osInfo, _ := function.GetOSInfo(sysInfo)
+				fmt.Println(osInfo)
+			}
+			if procsFlag {
+				procsInfo, _ := function.GetProcsInfo()
+				fmt.Println(procsInfo)
+			}
+			if productFlag {
+				productInfo, _ := function.GetProductInfo(sysInfo)
+				fmt.Println(productInfo)
+			}
+			if storageFlag {
+				storageInfo, _ := function.GetStorageInfo(sysInfo)
+				fmt.Println(storageInfo)
+			}
+			if swapFlag {
+				swapInfo, _ := function.GetSwapInfo(dataUnit)
+				fmt.Println(swapInfo)
+			}
+			if timeFlag {
+				timeInfo, _ := function.GetTimeInfo()
+				fmt.Println(timeInfo)
+			}
+			if userFlag {
+				userInfo, _ := function.GetUserInfo()
+				fmt.Println(userInfo)
+			}
 		}
 	},
 }
