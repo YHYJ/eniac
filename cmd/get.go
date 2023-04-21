@@ -18,11 +18,10 @@ import (
 	"github.com/zcalusic/sysinfo"
 )
 
-// getCmd represents the get command
 var getCmd = &cobra.Command{
 	Use:   "get",
 	Short: "Get system information",
-	Long:  `Get system information`,
+	Long:  `Get system information.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// 读取配置文件
 		cfgFile, _ := cmd.Flags().GetString("config")

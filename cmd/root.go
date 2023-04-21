@@ -16,17 +16,15 @@ import (
 	"github.com/yhyj/eniac/function"
 )
 
-// 在没有任何子命令的情况下调用时的基本命令
 var rootCmd = &cobra.Command{
 	Use:   "eniac",
-	Short: "for system interaction",
-	Long:  `Eniac is a system interactive command line tool`,
+	Short: "For system interaction",
+	Long:  `Eniac is a system interactive command line tool.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
 }
 
-// 由main.main调用
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
