@@ -37,7 +37,9 @@ var getCmd = &cobra.Command{
 			memoryCfg := confTree.Get("memory").(*toml.Tree)
 			memoryDataUnit := memoryCfg.Get("data_unit").(string)
 			memoryPercentUnit := memoryCfg.Get("percent_unit").(string)
-			// 获取系统信息（集中获取一次后分配到不同的参数）
+			// 获取genealogy配置项
+			// genealogyCfg := confTree.Get("genealogy").(*toml.Tree)
+			// 采集系统信息（集中采集一次后分配到不同的参数）
 			var sysInfo sysinfo.SysInfo
 			sysInfo.GetSysInfo()
 			// 解析参数
