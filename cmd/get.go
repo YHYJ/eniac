@@ -30,10 +30,13 @@ var getCmd = &cobra.Command{
 		if err != nil {
 			fmt.Printf("\x1b[36;1m%s\x1b[0m\n", err)
 		} else {
-			// 获取配置项
+			// 获取CPU配置项
+			cpuCfg := confTree.Get("cpu").(*toml.Tree)
+			cpuCacheUnit := cpuCfg.Get("cache_unit").(string)
+			// 获取Memory配置项
 			memoryCfg := confTree.Get("memory").(*toml.Tree)
-			dataUnit := memoryCfg.Get("data_unit").(string)
-			percentUnit := memoryCfg.Get("percent_unit").(string)
+			memoryDataUnit := memoryCfg.Get("data_unit").(string)
+			memoryPercentUnit := memoryCfg.Get("percent_unit").(string)
 			// 获取系统信息（集中获取一次后分配到不同的参数）
 			var sysInfo sysinfo.SysInfo
 			sysInfo.GetSysInfo()
@@ -60,7 +63,7 @@ var getCmd = &cobra.Command{
 				fmt.Println(boardInfo)
 			}
 			if cpuFlag {
-				cpuInfo, _ := function.GetCPUInfo(sysInfo)
+				cpuInfo, _ := function.GetCPUInfo(sysInfo, cpuCacheUnit)
 				fmt.Println(cpuInfo)
 			}
 			if loadFlag {
@@ -68,7 +71,7 @@ var getCmd = &cobra.Command{
 				fmt.Println(loadInfo)
 			}
 			if memFlag {
-				memInfo, _ := function.GetMemoryInfo(dataUnit, percentUnit)
+				memInfo, _ := function.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
 				fmt.Println(memInfo)
 			}
 			if osFlag {
@@ -88,7 +91,7 @@ var getCmd = &cobra.Command{
 				fmt.Println(storageInfo)
 			}
 			if swapFlag {
-				swapInfo, _ := function.GetSwapInfo(dataUnit)
+				swapInfo, _ := function.GetSwapInfo(memoryDataUnit)
 				fmt.Println(swapInfo)
 			}
 			if timeFlag {
