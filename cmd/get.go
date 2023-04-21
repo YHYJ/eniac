@@ -26,8 +26,7 @@ var getCmd = &cobra.Command{
 		// 读取配置文件
 		cfgFile, _ := cmd.Flags().GetString("config")
 		confTree, err := function.GetTomlConfig(cfgFile)
-		dataUnit := ""
-		percentUnit := ""
+		var dataUnit, percentUnit string
 		if err != nil {
 			fmt.Printf("\x1b[36;1m%s\x1b[0m\n", err)
 		} else {
