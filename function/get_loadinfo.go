@@ -11,19 +11,13 @@ package function
 
 import "github.com/shirou/gopsutil/load"
 
-// LoadInfoStruct 负载信息结构体
-type LoadInfoStruct struct {
-	Load1  float64 `json:"load1"`  // 1分钟平均负载
-	Load5  float64 `json:"load5"`  // 5分钟平均负载
-	Load15 float64 `json:"load15"` // 15分钟平均负载
-}
-
 // GetLoadInfo 获取负载信息
-func GetLoadInfo() (loadInfo LoadInfoStruct, err error) {
+func GetLoadInfo() (loadInfo map[string]interface{}, err error) {
 	info, _ := load.Avg()
-	loadInfo.Load1 = info.Load1
-	loadInfo.Load5 = info.Load5
-	loadInfo.Load15 = info.Load15
+	loadInfo = make(map[string]interface{})
+	loadInfo["Load1"] = info.Load1   // 1分钟内的负载
+	loadInfo["Load5"] = info.Load5   // 5分钟内的负载
+	loadInfo["Load15"] = info.Load15 // 15分钟内的负载
 
 	return loadInfo, err
 }

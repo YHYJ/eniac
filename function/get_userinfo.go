@@ -11,23 +11,15 @@ package function
 
 import "os/user"
 
-// UserInfoStruct 用户信息结构体
-type UserInfoStruct struct {
-	User        string `json:"user"`          // 当前用户
-	UserName    string `json:"user_name"`     // 当前用户名称
-	UserUid     string `json:"user_uid"`      // 当前用户uid
-	UserGid     string `json:"user_gid"`      // 当前用户gid
-	UserHomeDir string `json:"user_home_dir"` // 当前用户主目录
-}
-
 // GetUserInfo 获取用户信息
-func GetUserInfo() (userInfo UserInfoStruct, err error) {
+func GetUserInfo() (userInfo map[string]interface{}, err error) {
 	info, _ := user.Current()
-	userInfo.User = info.Name
-	userInfo.UserName = info.Username
-	userInfo.UserUid = info.Uid
-	userInfo.UserGid = info.Gid
-	userInfo.UserHomeDir = info.HomeDir
+	userInfo = make(map[string]interface{})
+	userInfo["User"] = info.Name           // 用户昵称
+	userInfo["UserName"] = info.Username   // 用户名
+	userInfo["UserUid"] = info.Uid         // 用户ID
+	userInfo["UserGid"] = info.Gid         // 用户组ID
+	userInfo["UserHomeDir"] = info.HomeDir // 用户主目录
 
 	return userInfo, err
 }
