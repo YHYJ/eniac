@@ -10,6 +10,8 @@ Description: 获取系统信息
 package function
 
 import (
+	"fmt"
+
 	"github.com/shirou/gopsutil/host"
 	"github.com/zcalusic/sysinfo"
 )
@@ -65,8 +67,8 @@ type StorageInfoStruct struct {
 
 // TimeInfoStruct 时间信息结构体
 type TimeInfoStruct struct {
-	BootTime uint64 `json:"boot_time"` // 系统启动时间
-	Uptime   uint64 `json:"uptime"`    // 系统运行时间
+	BootTime string `json:"boot_time"` // 系统启动时间
+	Uptime   string `json:"uptime"`    // 系统运行时间
 }
 
 var hostInfo, _ = host.Info()
@@ -136,8 +138,10 @@ func GetStorageInfo(sysInfo sysinfo.SysInfo) (storageInfo StorageInfoStruct, err
 
 // GetTimeInfo 获取时间信息
 func GetTimeInfo() (timeInfo TimeInfoStruct, err error) {
-	timeInfo.BootTime = hostInfo.BootTime
-	timeInfo.Uptime = hostInfo.Uptime
+	timeInfo.BootTime = Uint2TimeString(hostInfo.BootTime)
+	day, hour, minute, second := Second2DayHourMinuteSecond(hostInfo.Uptime)
+	result := fmt.Sprintf("%vd %vh %vm %vs", day, hour, minute, second)
+	timeInfo.Uptime = result
 
 	return timeInfo, err
 }

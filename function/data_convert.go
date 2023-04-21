@@ -9,7 +9,24 @@ Description: 数据转换（包括单位和格式）
 
 package function
 
-import "strings"
+import (
+	"strings"
+	"time"
+)
+
+// 秒转换为天、小时、分钟、秒
+func Second2DayHourMinuteSecond(second uint64) (uint64, uint64, uint64, uint64) {
+	day := second / 86400
+	hour := (second - day*86400) / 3600
+	minute := (second - day*86400 - hour*3600) / 60
+	second = second - day*86400 - hour*3600 - minute*60
+	return day, hour, minute, second
+}
+
+// uint64格式的时间戳转换为字符串格式
+func Uint2TimeString(timeStamp uint64) string {
+	return time.Unix(int64(timeStamp), 0).Format("2006-01-02 15:04:05")
+}
 
 // 最大化字符串的第一个字母
 func upperStringFirstChar(str string) string {
