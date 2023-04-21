@@ -1,5 +1,5 @@
 /*
-File: get_memswapinfo.go
+File: get_memory_swap_info.go
 Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2023-04-20 11:35:40

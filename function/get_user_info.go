@@ -1,5 +1,5 @@
 /*
-File: get_userinfo.go
+File: get_user_info.go
 Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2023-04-20 10:37:57

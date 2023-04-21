@@ -1,5 +1,5 @@
 /*
-File: get_systeminfo.go
+File: get_system_info.go
 Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2023-04-20 13:37:40

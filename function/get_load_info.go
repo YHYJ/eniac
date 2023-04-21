@@ -1,5 +1,5 @@
 /*
-File: get_loadinfo.go
+File: get_load_info.go
 Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2023-04-20 11:20:33
