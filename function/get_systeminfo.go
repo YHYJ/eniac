@@ -24,6 +24,7 @@ type BIOSInfoStruct struct {
 	BIOSVersion string `json:"bios_version"` // bios版本
 	BIOSDate    string `json:"bios_date"`    // bios日期
 }
+
 // GetBIOSInfo 获取BIOS信息
 func GetBIOSInfo(sysInfo sysinfo.SysInfo) (biosInfo BIOSInfoStruct, err error) {
 	biosInfo.BIOSVendor = sysInfo.BIOS.Vendor
@@ -39,6 +40,7 @@ type BoardInfoStruct struct {
 	BoardName    string `json:"board_name"`    // 主板名称
 	BoardVersion string `json:"board_version"` // 主板版本
 }
+
 // GetBoardInfo 获取主板信息
 func GetBoardInfo(sysInfo sysinfo.SysInfo) (boardInfo BoardInfoStruct, err error) {
 	boardInfo.BoardVendor = sysInfo.Board.Vendor
@@ -50,19 +52,21 @@ func GetBoardInfo(sysInfo sysinfo.SysInfo) (boardInfo BoardInfoStruct, err error
 
 // CPUInfoStruct CPU信息结构体
 type CPUInfoStruct struct {
-	CPUModel   string `json:"cpu_model"`   // cpu型号
-	CPUNumber  uint   `json:"cpu_number"`  // cpu数量
-	CPUCores   uint   `json:"cpu_cores"`   // cpu核心数
-	CPUThreads uint   `json:"cpu_threads"` // cpu线程数
-	CPUCache   uint   `json:"cpu_cache"`   // cpu缓存
+	CPUModel     string  `json:"cpu_model"`      // cpu型号
+	CPUNumber    uint    `json:"cpu_number"`     // cpu数量
+	CPUCores     uint    `json:"cpu_cores"`      // cpu核心数
+	CPUThreads   uint    `json:"cpu_threads"`    // cpu线程数
+	CPUCache     float64 `json:"cpu_cache"`      // cpu缓存
+	CPUCacheUnit string  `json:"cpu_cache_unit"` // cpu缓存单位
 }
+
 // GetCPUInfo 获取CPU信息
-func GetCPUInfo(sysInfo sysinfo.SysInfo) (cpuInfo CPUInfoStruct, err error) {
+func GetCPUInfo(sysInfo sysinfo.SysInfo, dataUnit string) (cpuInfo CPUInfoStruct, err error) {
 	cpuInfo.CPUModel = sysInfo.CPU.Model
 	cpuInfo.CPUNumber = sysInfo.CPU.Cpus
 	cpuInfo.CPUCores = sysInfo.CPU.Cores
 	cpuInfo.CPUThreads = sysInfo.CPU.Threads
-	cpuInfo.CPUCache = sysInfo.CPU.Cache
+	cpuInfo.CPUCache, cpuInfo.CPUCacheUnit = dataUnitConvert("KB", dataUnit, float64(sysInfo.CPU.Cache))
 
 	return cpuInfo, err
 }
@@ -76,6 +80,7 @@ type OSInfoStruct struct {
 	Hostname string `json:"hostname"`  // 主机名
 	TimeZone string `json:"time_zone"` // 时区
 }
+
 // GetOSInfo 获取系统信息
 func GetOSInfo(sysInfo sysinfo.SysInfo) (osInfo OSInfoStruct, err error) {
 	osInfo.OS = upperStringFirstChar(sysInfo.OS.Name)
@@ -92,6 +97,7 @@ func GetOSInfo(sysInfo sysinfo.SysInfo) (osInfo OSInfoStruct, err error) {
 type ProcsInfoStruct struct {
 	Procs uint64 `json:"procs"` // 进程数
 }
+
 // GetProcsInfo 获取进程信息
 func GetProcsInfo() (procsInfo ProcsInfoStruct, err error) {
 	procsInfo.Procs = hostInfo.Procs
@@ -104,6 +110,7 @@ type ProductInfoStruct struct {
 	ProductVendor string `json:"product_vendor"` // 产品厂商
 	ProductName   string `json:"product_name"`   // 产品名称
 }
+
 // GetProductInfo 获取产品信息
 func GetProductInfo(sysInfo sysinfo.SysInfo) (productInfo ProductInfoStruct, err error) {
 	productInfo.ProductVendor = sysInfo.Product.Vendor
@@ -116,6 +123,7 @@ func GetProductInfo(sysInfo sysinfo.SysInfo) (productInfo ProductInfoStruct, err
 type StorageInfoStruct struct {
 	StorageList []sysinfo.StorageDevice `json:"storage_list"` // 存储设备列表
 }
+
 // GetStorageInfo 获取存储设备信息
 func GetStorageInfo(sysInfo sysinfo.SysInfo) (storageInfo StorageInfoStruct, err error) {
 	storageInfo.StorageList = sysInfo.Storage
@@ -128,6 +136,7 @@ type TimeInfoStruct struct {
 	BootTime string `json:"boot_time"` // 系统启动时间
 	Uptime   string `json:"uptime"`    // 系统运行时间
 }
+
 // GetTimeInfo 获取时间信息
 func GetTimeInfo() (timeInfo TimeInfoStruct, err error) {
 	timeInfo.BootTime = Uint2TimeString(hostInfo.BootTime)
