@@ -41,11 +41,12 @@ func GetBoardInfo(sysInfo sysinfo.SysInfo) (boardInfo map[string]interface{}, er
 // GetCPUInfo 获取CPU信息
 func GetCPUInfo(sysInfo sysinfo.SysInfo, dataUnit string) (cpuInfo map[string]interface{}, err error) {
 	cpuInfo = make(map[string]interface{})
-	cpuInfo["CPUModel"] = sysInfo.CPU.Model                                                                    // cpu型号
-	cpuInfo["CPUNumber"] = sysInfo.CPU.Cpus                                                                    // cpu数量
-	cpuInfo["CPUCores"] = sysInfo.CPU.Cores                                                                    // cpu核心数
-	cpuInfo["CPUThreads"] = sysInfo.CPU.Threads                                                                // cpu线程数
-	cpuInfo["CPUCache"], cpuInfo["CPUCacheUnit"] = dataUnitConvert("KB", dataUnit, float64(sysInfo.CPU.Cache)) // cpu缓存，CPU缓存单位
+	cpuInfo["CPUModel"] = sysInfo.CPU.Model                                               // cpu型号
+	cpuInfo["CPUNumber"] = sysInfo.CPU.Cpus                                               // cpu数量
+	cpuInfo["CPUCores"] = sysInfo.CPU.Cores                                               // cpu核心数
+	cpuInfo["CPUThreads"] = sysInfo.CPU.Threads                                           // cpu线程数
+	cpuCache, cpuCacheUnit := dataUnitConvert("KB", dataUnit, float64(sysInfo.CPU.Cache)) // cpu缓存
+	cpuInfo["CPUCache"] = fmt.Sprintf("%.2f %s", cpuCache, cpuCacheUnit)                  // cpu缓存
 
 	return cpuInfo, err
 }

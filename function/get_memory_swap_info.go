@@ -9,21 +9,31 @@ Description: 获取内存和交换分区信息
 
 package function
 
-import "github.com/shirou/gopsutil/mem"
+import (
+	"fmt"
+
+	"github.com/shirou/gopsutil/mem"
+)
 
 var memInfo, _ = mem.VirtualMemory()
 
 // GetMemoryInfo 获取内存信息
 func GetMemoryInfo(dataUnit string, percentUnit string) (memoryInfo map[string]interface{}, err error) {
 	memoryInfo = make(map[string]interface{})
-	memoryInfo["MemTotal"], memoryInfo["MemTotalUnit"] = dataUnitConvert("B", dataUnit, float64(memInfo.Total))                          // 内存总量，内存总量单位
-	memoryInfo["MemUsed"], memoryInfo["MemUsedUnit"] = dataUnitConvert("B", dataUnit, float64(memInfo.Used))                             // 已用内存，已用内存单位
-	memoryInfo["MemUsedPercent"] = memInfo.UsedPercent                                                                                   // 内存使用率
-	memoryInfo["MemUsedPercentUnit"] = percentUnit                                                                                       // 内存使用率单位
-	memoryInfo["MemFree"], memoryInfo["MemFreeUnit"] = dataUnitConvert("B", dataUnit, float64(memInfo.Free))                             // 空闲内存，空闲内存单位
-	memoryInfo["MemShared"], memoryInfo["MemSharedUnit"] = dataUnitConvert("B", dataUnit, float64(memInfo.Shared))                       // 共享内存，共享内存单位
-	memoryInfo["MemBuffCache"], memoryInfo["MemBuffCacheUnit"] = dataUnitConvert("B", dataUnit, float64(memInfo.Buffers+memInfo.Cached)) // 缓存内存，缓存内存单位
-	memoryInfo["MemAvail"], memoryInfo["MemAvailUnit"] = dataUnitConvert("B", dataUnit, float64(memInfo.Available))                      // 可用内存，可用内存单位
+	memTotal, memTotalUnit := dataUnitConvert("B", dataUnit, float64(memInfo.Total))
+	memoryInfo["MemTotal"] = fmt.Sprintf("%.2f %s", memTotal, memTotalUnit) // 内存总量
+	memUsed, memUsedUnit := dataUnitConvert("B", dataUnit, float64(memInfo.Used))
+	memoryInfo["MemUsed"] = fmt.Sprintf("%.2f %s", memUsed, memUsedUnit) // 已用内存
+	memUsedPercent, _ := dataUnitConvert("B", percentUnit, float64(memInfo.UsedPercent))
+	memoryInfo["MemUsedPercent"] = fmt.Sprintf("%.2f %s", memUsedPercent, percentUnit) // 内存使用率
+	memFree, memFreeUnit := dataUnitConvert("B", dataUnit, float64(memInfo.Free))
+	memoryInfo["MemFree"] = fmt.Sprintf("%.2f %s", memFree, memFreeUnit) // 空闲内存
+	memShared, memSharedUnit := dataUnitConvert("B", dataUnit, float64(memInfo.Shared))
+	memoryInfo["MemShared"] = fmt.Sprintf("%.2f %s", memShared, memSharedUnit) // 共享内存
+	memBuffCache, memBuffCacheUnit := dataUnitConvert("B", dataUnit, float64(memInfo.Buffers+memInfo.Cached))
+	memoryInfo["MemBuffCache"] = fmt.Sprintf("%.2f %s", memBuffCache, memBuffCacheUnit) // 缓存内存
+	memAvail, memAvailUnit := dataUnitConvert("B", dataUnit, float64(memInfo.Available))
+	memoryInfo["MemAvail"] = fmt.Sprintf("%.2f %s", memAvail, memAvailUnit) // 可用内存
 
 	return memoryInfo, err
 }
@@ -31,8 +41,10 @@ func GetMemoryInfo(dataUnit string, percentUnit string) (memoryInfo map[string]i
 // GetSwapInfo 获取交换分区信息
 func GetSwapInfo(dataUnit string) (swapInfo map[string]interface{}, err error) {
 	swapInfo = make(map[string]interface{})
-	swapInfo["SwapTotal"], swapInfo["SwapTotalUnit"] = dataUnitConvert("B", dataUnit, float64(memInfo.SwapTotal)) // 交换分区总量，交换分区总量单位
-	swapInfo["SwapFree"], swapInfo["SwapFreeUnit"] = dataUnitConvert("B", dataUnit, float64(memInfo.SwapFree))    // 交换分区空闲量，交换分区空闲量单位
+	swapTotal, swapTotalUnit := dataUnitConvert("B", dataUnit, float64(memInfo.SwapTotal))
+	swapInfo["SwapTotal"] = fmt.Sprintf("%.2f %s", swapTotal, swapTotalUnit) // 交换分区总量
+	swapFree, swapFreeUnit := dataUnitConvert("B", dataUnit, float64(memInfo.SwapFree))
+	swapInfo["SwapFree"] = fmt.Sprintf("%.2f %s", swapFree, swapFreeUnit) // 交换分区空闲量
 
 	return swapInfo, err
 }
