@@ -84,7 +84,9 @@ func GetProductInfo(sysInfo sysinfo.SysInfo) (productInfo map[string]interface{}
 // GetStorageInfo 获取存储设备信息
 func GetStorageInfo(sysInfo sysinfo.SysInfo) (storageInfo map[string]interface{}, err error) {
 	storageInfo = make(map[string]interface{})
-	storageInfo["StorageList"] = sysInfo.Storage // 存储设备列表
+	for index, value := range sysInfo.Storage {
+		storageInfo[fmt.Sprintf("%s%d", "Storage", index)] = value
+	}
 
 	return storageInfo, err
 }
