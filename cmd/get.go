@@ -75,6 +75,7 @@ var getCmd = &cobra.Command{
 			if biosFlag {
 				biosInfo, _ := function.GetBIOSInfo(sysInfo)
 				// 顺序输出
+				fmt.Println("----------BIOS Information----------")
 				var slice = []string{"BIOSVendor", "BIOSVersion", "BIOSDate"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -87,6 +88,7 @@ var getCmd = &cobra.Command{
 			if boardFlag {
 				boardInfo, _ := function.GetBoardInfo(sysInfo)
 				// 顺序输出
+				fmt.Println("----------Board Information----------")
 				var slice = []string{"BoardVendor", "BoardName", "BoardVersion"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -99,6 +101,7 @@ var getCmd = &cobra.Command{
 			if cpuFlag {
 				cpuInfo, _ := function.GetCPUInfo(sysInfo, cpuCacheUnit)
 				// 顺序输出
+				fmt.Println("----------CPU Information----------")
 				var slice = []string{"CPUModel", "CPUCache", "CPUNumber", "CPUCores", "CPUThreads"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -111,6 +114,7 @@ var getCmd = &cobra.Command{
 			if loadFlag {
 				loadInfo, _ := function.GetLoadInfo()
 				// 顺序输出
+				fmt.Println("----------Load Information----------")
 				var slice = []string{"Load1", "Load5", "Load15"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -123,6 +127,7 @@ var getCmd = &cobra.Command{
 			if memoryFlag {
 				memInfo, _ := function.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
 				// 顺序输出
+				fmt.Println("----------Memory Information----------")
 				var slice = []string{"MemTotal", "MemUsed", "MemUsedPercent", "MemFree", "MemShared", "MemBuffCache", "MemAvail"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -135,6 +140,7 @@ var getCmd = &cobra.Command{
 			if osFlag {
 				osInfo, _ := function.GetOSInfo(sysInfo)
 				// 顺序输出
+				fmt.Println("----------OS Information----------")
 				var slice = []string{"Platform", "OS", "Kernel", "Arch", "Hostname", "TimeZone"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -145,9 +151,10 @@ var getCmd = &cobra.Command{
 				}
 			}
 			if processFlag {
-				procsInfo, _ := function.GetProcsInfo()
+				procsInfo, _ := function.GetProcessInfo()
 				// 顺序输出
-				var slice = []string{"Procs"}
+				fmt.Println("----------Process Information----------")
+				var slice = []string{"Process"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
 						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), procsInfo[key])
@@ -159,6 +166,7 @@ var getCmd = &cobra.Command{
 			if productFlag {
 				productInfo, _ := function.GetProductInfo(sysInfo)
 				// 顺序输出
+				fmt.Println("----------Product Information----------")
 				var slice = []string{"ProductVendor", "ProductName"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -172,6 +180,7 @@ var getCmd = &cobra.Command{
 				storageInfo, _ := function.GetStorageInfo(sysInfo)
 				for _, value := range storageInfo {
 					// 顺序输出
+					fmt.Println("----------Storage Information----------")
 					var slice = []string{"StorageName", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageSize"}
 					for _, key := range slice {
 						if genealogyCfg.Has(key) {
@@ -185,6 +194,7 @@ var getCmd = &cobra.Command{
 			if swapFlag {
 				swapInfo, _ := function.GetSwapInfo(memoryDataUnit)
 				// 顺序输出
+				fmt.Println("----------Swap Information----------")
 				var slice = []string{"SwapTotal", "SwapFree"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -197,6 +207,7 @@ var getCmd = &cobra.Command{
 			if timeFlag {
 				timeInfo, _ := function.GetTimeInfo()
 				// 顺序输出
+				fmt.Println("----------Time Information----------")
 				var slice = []string{"Uptime", "BootTime"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -209,6 +220,7 @@ var getCmd = &cobra.Command{
 			if userFlag {
 				userInfo, _ := function.GetUserInfo()
 				// 顺序输出
+				fmt.Println("----------User Information----------")
 				var slice = []string{"User", "UserName", "UserUid", "UserGid", "UserHomeDir"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {

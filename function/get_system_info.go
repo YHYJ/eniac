@@ -64,10 +64,10 @@ func GetOSInfo(sysInfo sysinfo.SysInfo) (osInfo map[string]interface{}, err erro
 	return osInfo, err
 }
 
-// GetProcsInfo 获取进程信息
-func GetProcsInfo() (procsInfo map[string]interface{}, err error) {
+// GetProcessInfo 获取进程信息
+func GetProcessInfo() (procsInfo map[string]interface{}, err error) {
 	procsInfo = make(map[string]interface{})
-	procsInfo["Procs"] = hostInfo.Procs // 进程数
+	procsInfo["Process"] = hostInfo.Procs // 进程数
 
 	return procsInfo, err
 }
