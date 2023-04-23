@@ -42,18 +42,35 @@ var getCmd = &cobra.Command{
 			var sysInfo sysinfo.SysInfo
 			sysInfo.GetSysInfo()
 			// 解析参数
-			biosFlag, _ := cmd.Flags().GetBool("bios")
-			boardFlag, _ := cmd.Flags().GetBool("board")
-			cpuFlag, _ := cmd.Flags().GetBool("cpu")
-			loadFlag, _ := cmd.Flags().GetBool("load")
-			memoryFlag, _ := cmd.Flags().GetBool("memory")
-			osFlag, _ := cmd.Flags().GetBool("os")
-			processFlag, _ := cmd.Flags().GetBool("process")
-			productFlag, _ := cmd.Flags().GetBool("product")
-			storageFlag, _ := cmd.Flags().GetBool("storage")
-			swapFlag, _ := cmd.Flags().GetBool("swap")
-			timeFlag, _ := cmd.Flags().GetBool("time")
-			userFlag, _ := cmd.Flags().GetBool("user")
+			var biosFlag, boardFlag, cpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, timeFlag, userFlag bool
+			allFlag, _ := cmd.Flags().GetBool("all")
+			if allFlag {
+				biosFlag = true
+				boardFlag = true
+				cpuFlag = true
+				loadFlag = true
+				memoryFlag = true
+				osFlag = true
+				processFlag = true
+				productFlag = true
+				storageFlag = true
+				swapFlag = true
+				timeFlag = true
+				userFlag = true
+			} else {
+				biosFlag, _ = cmd.Flags().GetBool("bios")
+				boardFlag, _ = cmd.Flags().GetBool("board")
+				cpuFlag, _ = cmd.Flags().GetBool("cpu")
+				loadFlag, _ = cmd.Flags().GetBool("load")
+				memoryFlag, _ = cmd.Flags().GetBool("memory")
+				osFlag, _ = cmd.Flags().GetBool("os")
+				processFlag, _ = cmd.Flags().GetBool("process")
+				productFlag, _ = cmd.Flags().GetBool("product")
+				storageFlag, _ = cmd.Flags().GetBool("storage")
+				swapFlag, _ = cmd.Flags().GetBool("swap")
+				timeFlag, _ = cmd.Flags().GetBool("time")
+				userFlag, _ = cmd.Flags().GetBool("user")
+			}
 			// 执行对应函数
 			if biosFlag {
 				biosInfo, _ := function.GetBIOSInfo(sysInfo)
@@ -206,6 +223,7 @@ var getCmd = &cobra.Command{
 }
 
 func init() {
+	getCmd.Flags().BoolP("all", "", false, "Get all information")
 	getCmd.Flags().BoolP("bios", "", false, "Get BIOS information")
 	getCmd.Flags().BoolP("board", "", false, "Get Board information")
 	getCmd.Flags().BoolP("cpu", "", false, "Get CPU information")
