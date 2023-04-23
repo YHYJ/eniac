@@ -10,21 +10,9 @@ Description: 数据转换（包括单位和格式）
 package function
 
 import (
-	"github.com/pelletier/go-toml"
 	"strings"
 	"time"
 )
-
-// 使用*toml.Tree将map的key转换为指定语言
-func MapKey2ConvertLanguage(tree *toml.Tree, data map[string]interface{}) map[string]interface{} {
-	for key, value := range data {
-		if tree.Has(key) {
-			data[tree.Get(key).(string)] = value
-			delete(data, key)
-		}
-	}
-	return data
-}
 
 // 秒转换为天、小时、分钟、秒
 func Second2DayHourMinuteSecond(second uint64) (uint64, uint64, uint64, uint64) {
@@ -41,7 +29,7 @@ func Uint2TimeString(timeStamp uint64) string {
 }
 
 // 最大化字符串的第一个字母
-func upperStringFirstChar(str string) string {
+func UpperStringFirstChar(str string) string {
 	if len(str) == 0 {
 		return str
 	}
@@ -50,7 +38,7 @@ func upperStringFirstChar(str string) string {
 }
 
 // 数据单位转换
-func dataUnitConvert(oldUnit string, newUnit string, data float64) (float64, string) {
+func DataUnitConvert(oldUnit string, newUnit string, data float64) (float64, string) {
 	if oldUnit == "B" && newUnit == "KB" {
 		if data < 1024 {
 			newUnit = "B"
