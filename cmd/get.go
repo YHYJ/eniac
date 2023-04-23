@@ -46,9 +46,9 @@ var getCmd = &cobra.Command{
 			boardFlag, _ := cmd.Flags().GetBool("board")
 			cpuFlag, _ := cmd.Flags().GetBool("cpu")
 			loadFlag, _ := cmd.Flags().GetBool("load")
-			memFlag, _ := cmd.Flags().GetBool("mem")
+			memoryFlag, _ := cmd.Flags().GetBool("memory")
 			osFlag, _ := cmd.Flags().GetBool("os")
-			procsFlag, _ := cmd.Flags().GetBool("procs")
+			processFlag, _ := cmd.Flags().GetBool("process")
 			productFlag, _ := cmd.Flags().GetBool("product")
 			storageFlag, _ := cmd.Flags().GetBool("storage")
 			swapFlag, _ := cmd.Flags().GetBool("swap")
@@ -103,7 +103,7 @@ var getCmd = &cobra.Command{
 					}
 				}
 			}
-			if memFlag {
+			if memoryFlag {
 				memInfo, _ := function.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
 				// 顺序输出
 				var slice = []string{"MemTotal", "MemUsed", "MemUsedPercent", "MemFree", "MemShared", "MemBuffCache", "MemAvail"}
@@ -127,7 +127,7 @@ var getCmd = &cobra.Command{
 					}
 				}
 			}
-			if procsFlag {
+			if processFlag {
 				procsInfo, _ := function.GetProcsInfo()
 				// 顺序输出
 				var slice = []string{"Procs"}
@@ -210,9 +210,9 @@ func init() {
 	getCmd.Flags().BoolP("board", "", false, "Get Board information")
 	getCmd.Flags().BoolP("cpu", "", false, "Get CPU information")
 	getCmd.Flags().BoolP("load", "", false, "Get Load information")
-	getCmd.Flags().BoolP("mem", "", false, "Get Memory information")
+	getCmd.Flags().BoolP("memory", "", false, "Get Memory information")
 	getCmd.Flags().BoolP("os", "", false, "Get OS information")
-	getCmd.Flags().BoolP("procs", "", false, "Get Procs information")
+	getCmd.Flags().BoolP("process", "", false, "Get Process information")
 	getCmd.Flags().BoolP("product", "", false, "Get Product information")
 	getCmd.Flags().BoolP("storage", "", false, "Get Storage information")
 	getCmd.Flags().BoolP("swap", "", false, "Get Swap information")
