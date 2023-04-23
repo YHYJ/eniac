@@ -45,7 +45,7 @@ func GetCPUInfo(sysInfo sysinfo.SysInfo, dataUnit string) (cpuInfo map[string]in
 	cpuInfo["CPUNumber"] = sysInfo.CPU.Cpus                                               // cpu数量
 	cpuInfo["CPUCores"] = sysInfo.CPU.Cores                                               // cpu核心数
 	cpuInfo["CPUThreads"] = sysInfo.CPU.Threads                                           // cpu线程数
-	cpuCache, cpuCacheUnit := dataUnitConvert("KB", dataUnit, float64(sysInfo.CPU.Cache)) // cpu缓存
+	cpuCache, cpuCacheUnit := DataUnitConvert("KB", dataUnit, float64(sysInfo.CPU.Cache)) // cpu缓存
 	cpuInfo["CPUCache"] = fmt.Sprintf("%.2f %s", cpuCache, cpuCacheUnit)                  // cpu缓存
 
 	return cpuInfo, err
@@ -54,10 +54,10 @@ func GetCPUInfo(sysInfo sysinfo.SysInfo, dataUnit string) (cpuInfo map[string]in
 // GetOSInfo 获取系统信息
 func GetOSInfo(sysInfo sysinfo.SysInfo) (osInfo map[string]interface{}, err error) {
 	osInfo = make(map[string]interface{})
-	osInfo["OS"] = upperStringFirstChar(sysInfo.OS.Name)         // 操作系统
+	osInfo["OS"] = UpperStringFirstChar(sysInfo.OS.Name)         // 操作系统
 	osInfo["Arch"] = sysInfo.OS.Architecture                     // 系统架构
 	osInfo["Kernel"] = sysInfo.Kernel.Release                    // 内核版本
-	osInfo["Platform"] = upperStringFirstChar(sysInfo.OS.Vendor) // 平台
+	osInfo["Platform"] = UpperStringFirstChar(sysInfo.OS.Vendor) // 平台
 	osInfo["Hostname"] = hostInfo.Hostname                       // 主机名
 	osInfo["TimeZone"] = sysInfo.Node.Timezone                   // 时区
 
@@ -84,8 +84,16 @@ func GetProductInfo(sysInfo sysinfo.SysInfo) (productInfo map[string]interface{}
 // GetStorageInfo 获取存储设备信息
 func GetStorageInfo(sysInfo sysinfo.SysInfo) (storageInfo map[string]interface{}, err error) {
 	storageInfo = make(map[string]interface{})
+	storageValue := make(map[string]interface{})
 	for index, value := range sysInfo.Storage {
-		storageInfo[fmt.Sprintf("%s%d", "Storage", index)] = value
+		storageValue["StorageName"] = value.Name
+		storageValue["StorageDriver"] = value.Driver
+		storageValue["StorageVendor"] = value.Vendor
+		storageValue["StorageModel"] = value.Model
+		storageValue["StorageSerial"] = value.Serial
+		storageSize, storageSizeUnit := DataUnitConvert("GB", "TB", float64(value.Size))
+		storageValue["StorageSize"] = fmt.Sprintf("%.1f %s", storageSize, storageSizeUnit)
+		storageInfo[fmt.Sprintf("%s%d", "Storage", index)] = storageValue
 	}
 
 	return storageInfo, err
