@@ -141,14 +141,15 @@ var getCmd = &cobra.Command{
 			if storageFlag {
 				fmt.Println("----------Storage Information----------")
 				storageInfo, _ := function.GetStorageInfo(sysInfo)
-				for _, value := range storageInfo {
+				for index, values := range storageInfo {
 					// 顺序输出
-					var slice = []string{"StorageName", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageSize"}
-					for _, key := range slice {
-						if genealogyCfg.Has(key) {
-							fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), value.(map[string]interface{})[key])
+					var slice = []string{"StorageName", "StorageSize", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial"}
+					fmt.Println(index)
+					for _, name := range slice {
+						if genealogyCfg.Has(name) {
+							fmt.Printf("%4v%v: %v\n", "", genealogyCfg.Get(name).(string), values.(map[string]interface{})[name])
 						} else {
-							fmt.Printf("%v: %v\n", key, value.(map[string]interface{})[key])
+							fmt.Printf("%4v%v: %v\n", "", name, values.(map[string]interface{})[name])
 						}
 					}
 				}
