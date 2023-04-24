@@ -30,19 +30,22 @@ var getCmd = &cobra.Command{
 			fmt.Printf("\x1b[36;1m%s\x1b[0m\n", err)
 		} else {
 			// 设置配置项默认值
-			var (
-				cpuCacheUnit      string = "KB"
-				memoryDataUnit    string = "GB"
-				memoryPercentUnit string = "%"
-			)
-			// 获取CPU配置项
-			if confTree.Has("cpu.cache_unit") {
-				cpuCacheUnit = confTree.Get("cpu.cache_unit").(string)
-			} else {
-				fmt.Println("配置文件缺少cpu.cache_unit配置项， 使用默认值")
+			exampleGenealogy := map[string]interface{}{
+				"genealogy": map[string]string{},
 			}
+			exampleGenealogyObject, _ := toml.TreeFromMap(exampleGenealogy)
+			var (
+				cpuCacheUnit      string     = "KB"
+				memoryDataUnit    string     = "GB"
+				memoryPercentUnit string     = "%"
+				genealogyCfg      *toml.Tree = exampleGenealogyObject
+			)
 			// 获取genealogy配置项
-			genealogyCfg := confTree.Get("genealogy").(*toml.Tree)
+			if confTree.Has("genealogy") {
+				genealogyCfg = confTree.Get("genealogy").(*toml.Tree)
+			} else {
+				fmt.Printf("\x1b[34;1m%s\x1b[0m\n", "config file is missing 'genealogy' configuration item, using default value")
+			}
 			// 采集系统信息（集中采集一次后分配到不同的参数）
 			var sysInfo sysinfo.SysInfo
 			sysInfo.GetSysInfo()
@@ -78,9 +81,9 @@ var getCmd = &cobra.Command{
 			}
 			// 执行对应函数
 			if productFlag {
+				fmt.Println("----------Product Information----------")
 				productInfo, _ := function.GetProductInfo(sysInfo)
 				// 顺序输出
-				fmt.Println("----------Product Information----------")
 				var slice = []string{"ProductVendor", "ProductName"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -91,9 +94,9 @@ var getCmd = &cobra.Command{
 				}
 			}
 			if boardFlag {
+				fmt.Println("----------Board Information----------")
 				boardInfo, _ := function.GetBoardInfo(sysInfo)
 				// 顺序输出
-				fmt.Println("----------Board Information----------")
 				var slice = []string{"BoardVendor", "BoardName", "BoardVersion"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -104,9 +107,9 @@ var getCmd = &cobra.Command{
 				}
 			}
 			if biosFlag {
+				fmt.Println("----------BIOS Information----------")
 				biosInfo, _ := function.GetBIOSInfo(sysInfo)
 				// 顺序输出
-				fmt.Println("----------BIOS Information----------")
 				var slice = []string{"BIOSVendor", "BIOSVersion", "BIOSDate"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -117,9 +120,15 @@ var getCmd = &cobra.Command{
 				}
 			}
 			if cpuFlag {
+				fmt.Println("----------CPU Information----------")
+				// 获取CPU配置项
+				if confTree.Has("cpu.cache_unit") {
+					cpuCacheUnit = confTree.Get("cpu.cache_unit").(string)
+				} else {
+					fmt.Printf("\x1b[34;1m%s\x1b[0m\n", "config file is missing 'cpu.cache_unit' item, using default value")
+				}
 				cpuInfo, _ := function.GetCPUInfo(sysInfo, cpuCacheUnit)
 				// 顺序输出
-				fmt.Println("----------CPU Information----------")
 				var slice = []string{"CPUModel", "CPUCache", "CPUNumber", "CPUCores", "CPUThreads"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -130,10 +139,10 @@ var getCmd = &cobra.Command{
 				}
 			}
 			if storageFlag {
+				fmt.Println("----------Storage Information----------")
 				storageInfo, _ := function.GetStorageInfo(sysInfo)
 				for _, value := range storageInfo {
 					// 顺序输出
-					fmt.Println("----------Storage Information----------")
 					var slice = []string{"StorageName", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageSize"}
 					for _, key := range slice {
 						if genealogyCfg.Has(key) {
@@ -145,21 +154,21 @@ var getCmd = &cobra.Command{
 				}
 			}
 			if memoryFlag {
+				fmt.Println("----------Memory Information----------")
 				// 获取Memory配置项
 				if confTree.Has("memory.data_unit") {
 					memoryDataUnit = confTree.Get("memory.data_unit").(string)
 				} else {
-					fmt.Println("配置文件缺少memory.data_unit配置项， 使用默认值")
+					fmt.Printf("\x1b[34;1m%s\x1b[0m\n", "config file is missing 'memory.data_unit' item, using default value")
 				}
 				if confTree.Has("memory.percent_unit") {
 					memoryPercentUnit = confTree.Get("memory.percent_unit").(string)
 				} else {
-					fmt.Println("配置文件缺少memory.percent_unit配置项， 使用默认值")
+					fmt.Printf("\x1b[34;1m%s\x1b[0m\n", "config file is missing 'memory.percent_unit' item, using default value")
 				}
 
 				memInfo, _ := function.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
 				// 顺序输出
-				fmt.Println("----------Memory Information----------")
 				var slice = []string{"MemoryTotal", "MemoryUsed", "MemoryUsedPercent", "MemoryFree", "MemoryShared", "MemoryBuffCache", "MemoryAvail"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -170,16 +179,16 @@ var getCmd = &cobra.Command{
 				}
 			}
 			if swapFlag {
+				fmt.Println("----------Swap Information----------")
 				// 获取Memory配置项
 				if confTree.Has("memory.data_unit") {
 					memoryDataUnit = confTree.Get("memory.data_unit").(string)
 				} else {
-					fmt.Println("配置文件缺少memory.data_unit配置项， 使用默认值")
+					fmt.Printf("\x1b[34;1m%s\x1b[0m\n", "config file is missing 'memory.data_unit' item, using default value")
 				}
 
 				swapInfo, _ := function.GetSwapInfo(memoryDataUnit)
 				// 顺序输出
-				fmt.Println("----------Swap Information----------")
 				var slice = []string{"SwapTotal", "SwapFree"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -190,9 +199,9 @@ var getCmd = &cobra.Command{
 				}
 			}
 			if osFlag {
+				fmt.Println("----------OS Information----------")
 				osInfo, _ := function.GetOSInfo(sysInfo)
 				// 顺序输出
-				fmt.Println("----------OS Information----------")
 				var slice = []string{"Platform", "OS", "Kernel", "Arch", "Hostname", "TimeZone"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -203,9 +212,9 @@ var getCmd = &cobra.Command{
 				}
 			}
 			if loadFlag {
+				fmt.Println("----------Load Information----------")
 				loadInfo, _ := function.GetLoadInfo()
 				// 顺序输出
-				fmt.Println("----------Load Information----------")
 				var slice = []string{"Load1", "Load5", "Load15"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -216,9 +225,9 @@ var getCmd = &cobra.Command{
 				}
 			}
 			if processFlag {
+				fmt.Println("----------Process Information----------")
 				procsInfo, _ := function.GetProcessInfo()
 				// 顺序输出
-				fmt.Println("----------Process Information----------")
 				var slice = []string{"Process"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -229,9 +238,9 @@ var getCmd = &cobra.Command{
 				}
 			}
 			if timeFlag {
+				fmt.Println("----------Time Information----------")
 				timeInfo, _ := function.GetTimeInfo()
 				// 顺序输出
-				fmt.Println("----------Time Information----------")
 				var slice = []string{"Uptime", "BootTime"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
@@ -242,9 +251,9 @@ var getCmd = &cobra.Command{
 				}
 			}
 			if userFlag {
+				fmt.Println("----------User Information----------")
 				userInfo, _ := function.GetUserInfo()
 				// 顺序输出
-				fmt.Println("----------User Information----------")
 				var slice = []string{"User", "UserName", "UserUid", "UserGid", "UserHomeDir"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
