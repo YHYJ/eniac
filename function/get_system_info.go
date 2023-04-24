@@ -84,8 +84,8 @@ func GetProductInfo(sysInfo sysinfo.SysInfo) (productInfo map[string]interface{}
 // GetStorageInfo 获取存储设备信息
 func GetStorageInfo(sysInfo sysinfo.SysInfo) (storageInfo map[string]interface{}, err error) {
 	storageInfo = make(map[string]interface{})
-	storageValue := make(map[string]interface{})
 	for index, value := range sysInfo.Storage {
+		storageValue := make(map[string]interface{})
 		storageValue["StorageName"] = value.Name
 		storageValue["StorageDriver"] = value.Driver
 		storageValue["StorageVendor"] = value.Vendor
