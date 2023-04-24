@@ -29,13 +29,18 @@ var getCmd = &cobra.Command{
 		if err != nil {
 			fmt.Printf("\x1b[36;1m%s\x1b[0m\n", err)
 		} else {
+			// 设置配置项默认值
+			var (
+				cpuCacheUnit      string = "KB"
+				memoryDataUnit    string = "GB"
+				memoryPercentUnit string = "%"
+			)
 			// 获取CPU配置项
-			cpuCfg := confTree.Get("cpu").(*toml.Tree)
-			cpuCacheUnit := cpuCfg.Get("cache_unit").(string)
-			// 获取Memory配置项
-			memoryCfg := confTree.Get("memory").(*toml.Tree)
-			memoryDataUnit := memoryCfg.Get("data_unit").(string)
-			memoryPercentUnit := memoryCfg.Get("percent_unit").(string)
+			if confTree.Has("cpu.cache_unit") {
+				cpuCacheUnit = confTree.Get("cpu.cache_unit").(string)
+			} else {
+				fmt.Println("配置文件缺少cpu.cache_unit配置项， 使用默认值")
+			}
 			// 获取genealogy配置项
 			genealogyCfg := confTree.Get("genealogy").(*toml.Tree)
 			// 采集系统信息（集中采集一次后分配到不同的参数）
@@ -125,10 +130,22 @@ var getCmd = &cobra.Command{
 				}
 			}
 			if memoryFlag {
+				// 获取Memory配置项
+				if confTree.Has("memory.data_unit") {
+					memoryDataUnit = confTree.Get("memory.data_unit").(string)
+				} else {
+					fmt.Println("配置文件缺少memory.data_unit配置项， 使用默认值")
+				}
+				if confTree.Has("memory.percent_unit") {
+					memoryPercentUnit = confTree.Get("memory.percent_unit").(string)
+				} else {
+					fmt.Println("配置文件缺少memory.percent_unit配置项， 使用默认值")
+				}
+
 				memInfo, _ := function.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
 				// 顺序输出
 				fmt.Println("----------Memory Information----------")
-				var slice = []string{"MemTotal", "MemUsed", "MemUsedPercent", "MemFree", "MemShared", "MemBuffCache", "MemAvail"}
+				var slice = []string{"MemoryTotal", "MemoryUsed", "MemoryUsedPercent", "MemoryFree", "MemoryShared", "MemoryBuffCache", "MemoryAvail"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
 						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), memInfo[key])
@@ -192,6 +209,13 @@ var getCmd = &cobra.Command{
 				}
 			}
 			if swapFlag {
+				// 获取Memory配置项
+				if confTree.Has("memory.data_unit") {
+					memoryDataUnit = confTree.Get("memory.data_unit").(string)
+				} else {
+					fmt.Println("配置文件缺少memory.data_unit配置项， 使用默认值")
+				}
+
 				swapInfo, _ := function.GetSwapInfo(memoryDataUnit)
 				// 顺序输出
 				fmt.Println("----------Swap Information----------")
