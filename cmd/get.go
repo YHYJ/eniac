@@ -77,16 +77,16 @@ var getCmd = &cobra.Command{
 				userFlag, _ = cmd.Flags().GetBool("user")
 			}
 			// 执行对应函数
-			if biosFlag {
-				biosInfo, _ := function.GetBIOSInfo(sysInfo)
+			if productFlag {
+				productInfo, _ := function.GetProductInfo(sysInfo)
 				// 顺序输出
-				fmt.Println("----------BIOS Information----------")
-				var slice = []string{"BIOSVendor", "BIOSVersion", "BIOSDate"}
+				fmt.Println("----------Product Information----------")
+				var slice = []string{"ProductVendor", "ProductName"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
-						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), biosInfo[key])
+						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), productInfo[key])
 					} else {
-						fmt.Printf("%v: %v\n", key, biosInfo[key])
+						fmt.Printf("%v: %v\n", key, productInfo[key])
 					}
 				}
 			}
@@ -103,6 +103,19 @@ var getCmd = &cobra.Command{
 					}
 				}
 			}
+			if biosFlag {
+				biosInfo, _ := function.GetBIOSInfo(sysInfo)
+				// 顺序输出
+				fmt.Println("----------BIOS Information----------")
+				var slice = []string{"BIOSVendor", "BIOSVersion", "BIOSDate"}
+				for _, key := range slice {
+					if genealogyCfg.Has(key) {
+						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), biosInfo[key])
+					} else {
+						fmt.Printf("%v: %v\n", key, biosInfo[key])
+					}
+				}
+			}
 			if cpuFlag {
 				cpuInfo, _ := function.GetCPUInfo(sysInfo, cpuCacheUnit)
 				// 顺序输出
@@ -116,16 +129,18 @@ var getCmd = &cobra.Command{
 					}
 				}
 			}
-			if loadFlag {
-				loadInfo, _ := function.GetLoadInfo()
-				// 顺序输出
-				fmt.Println("----------Load Information----------")
-				var slice = []string{"Load1", "Load5", "Load15"}
-				for _, key := range slice {
-					if genealogyCfg.Has(key) {
-						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), loadInfo[key])
-					} else {
-						fmt.Printf("%v: %v\n", key, loadInfo[key])
+			if storageFlag {
+				storageInfo, _ := function.GetStorageInfo(sysInfo)
+				for _, value := range storageInfo {
+					// 顺序输出
+					fmt.Println("----------Storage Information----------")
+					var slice = []string{"StorageName", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageSize"}
+					for _, key := range slice {
+						if genealogyCfg.Has(key) {
+							fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), value.(map[string]interface{})[key])
+						} else {
+							fmt.Printf("%v: %v\n", key, value.(map[string]interface{})[key])
+						}
 					}
 				}
 			}
@@ -154,60 +169,6 @@ var getCmd = &cobra.Command{
 					}
 				}
 			}
-			if osFlag {
-				osInfo, _ := function.GetOSInfo(sysInfo)
-				// 顺序输出
-				fmt.Println("----------OS Information----------")
-				var slice = []string{"Platform", "OS", "Kernel", "Arch", "Hostname", "TimeZone"}
-				for _, key := range slice {
-					if genealogyCfg.Has(key) {
-						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), osInfo[key])
-					} else {
-						fmt.Printf("%v: %v\n", key, osInfo[key])
-					}
-				}
-			}
-			if processFlag {
-				procsInfo, _ := function.GetProcessInfo()
-				// 顺序输出
-				fmt.Println("----------Process Information----------")
-				var slice = []string{"Process"}
-				for _, key := range slice {
-					if genealogyCfg.Has(key) {
-						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), procsInfo[key])
-					} else {
-						fmt.Printf("%v: %v\n", key, procsInfo[key])
-					}
-				}
-			}
-			if productFlag {
-				productInfo, _ := function.GetProductInfo(sysInfo)
-				// 顺序输出
-				fmt.Println("----------Product Information----------")
-				var slice = []string{"ProductVendor", "ProductName"}
-				for _, key := range slice {
-					if genealogyCfg.Has(key) {
-						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), productInfo[key])
-					} else {
-						fmt.Printf("%v: %v\n", key, productInfo[key])
-					}
-				}
-			}
-			if storageFlag {
-				storageInfo, _ := function.GetStorageInfo(sysInfo)
-				for _, value := range storageInfo {
-					// 顺序输出
-					fmt.Println("----------Storage Information----------")
-					var slice = []string{"StorageName", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageSize"}
-					for _, key := range slice {
-						if genealogyCfg.Has(key) {
-							fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), value.(map[string]interface{})[key])
-						} else {
-							fmt.Printf("%v: %v\n", key, value.(map[string]interface{})[key])
-						}
-					}
-				}
-			}
 			if swapFlag {
 				// 获取Memory配置项
 				if confTree.Has("memory.data_unit") {
@@ -225,6 +186,45 @@ var getCmd = &cobra.Command{
 						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), swapInfo[key])
 					} else {
 						fmt.Printf("%v: %v\n", key, swapInfo[key])
+					}
+				}
+			}
+			if osFlag {
+				osInfo, _ := function.GetOSInfo(sysInfo)
+				// 顺序输出
+				fmt.Println("----------OS Information----------")
+				var slice = []string{"Platform", "OS", "Kernel", "Arch", "Hostname", "TimeZone"}
+				for _, key := range slice {
+					if genealogyCfg.Has(key) {
+						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), osInfo[key])
+					} else {
+						fmt.Printf("%v: %v\n", key, osInfo[key])
+					}
+				}
+			}
+			if loadFlag {
+				loadInfo, _ := function.GetLoadInfo()
+				// 顺序输出
+				fmt.Println("----------Load Information----------")
+				var slice = []string{"Load1", "Load5", "Load15"}
+				for _, key := range slice {
+					if genealogyCfg.Has(key) {
+						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), loadInfo[key])
+					} else {
+						fmt.Printf("%v: %v\n", key, loadInfo[key])
+					}
+				}
+			}
+			if processFlag {
+				procsInfo, _ := function.GetProcessInfo()
+				// 顺序输出
+				fmt.Println("----------Process Information----------")
+				var slice = []string{"Process"}
+				for _, key := range slice {
+					if genealogyCfg.Has(key) {
+						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), procsInfo[key])
+					} else {
+						fmt.Printf("%v: %v\n", key, procsInfo[key])
 					}
 				}
 			}

@@ -75,7 +75,7 @@ func DataUnitConvert(oldUnit string, newUnit string, data float64) (float64, str
 			return data, newUnit
 		} else {
 			return data / 1024, newUnit
-		} // TODO
+		}
 	} else if oldUnit == "KB" && newUnit == "GB" {
 		if data < 1024*1024 {
 			newUnit = "MB"
