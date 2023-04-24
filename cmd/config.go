@@ -28,7 +28,7 @@ var configCmd = &cobra.Command{
 		printFlag, _ := cmd.Flags().GetBool("print")
 
 		// 检查配置文件是否存在
-		cfgFileExist := function.CheckFileExist(cfgFile)
+		cfgFileExist := function.FileExist(cfgFile)
 
 		// 执行配置文件操作
 		if createFlag {
@@ -37,14 +37,14 @@ var configCmd = &cobra.Command{
 					function.DeleteFile(cfgFile)
 					function.CreateFile(cfgFile)
 					function.WriteTomlConfig(cfgFile)
-					fmt.Println("配置文件已重置")
+					fmt.Printf("\x1b[34;1m%s\x1b[0m\n", "create "+cfgFile+": file overwritten")
 				} else {
-					fmt.Println("配置文件已存在")
+					fmt.Printf("\x1b[36;1m%s\x1b[0m\n", "create "+cfgFile+": file exists (use --force to overwrite)")
 				}
 			} else {
 				function.CreateFile(cfgFile)
 				function.WriteTomlConfig(cfgFile)
-				fmt.Println("配置文件已创建")
+				fmt.Printf("\x1b[32;1m%s\x1b[0m\n", "create "+cfgFile+": file created")
 			}
 		}
 
@@ -57,7 +57,7 @@ var configCmd = &cobra.Command{
 					fmt.Println(configuration)
 				}
 			} else {
-				fmt.Println("未指定配置文件，默认配置文件也不存在")
+				fmt.Printf("\x1b[36;1m%s\x1b[0m\n", "configuration file not found (use --create to create a configuration file)")
 			}
 		}
 	},
