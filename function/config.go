@@ -98,6 +98,9 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"UserGid":           "用户组ID",
 			"UserHomeDir":       "用户主目录",
 		},
+		"update": map[string]string{
+			"record_file": "/tmp/system-checkupdates.log",
+		},
 	}
 	if !FileExist(filePath) {
 		return 0, fmt.Errorf("open %s: no such file or directory", filePath)

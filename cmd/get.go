@@ -39,6 +39,7 @@ var getCmd = &cobra.Command{
 				memoryDataUnit    string     = "GB"
 				memoryPercentUnit string     = "%"
 				genealogyCfg      *toml.Tree = exampleGenealogyObject
+				updateRecordFile  string     = "/tmp/system-checkupdates.log"
 			)
 			// 获取genealogy配置项
 			if confTree.Has("genealogy") {
@@ -50,7 +51,7 @@ var getCmd = &cobra.Command{
 			var sysInfo sysinfo.SysInfo
 			sysInfo.GetSysInfo()
 			// 解析参数
-			var biosFlag, boardFlag, cpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, timeFlag, userFlag bool
+			var biosFlag, boardFlag, cpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, timeFlag, userFlag, updateFlag bool
 			allFlag, _ := cmd.Flags().GetBool("all")
 			if allFlag {
 				biosFlag = true
@@ -65,6 +66,7 @@ var getCmd = &cobra.Command{
 				swapFlag = true
 				timeFlag = true
 				userFlag = true
+				updateFlag = true
 			} else {
 				biosFlag, _ = cmd.Flags().GetBool("bios")
 				boardFlag, _ = cmd.Flags().GetBool("board")
@@ -78,6 +80,7 @@ var getCmd = &cobra.Command{
 				swapFlag, _ = cmd.Flags().GetBool("swap")
 				timeFlag, _ = cmd.Flags().GetBool("time")
 				userFlag, _ = cmd.Flags().GetBool("user")
+				updateFlag, _ = cmd.Flags().GetBool("update")
 			}
 			// 执行对应函数
 			if productFlag {
@@ -167,7 +170,6 @@ var getCmd = &cobra.Command{
 				} else {
 					fmt.Printf("\x1b[34;1m%s\x1b[0m\n", "config file is missing 'memory.percent_unit' item, using default value")
 				}
-
 				memInfo, _ := function.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
 				// 顺序输出
 				var slice = []string{"MemoryTotal", "MemoryUsed", "MemoryUsedPercent", "MemoryFree", "MemoryShared", "MemoryBuffCache", "MemoryAvail"}
@@ -187,7 +189,6 @@ var getCmd = &cobra.Command{
 				} else {
 					fmt.Printf("\x1b[34;1m%s\x1b[0m\n", "config file is missing 'memory.data_unit' item, using default value")
 				}
-
 				swapInfo, _ := function.GetSwapInfo(memoryDataUnit)
 				// 顺序输出
 				var slice = []string{"SwapTotal", "SwapFree"}
@@ -264,6 +265,23 @@ var getCmd = &cobra.Command{
 					}
 				}
 			}
+			if updateFlag {
+				fmt.Println("----------Update Information----------")
+				// 获取update配置项
+				if confTree.Has("update.record_file") {
+					updateRecordFile = confTree.Get("update.record_file").(string)
+				} else {
+					fmt.Printf("\x1b[34;1m%s\x1b[0m\n", "config file is missing 'update.record_file' item, using default value")
+				}
+				updateInfo, err := function.GetUpdateInfo(updateRecordFile, 0)
+				if err != nil {
+					fmt.Printf("\x1b[36;1m%s\x1b[0m\n", err)
+				} else {
+					for num, info := range updateInfo {
+						fmt.Println(num+1, info)
+					}
+				}
+			}
 		}
 	},
 }
@@ -282,6 +300,7 @@ func init() {
 	getCmd.Flags().BoolP("swap", "", false, "Get Swap information")
 	getCmd.Flags().BoolP("time", "", false, "Get Time information")
 	getCmd.Flags().BoolP("user", "", false, "Get User information")
+	getCmd.Flags().BoolP("update", "", false, "Get Update information")
 
 	getCmd.Flags().BoolP("help", "h", false, "help for get")
 	rootCmd.AddCommand(getCmd)
