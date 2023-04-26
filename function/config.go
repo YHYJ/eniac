@@ -79,6 +79,7 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"MemoryShared":      "共享物理内存",
 			"MemoryBuffCache":   "缓冲物理内存",
 			"MemoryAvail":       "可用物理内存",
+			"SwapDisabled":      "交换空间未启用",
 			"SwapTotal":         "总交换空间",
 			"SwapFree":          "空闲交换空间",
 			"Process":           "进程数",

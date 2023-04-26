@@ -42,6 +42,10 @@ func GetMemoryInfo(dataUnit string, percentUnit string) (memoryInfo map[string]i
 func GetSwapInfo(dataUnit string) (swapInfo map[string]interface{}, err error) {
 	swapInfo = make(map[string]interface{})
 	swapTotal, swapTotalUnit := DataUnitConvert("B", dataUnit, float64(memInfo.SwapTotal))
+	swapInfo["SwapDisabled"] = false
+	if swapTotal == 0 {
+		swapInfo["SwapDisabled"] = true
+	}
 	swapInfo["SwapTotal"] = fmt.Sprintf("%.2f %s", swapTotal, swapTotalUnit) // 交换分区总量
 	swapFree, swapFreeUnit := DataUnitConvert("B", dataUnit, float64(memInfo.SwapFree))
 	swapInfo["SwapFree"] = fmt.Sprintf("%.2f %s", swapFree, swapFreeUnit) // 交换分区空闲量

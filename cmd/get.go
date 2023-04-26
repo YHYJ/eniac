@@ -191,12 +191,23 @@ var getCmd = &cobra.Command{
 				}
 				swapInfo, _ := function.GetSwapInfo(memoryDataUnit)
 				// 顺序输出
-				var slice = []string{"SwapTotal", "SwapFree"}
-				for _, key := range slice {
-					if genealogyCfg.Has(key) {
-						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), swapInfo[key])
-					} else {
-						fmt.Printf("%v: %v\n", key, swapInfo[key])
+				if swapInfo["SwapDisabled"] == true {
+					var slice = []string{"SwapDisabled"}
+					for _, key := range slice {
+						if genealogyCfg.Has(key) {
+							fmt.Printf("%v\n", genealogyCfg.Get(key).(string))
+						} else {
+							fmt.Printf("%v\n", key)
+						}
+					}
+				} else {
+					var slice = []string{"SwapTotal", "SwapFree"}
+					for _, key := range slice {
+						if genealogyCfg.Has(key) {
+							fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), swapInfo[key])
+						} else {
+							fmt.Printf("%v: %v\n", key, swapInfo[key])
+						}
 					}
 				}
 			}
