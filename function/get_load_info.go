@@ -9,7 +9,7 @@ Description: 获取负载信息
 
 package function
 
-import "github.com/shirou/gopsutil/load"
+import "github.com/shirou/gopsutil/v3/load"
 
 // GetLoadInfo 获取负载信息
 func GetLoadInfo() (loadInfo map[string]interface{}, err error) {

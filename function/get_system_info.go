@@ -12,7 +12,7 @@ package function
 import (
 	"fmt"
 
-	"github.com/shirou/gopsutil/host"
+	"github.com/shirou/gopsutil/v3/host"
 	"github.com/zcalusic/sysinfo"
 )
 

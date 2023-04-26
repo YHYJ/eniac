@@ -12,7 +12,7 @@ package function
 import (
 	"fmt"
 
-	"github.com/shirou/gopsutil/mem"
+	"github.com/shirou/gopsutil/v3/mem"
 )
 
 var memInfo, _ = mem.VirtualMemory()
