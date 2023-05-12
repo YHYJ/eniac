@@ -11,6 +11,7 @@ package function
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/shirou/gopsutil/v3/host"
 	"github.com/zcalusic/sysinfo"
@@ -106,6 +107,9 @@ func GetTimeInfo() (timeInfo map[string]interface{}, err error) {
 	day, hour, minute, second := Second2DayHourMinuteSecond(hostInfo.Uptime)
 	result := fmt.Sprintf("%vd %vh %vm %vs", day, hour, minute, second)
 	timeInfo["Uptime"] = result // 系统运行时间
+	starttimeArgs := []string{"time"}
+	StartTime := RunCommandGetResult("systemd-analyze", starttimeArgs)
+	timeInfo["StartTime"] = strings.Split(strings.Split(StartTime, "\n")[0], "= ")[1] // 系统启动用时
 
 	return timeInfo, err
 }

@@ -254,7 +254,7 @@ var getCmd = &cobra.Command{
 				fmt.Println("----------Time Information----------")
 				timeInfo, _ := function.GetTimeInfo()
 				// 顺序输出
-				var slice = []string{"Uptime", "BootTime"}
+				var slice = []string{"Uptime", "BootTime", "StartTime"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
 						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), timeInfo[key])
