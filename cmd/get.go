@@ -51,7 +51,7 @@ var getCmd = &cobra.Command{
 			var sysInfo sysinfo.SysInfo
 			sysInfo.GetSysInfo()
 			// 解析参数
-			var biosFlag, boardFlag, cpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, timeFlag, userFlag, updateFlag bool
+			var biosFlag, boardFlag, cpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, timeFlag, userFlag, updateFlag, onlyFlag bool
 			allFlag, _ := cmd.Flags().GetBool("all")
 			if allFlag {
 				biosFlag = true
@@ -67,6 +67,7 @@ var getCmd = &cobra.Command{
 				timeFlag = true
 				userFlag = true
 				updateFlag = true
+				onlyFlag = false
 			} else {
 				biosFlag, _ = cmd.Flags().GetBool("bios")
 				boardFlag, _ = cmd.Flags().GetBool("board")
@@ -81,6 +82,7 @@ var getCmd = &cobra.Command{
 				timeFlag, _ = cmd.Flags().GetBool("time")
 				userFlag, _ = cmd.Flags().GetBool("user")
 				updateFlag, _ = cmd.Flags().GetBool("update")
+				onlyFlag, _ = cmd.Flags().GetBool("only")
 			}
 			// 执行对应函数
 			if productFlag {
@@ -277,32 +279,44 @@ var getCmd = &cobra.Command{
 				}
 			}
 			if updateFlag {
-				fmt.Println("----------Update Information----------")
-				// 获取update配置项
-				if confTree.Has("update.record_file") {
-					updateRecordFile = confTree.Get("update.record_file").(string)
-				} else {
-					fmt.Printf("\x1b[34;1m%s\x1b[0m\n", "config file is missing 'update.record_file' item, using default value")
-				}
-				// 输出更新状态监测
-				daemonInfo, _ := function.GetUpdateDaemonInfo()
-				var slice = []string{"DaemonStatus"}
-				for _, key := range slice {
-					if genealogyCfg.Has(key) {
-						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), daemonInfo[key])
+				if onlyFlag {
+					// 仅输出可更新包信息，转为系统更新检测插件服务
+					updateInfo, err := function.GetUpdateInfo(updateRecordFile, 0)
+					if err != nil {
+						fmt.Printf("\x1b[36;1m%s\x1b[0m\n", err)
 					} else {
-						fmt.Printf("%v: %v\n", key, daemonInfo[key])
+						for num, info := range updateInfo {
+							fmt.Printf("%4v%v: %v\n", "", num+1, info)
+						}
 					}
-				}
-				// 输出具体更新信息
-				updateInfo, err := function.GetUpdateInfo(updateRecordFile, 0)
-				if err != nil {
-					fmt.Printf("\x1b[36;1m%s\x1b[0m\n", err)
 				} else {
-					key := "UpdateList"
-					fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), len(updateInfo))
-					for num, info := range updateInfo {
-						fmt.Printf("%4v%v: %v\n", "", num+1, info)
+					fmt.Println("----------Update Information----------")
+					// 获取update配置项
+					if confTree.Has("update.record_file") {
+						updateRecordFile = confTree.Get("update.record_file").(string)
+					} else {
+						fmt.Printf("\x1b[34;1m%s\x1b[0m\n", "config file is missing 'update.record_file' item, using default value")
+					}
+					// 输出更新状态监测
+					daemonInfo, _ := function.GetUpdateDaemonInfo()
+					var slice = []string{"DaemonStatus"}
+					for _, key := range slice {
+						if genealogyCfg.Has(key) {
+							fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), daemonInfo[key])
+						} else {
+							fmt.Printf("%v: %v\n", key, daemonInfo[key])
+						}
+					}
+					// 输出具体更新信息
+					updateInfo, err := function.GetUpdateInfo(updateRecordFile, 0)
+					if err != nil {
+						fmt.Printf("\x1b[36;1m%s\x1b[0m\n", err)
+					} else {
+						key := "UpdateList"
+						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), len(updateInfo))
+						for num, info := range updateInfo {
+							fmt.Printf("%4v%v: %v\n", "", num+1, info)
+						}
 					}
 				}
 			}
@@ -325,6 +339,7 @@ func init() {
 	getCmd.Flags().BoolP("time", "", false, "Get Time information")
 	getCmd.Flags().BoolP("user", "", false, "Get User information")
 	getCmd.Flags().BoolP("update", "", false, "Get Update information")
+	getCmd.Flags().BoolP("only", "", false, "Get update package information only")
 
 	getCmd.Flags().BoolP("help", "h", false, "help for get")
 	rootCmd.AddCommand(getCmd)
