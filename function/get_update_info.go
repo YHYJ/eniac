@@ -48,7 +48,7 @@ func GetUpdateInfo(filePath string, line int) ([]string, error) {
 // 获取更新检测服务信息
 func GetUpdateDaemonInfo() (daemonInfo map[string]interface{}, err error) {
 	daemonInfo = make(map[string]interface{})
-	daemonArgs := []string{"is-active", "system-checkupdates"}
+	daemonArgs := []string{"is-active", "system-checkupdates.timer"}
 	daemonStatus := RunCommandGetResult("systemctl", daemonArgs)
 	daemonInfo["DaemonStatus"] = daemonStatus
 
