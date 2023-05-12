@@ -284,12 +284,25 @@ var getCmd = &cobra.Command{
 				} else {
 					fmt.Printf("\x1b[34;1m%s\x1b[0m\n", "config file is missing 'update.record_file' item, using default value")
 				}
+				// 输出更新状态监测
+				daemonInfo, _ := function.GetUpdateDaemonInfo()
+				var slice = []string{"DaemonStatus"}
+				for _, key := range slice {
+					if genealogyCfg.Has(key) {
+						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), daemonInfo[key])
+					} else {
+						fmt.Printf("%v: %v\n", key, daemonInfo[key])
+					}
+				}
+				// 输出具体更新信息
 				updateInfo, err := function.GetUpdateInfo(updateRecordFile, 0)
 				if err != nil {
 					fmt.Printf("\x1b[36;1m%s\x1b[0m\n", err)
 				} else {
+					key := "UpdateList"
+					fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), len(updateInfo))
 					for num, info := range updateInfo {
-						fmt.Println(num+1, info)
+						fmt.Printf("%4v%v: %v\n", "", num+1, info)
 					}
 				}
 			}

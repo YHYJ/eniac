@@ -98,6 +98,8 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"UserUid":           "用户ID",
 			"UserGid":           "用户组ID",
 			"UserHomeDir":       "用户主目录",
+			"UpdateList":        "更新列表",
+			"DaemonStatus":      "更新服务状态",
 		},
 		"update": map[string]string{
 			"record_file": "/tmp/system-checkupdates.log",

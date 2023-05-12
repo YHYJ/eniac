@@ -17,6 +17,7 @@ import (
 
 // 读取更新信息文件，参数line为0时读取全部行
 func GetUpdateInfo(filePath string, line int) ([]string, error) {
+	var textSlice []string
 	if !FileExist(filePath) {
 		return nil, fmt.Errorf("open %s: no such file", filePath)
 	}
@@ -33,7 +34,6 @@ func GetUpdateInfo(filePath string, line int) ([]string, error) {
 	// 创建一个扫描器对象按行遍历
 	scanner := bufio.NewScanner(text)
 	// 逐行读取，输出指定行
-	var textSlice []string
 	for scanner.Scan() {
 		if line == count {
 			textSlice = append(textSlice, scanner.Text())
@@ -43,4 +43,14 @@ func GetUpdateInfo(filePath string, line int) ([]string, error) {
 		count++
 	}
 	return textSlice, nil
+}
+
+// 获取更新检测服务信息
+func GetUpdateDaemonInfo() (daemonInfo map[string]interface{}, err error) {
+	daemonInfo = make(map[string]interface{})
+	daemonArgs := []string{"is-active", "system-checkupdates"}
+	daemonStatus := RunCommandGetResult("systemctl", daemonArgs)
+	daemonInfo["DaemonStatus"] = daemonStatus
+
+	return daemonInfo, err
 }
