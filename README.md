@@ -13,6 +13,7 @@
 
 * [Usage](#usage)
 * [Compile](#compile)
+* [Dependencies](#dependencies)
 
 <!-- vim-markdown-toc -->
 
@@ -70,3 +71,7 @@ CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build main.go
 # 适用于Windows amd64平台
 CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build main.go
 ```
+
+## Dependencies
+
+- systemd
