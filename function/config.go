@@ -93,6 +93,7 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"StorageSize":       "存储设备容量",
 			"BootTime":          "系统启动时间",
 			"Uptime":            "系统运行时间",
+			"StartTime":         "系统启动用时",
 			"User":              "用户名",
 			"UserName":          "用户昵称",
 			"UserUid":           "用户ID",
