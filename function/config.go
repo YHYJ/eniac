@@ -44,14 +44,14 @@ func GetTomlConfig(filePath string) (*toml.Tree, error) {
 func WriteTomlConfig(filePath string) (int64, error) {
 	// 定义一个map[string]interface{}类型的变量并赋值
 	exampleConf := map[string]interface{}{
-		"cpu": map[string]string{
+		"cpu": map[string]interface{}{
 			"cache_unit": "KB",
 		},
-		"memory": map[string]string{
+		"memory": map[string]interface{}{
 			"data_unit":    "GB",
 			"percent_unit": "%",
 		},
-		"genealogy": map[string]string{
+		"genealogy": map[string]interface{}{
 			"BIOSVendor":        "BIOS厂商",
 			"BIOSVersion":       "BIOS版本",
 			"BIOSDate":          "BIOS发布日期",
@@ -102,7 +102,7 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"UpdateList":        "更新列表",
 			"DaemonStatus":      "更新服务状态",
 		},
-		"update": map[string]string{
+		"update": map[string]interface{}{
 			"record_file": "/tmp/system-checkupdates.log",
 		},
 	}
