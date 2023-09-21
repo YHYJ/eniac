@@ -108,7 +108,10 @@ func GetTimeInfo() (timeInfo map[string]interface{}, err error) {
 	result := fmt.Sprintf("%vd %vh %vm %vs", day, hour, minute, second)
 	timeInfo["Uptime"] = result // 系统运行时间
 	starttimeArgs := []string{"time"}
-	StartTime := RunCommandGetResult("systemd-analyze", starttimeArgs)
+	StartTime, err := RunCommandGetResult("systemd-analyze", starttimeArgs)
+	if err != nil {
+		fmt.Printf("\x1b[31m%s\x1b[0m\n", err)
+	}
 	timeInfo["StartTime"] = strings.Split(strings.Split(StartTime, "\n")[0], "= ")[1] // 系统启动用时
 
 	return timeInfo, err

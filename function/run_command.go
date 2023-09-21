@@ -24,20 +24,22 @@ var (
 )
 
 // 运行指定命令并获取命令输出
-func RunCommandGetResult(command string, args []string) string {
+func RunCommandGetResult(command string, args []string) (string, error) {
 	_, err = exec.LookPath(command)
 	if err == nil {
 		// 定义命令
 		cmd := exec.Command(command, args...)
 		// 执行命令并获取命令输出
-		output, _ := cmd.Output()
+		output, err := cmd.Output()
+		if err != nil {
+			return "", err
+		}
 		// 类型转换
 		result = strings.TrimRight(string(output), "\n")
+		return result, nil
 	} else {
-		result = fmt.Sprintf("%v: %v\n", "Command not found", command)
+		return "", fmt.Errorf("Command not found: %s", command)
 	}
-
-	return result
 }
 
 // 运行指定命令并获取标志位
