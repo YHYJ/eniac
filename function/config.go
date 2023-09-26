@@ -66,7 +66,7 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"OS":                "操作系统",
 			"Arch":              "系统架构",
 			"Kernel":            "内核版本",
-			"Platform":          "平台",
+			"Platform":          "系统类型",
 			"Hostname":          "主机名称",
 			"TimeZone":          "系统时区",
 			"Load1":             "1分钟负载",
