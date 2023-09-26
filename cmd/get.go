@@ -174,7 +174,7 @@ var getCmd = &cobra.Command{
 				}
 				memInfo, _ := function.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
 				// 顺序输出
-				var slice = []string{"MemoryTotal", "MemoryUsed", "MemoryUsedPercent", "MemoryFree", "MemoryShared", "MemoryBuffCache", "MemoryAvail"}
+				var slice = []string{"MemoryUsedPercent", "MemoryTotal", "MemoryUsed", "MemoryAvail", "MemoryFree", "MemoryBuffCache", "MemoryShared"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
 						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), memInfo[key])
@@ -217,7 +217,7 @@ var getCmd = &cobra.Command{
 				fmt.Println("----------OS Information----------")
 				osInfo, _ := function.GetOSInfo(sysInfo)
 				// 顺序输出
-				var slice = []string{"Platform", "OS", "Kernel", "Arch", "Hostname", "TimeZone"}
+				var slice = []string{"Platform", "Arch", "OS", "Kernel", "TimeZone", "Hostname"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
 						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), osInfo[key])
@@ -233,7 +233,7 @@ var getCmd = &cobra.Command{
 				var slice = []string{"Load1", "Load5", "Load15"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
-						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), loadInfo[key])
+						fmt.Printf("%-6v: %v\n", genealogyCfg.Get(key).(string), loadInfo[key])
 					} else {
 						fmt.Printf("%v: %v\n", key, loadInfo[key])
 					}
@@ -256,7 +256,7 @@ var getCmd = &cobra.Command{
 				fmt.Println("----------Time Information----------")
 				timeInfo, _ := function.GetTimeInfo()
 				// 顺序输出
-				var slice = []string{"Uptime", "BootTime", "StartTime"}
+				var slice = []string{"StartTime", "Uptime", "BootTime"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
 						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), timeInfo[key])
@@ -269,7 +269,7 @@ var getCmd = &cobra.Command{
 				fmt.Println("----------User Information----------")
 				userInfo, _ := function.GetUserInfo()
 				// 顺序输出
-				var slice = []string{"User", "UserName", "UserUid", "UserGid", "UserHomeDir"}
+				var slice = []string{"UserName", "User", "UserUid", "UserGid", "UserHomeDir"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
 						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), userInfo[key])
