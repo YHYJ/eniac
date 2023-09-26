@@ -304,7 +304,7 @@ var getCmd = &cobra.Command{
 					fmt.Printf("\x1b[36;1m%s\x1b[0m\n", err)
 				} else {
 					for num, info := range updateInfo {
-						fmt.Printf("%4v%v: %v\n", "", num+1, info)
+						fmt.Printf("%v: %v\n", num+1, info)
 					}
 				}
 			} else {
@@ -318,7 +318,7 @@ var getCmd = &cobra.Command{
 					}
 				}
 				textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[32;1m%v\x1b[0m\n"
-				listFormat := "%4v%v: \x1b[32m%v\x1b[0m\n"
+				listFormat := "%8v: \x1b[32m%v\x1b[0m\n"
 				// 输出更新状态监测
 				daemonInfo, _ := function.GetUpdateDaemonInfo()
 				var slice = []string{"DaemonStatus"}
@@ -341,7 +341,7 @@ var getCmd = &cobra.Command{
 						fmt.Printf(textFormat, key, len(updateInfo))
 					}
 					for num, info := range updateInfo {
-						fmt.Printf(listFormat, "", num+1, info)
+						fmt.Printf(listFormat, num+1, info)
 					}
 				}
 			}
