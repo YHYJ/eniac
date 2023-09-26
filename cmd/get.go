@@ -164,13 +164,15 @@ var getCmd = &cobra.Command{
 			fmt.Println("----------Memory Information----------")
 			// 获取Memory配置项
 			if confTree != nil {
-				confItems := []string{"memory.data_unit", "memory.percent_unit"}
-				for _, confItem := range confItems {
-					if confTree.Has(confItem) {
-						memoryDataUnit = confTree.Get(confItem).(string)
-					} else {
-						fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", confItem)
-					}
+				if confTree.Has("memory.data_unit") {
+					memoryDataUnit = confTree.Get("memory.data_unit").(string)
+				} else {
+					fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", "memory.data_unit")
+				}
+				if confTree.Has("memory.percent_unit") {
+					memoryPercentUnit = confTree.Get("memory.percent_unit").(string)
+				} else {
+					fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", "memory.percent_unit")
 				}
 			}
 			memInfo, _ := function.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
