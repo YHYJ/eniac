@@ -87,39 +87,42 @@ var getCmd = &cobra.Command{
 		if productFlag {
 			fmt.Println("----------Product Information----------")
 			productInfo, _ := function.GetProductInfo(sysInfo)
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
 			var slice = []string{"ProductVendor", "ProductName"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
-					fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), productInfo[key])
+					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), productInfo[key])
 				} else {
-					fmt.Printf("%v: %v\n", key, productInfo[key])
+					fmt.Printf(textFormat, key, productInfo[key])
 				}
 			}
 		}
 		if boardFlag {
 			fmt.Println("----------Board Information----------")
 			boardInfo, _ := function.GetBoardInfo(sysInfo)
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
 			var slice = []string{"BoardVendor", "BoardName", "BoardVersion"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
-					fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), boardInfo[key])
+					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), boardInfo[key])
 				} else {
-					fmt.Printf("%v: %v\n", key, boardInfo[key])
+					fmt.Printf(textFormat, key, boardInfo[key])
 				}
 			}
 		}
 		if biosFlag {
 			fmt.Println("----------BIOS Information----------")
 			biosInfo, _ := function.GetBIOSInfo(sysInfo)
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
 			var slice = []string{"BIOSVendor", "BIOSVersion", "BIOSDate"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
-					fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), biosInfo[key])
+					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), biosInfo[key])
 				} else {
-					fmt.Printf("%v: %v\n", key, biosInfo[key])
+					fmt.Printf(textFormat, key, biosInfo[key])
 				}
 			}
 		}
@@ -134,28 +137,31 @@ var getCmd = &cobra.Command{
 				}
 			}
 			cpuInfo, _ := function.GetCPUInfo(sysInfo, cpuCacheUnit)
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
 			var slice = []string{"CPUModel", "CPUCache", "CPUNumber", "CPUCores", "CPUThreads"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
-					fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), cpuInfo[key])
+					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), cpuInfo[key])
 				} else {
-					fmt.Printf("%v: %v\n", key, cpuInfo[key])
+					fmt.Printf(textFormat, key, cpuInfo[key])
 				}
 			}
 		}
 		if storageFlag {
 			fmt.Println("----------Storage Information----------")
 			storageInfo, _ := function.GetStorageInfo(sysInfo)
+			titleFormat := "\x1b[30;1m%v\x1b[0m\n"
+			textFormat := "\x1b[34;1m%4v%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
 			for index, values := range storageInfo {
 				// 顺序输出
 				var slice = []string{"StorageName", "StorageSize", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial"}
-				fmt.Println(index)
+				fmt.Printf(titleFormat, index)
 				for _, name := range slice {
 					if genealogyCfg.Has(name) {
-						fmt.Printf("%4v%v: %v\n", "", genealogyCfg.Get(name).(string), values.(map[string]interface{})[name])
+						fmt.Printf(textFormat, "", genealogyCfg.Get(name).(string), values.(map[string]interface{})[name])
 					} else {
-						fmt.Printf("%4v%v: %v\n", "", name, values.(map[string]interface{})[name])
+						fmt.Printf(textFormat, "", name, values.(map[string]interface{})[name])
 					}
 				}
 			}
@@ -176,13 +182,14 @@ var getCmd = &cobra.Command{
 				}
 			}
 			memInfo, _ := function.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
 			// 顺序输出
 			var slice = []string{"MemoryUsedPercent", "MemoryTotal", "MemoryUsed", "MemoryAvail", "MemoryFree", "MemoryBuffCache", "MemoryShared"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
-					fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), memInfo[key])
+					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), memInfo[key])
 				} else {
-					fmt.Printf("%v: %v\n", key, memInfo[key])
+					fmt.Printf(textFormat, key, memInfo[key])
 				}
 			}
 		}
@@ -197,23 +204,24 @@ var getCmd = &cobra.Command{
 				}
 			}
 			swapInfo, _ := function.GetSwapInfo(memoryDataUnit)
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
 			// 顺序输出
 			if swapInfo["SwapDisabled"] == true {
 				var slice = []string{"SwapDisabled"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
-						fmt.Printf("%v\n", genealogyCfg.Get(key).(string))
+						fmt.Printf("🚫%v\n", genealogyCfg.Get(key).(string))
 					} else {
-						fmt.Printf("%v\n", key)
+						fmt.Printf("🚫%v\n", key)
 					}
 				}
 			} else {
 				var slice = []string{"SwapTotal", "SwapFree"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
-						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), swapInfo[key])
+						fmt.Printf(textFormat, genealogyCfg.Get(key).(string), swapInfo[key])
 					} else {
-						fmt.Printf("%v: %v\n", key, swapInfo[key])
+						fmt.Printf(textFormat, key, swapInfo[key])
 					}
 				}
 			}
@@ -221,71 +229,76 @@ var getCmd = &cobra.Command{
 		if osFlag {
 			fmt.Println("----------OS Information----------")
 			osInfo, _ := function.GetOSInfo(sysInfo)
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
 			var slice = []string{"Arch", "Platform", "OS", "Kernel", "TimeZone", "Hostname"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
-					fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), osInfo[key])
+					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), osInfo[key])
 				} else {
-					fmt.Printf("%v: %v\n", key, osInfo[key])
+					fmt.Printf(textFormat, key, osInfo[key])
 				}
 			}
 		}
 		if loadFlag {
 			fmt.Println("----------Load Information----------")
 			loadInfo, _ := function.GetLoadInfo()
+			textFormat := "\x1b[30;1m%-6v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
 			var slice = []string{"Load1", "Load5", "Load15"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
-					fmt.Printf("%-6v: %v\n", genealogyCfg.Get(key).(string), loadInfo[key])
+					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), loadInfo[key])
 				} else {
-					fmt.Printf("%v: %v\n", key, loadInfo[key])
+					fmt.Printf(textFormat, key, loadInfo[key])
 				}
 			}
 		}
 		if processFlag {
 			fmt.Println("----------Process Information----------")
 			procsInfo, _ := function.GetProcessInfo()
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
 			var slice = []string{"Process"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
-					fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), procsInfo[key])
+					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), procsInfo[key])
 				} else {
-					fmt.Printf("%v: %v\n", key, procsInfo[key])
+					fmt.Printf(textFormat, key, procsInfo[key])
 				}
 			}
 		}
 		if timeFlag {
 			fmt.Println("----------Time Information----------")
 			timeInfo, _ := function.GetTimeInfo()
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[36m%v\x1b[0m\n"
 			// 顺序输出
 			var slice = []string{"StartTime", "Uptime", "BootTime"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
-					fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), timeInfo[key])
+					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), timeInfo[key])
 				} else {
-					fmt.Printf("%v: %v\n", key, timeInfo[key])
+					fmt.Printf(textFormat, key, timeInfo[key])
 				}
 			}
 		}
 		if userFlag {
 			fmt.Println("----------User Information----------")
 			userInfo, _ := function.GetUserInfo()
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[36m%v\x1b[0m\n"
 			// 顺序输出
 			var slice = []string{"UserName", "User", "UserUid", "UserGid", "UserHomeDir"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
-					fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), userInfo[key])
+					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), userInfo[key])
 				} else {
-					fmt.Printf("%v: %v\n", key, userInfo[key])
+					fmt.Printf(textFormat, key, userInfo[key])
 				}
 			}
 		}
 		if updateFlag {
 			if onlyFlag {
-				// 仅输出可更新包信息，转为系统更新检测插件服务
+				// 仅输出可更新包信息，专为系统更新检测插件服务
 				updateInfo, err := function.GetUpdateInfo(updateRecordFile, 0)
 				if err != nil {
 					fmt.Printf("\x1b[36;1m%s\x1b[0m\n", err)
@@ -304,14 +317,15 @@ var getCmd = &cobra.Command{
 						fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", "update.record_file")
 					}
 				}
+				textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[32;1m%v\x1b[0m\n"
 				// 输出更新状态监测
 				daemonInfo, _ := function.GetUpdateDaemonInfo()
 				var slice = []string{"DaemonStatus"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
-						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), daemonInfo[key])
+						fmt.Printf(textFormat, genealogyCfg.Get(key).(string), daemonInfo[key])
 					} else {
-						fmt.Printf("%v: %v\n", key, daemonInfo[key])
+						fmt.Printf(textFormat, key, daemonInfo[key])
 					}
 				}
 				// 输出具体更新信息
@@ -321,9 +335,9 @@ var getCmd = &cobra.Command{
 				} else {
 					key := "UpdateList"
 					if genealogyCfg.Has(key) {
-						fmt.Printf("%v: %v\n", genealogyCfg.Get(key).(string), len(updateInfo))
+						fmt.Printf(textFormat, genealogyCfg.Get(key).(string), len(updateInfo))
 					} else {
-						fmt.Printf("%v: %v\n", key, len(updateInfo))
+						fmt.Printf(textFormat, key, len(updateInfo))
 					}
 					for num, info := range updateInfo {
 						fmt.Printf("%4v%v: %v\n", "", num+1, info)
