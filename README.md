@@ -59,17 +59,17 @@ go build main.go
 
 ```bash
 # 适用于Linux AArch64平台
-CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags='-s -w' -trimpath main.go
+CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags='-s -w' -trimpath -o eniac main.go
 ```
 
 ```bash
 # 适用于macOS amd64平台
-CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags='-s -w' -trimpath main.go
+CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags='-s -w' -trimpath -o eniac main.go
 ```
 
 ```bash
 # 适用于Windows amd64平台
-CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags='-s -w' -trimpath main.go
+CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags='-s -w' -trimpath -o eniac main.go
 ```
 
 ## Dependencies
