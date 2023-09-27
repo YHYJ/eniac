@@ -20,14 +20,14 @@ tidy:
 build:
 	@echo -e "\x1b[32m==>\x1b[0m Trying to compile project"
 	@go build -trimpath -ldflags "-s -w" -o $(TARGET)
-	@echo -e "\x1b[32m[✔]\x1b[0m Successfully generated \x1b[36m$(TARGET)\x1b[0m"
+	@echo -e "\x1b[32m[✔]\x1b[0m Successfully generated \x1b[32m$(TARGET)\x1b[0m"
 
 install:
 	@echo -e "\x1b[32m==>\x1b[0m Trying to install $(TARGET)"
 	@install --mode=755 --owner=$(ATTRIBUTION) --group=$(ATTRIBUTION) $(TARGET) $(INSTALL_PATH)/$(TARGET)
-	@echo -e "\x1b[32m[✔]\x1b[0m Successfully installed \x1b[36m$(TARGET)\x1b[0m"
+	@echo -e "\x1b[32m[✔]\x1b[0m Successfully installed \x1b[32m$(TARGET)\x1b[0m"
 
 clean:
 	@echo -e "\x1b[32m==>\x1b[0m Cleaning build process files"
-	@rm -f $(TARGET)     && echo -e "    - Removed \x1b[36m$(TARGET)\x1b[0m"
+	@rm -f $(TARGET)     && echo -e "    - Removed \x1b[32m$(TARGET)\x1b[0m"
 	@echo -e "\x1b[32m[✔]\x1b[0m Successfully cleaned files"
