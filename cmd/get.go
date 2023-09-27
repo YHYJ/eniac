@@ -150,12 +150,12 @@ var getCmd = &cobra.Command{
 		}
 		if storageFlag {
 			fmt.Println("----------Storage Information----------")
-			storageInfo, _ := function.GetStorageInfo(sysInfo)
+			storageInfo, _ := function.GetStorageInfo()
 			titleFormat := "\x1b[30;1m%v\x1b[0m\n"
 			textFormat := "\x1b[34;1m%4v%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
 			for index, values := range storageInfo {
 				// 顺序输出
-				var slice = []string{"StorageName", "StorageSize", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial"}
+				var slice = []string{"StorageName", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
 				fmt.Printf(titleFormat, index)
 				for _, name := range slice {
 					if genealogyCfg.Has(name) {

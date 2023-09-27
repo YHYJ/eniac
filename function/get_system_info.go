@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/jaypipes/ghw"
 	"github.com/shirou/gopsutil/v3/host"
 	"github.com/zcalusic/sysinfo"
 )
@@ -83,18 +84,27 @@ func GetProductInfo(sysInfo sysinfo.SysInfo) (productInfo map[string]interface{}
 }
 
 // GetStorageInfo 获取存储设备信息
-func GetStorageInfo(sysInfo sysinfo.SysInfo) (storageInfo map[string]interface{}, err error) {
+func GetStorageInfo() (storageInfo map[string]interface{}, err error) {
+	block, err := ghw.Block()
+	if err != nil {
+		fmt.Println("Failed to get block storage information:", err)
+		return
+	}
 	storageInfo = make(map[string]interface{})
-	for index, value := range sysInfo.Storage {
+	for index, disk := range block.Disks {
 		storageValue := make(map[string]interface{})
-		storageValue["StorageName"] = value.Name
-		storageValue["StorageDriver"] = value.Driver
-		storageValue["StorageVendor"] = value.Vendor
-		storageValue["StorageModel"] = value.Model
-		storageValue["StorageSerial"] = value.Serial
-		storageSize, storageSizeUnit := DataUnitConvert("GB", "TB", float64(value.Size))
-		storageValue["StorageSize"] = fmt.Sprintf("%.1f %s", storageSize, storageSizeUnit)
-		storageInfo[fmt.Sprintf("%s%d", "Storage", index)] = storageValue
+		if disk.SizeBytes > 0 {
+			storageValue["StorageName"] = disk.Name
+			storageValue["StorageDriver"] = disk.StorageController
+			storageValue["StorageVendor"] = disk.Vendor
+			storageValue["StorageModel"] = disk.Model
+			storageValue["StorageType"] = disk.DriveType
+			storageValue["StorageRemovable"] = disk.IsRemovable
+			storageValue["StorageSerial"] = disk.SerialNumber
+			storageSize, storageSizeUnit := DataUnitConvert("B", "TB", float64(disk.SizeBytes))
+			storageValue["StorageSize"] = fmt.Sprintf("%.1f %s", storageSize, storageSizeUnit)
+			storageInfo[fmt.Sprintf("%s%d", "Storage", index)] = storageValue
+		}
 	}
 
 	return storageInfo, err
