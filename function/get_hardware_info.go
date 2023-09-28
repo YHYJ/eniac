@@ -17,7 +17,8 @@ import (
 // GetStorageInfo 获取存储设备信息
 func GetStorageInfo() (storageInfo map[string]interface{}) {
 	storageInfo = make(map[string]interface{})
-	for index, disk := range blockData.Disks {
+	index := 1 // 排除虚拟设备影响的编号
+	for _, disk := range blockData.Disks {
 		storageValue := make(map[string]interface{})
 		if disk.SizeBytes > 0 {
 			storageValue["StorageName"] = disk.Name
@@ -30,6 +31,7 @@ func GetStorageInfo() (storageInfo map[string]interface{}) {
 			storageSize, storageSizeUnit := DataUnitConvert("B", "TB", float64(disk.SizeBytes))
 			storageValue["StorageSize"] = fmt.Sprintf("%.1f %s", storageSize, storageSizeUnit)
 			storageInfo[fmt.Sprintf("%s%d", "Storage.", index)] = storageValue
+			index += 1
 		}
 	}
 
@@ -122,7 +124,7 @@ func GetNetworkInfo() (networkInfo map[string]interface{}) {
 	// 访问解析后的数据
 	networkInfo = make(map[string]interface{})
 	network := networkDataJ2S["network"]
-	index := 0 // 排除虚拟网卡影响的编号
+	index := 1 // 排除虚拟网卡影响的编号
 	for _, nic := range network.Nics {
 		networkValue := make(map[string]interface{})
 		if !nic.IsVirtual {
@@ -142,8 +144,8 @@ func GetNetworkInfo() (networkInfo map[string]interface{}) {
 			networkValue["NicSpeed"] = nic.Speed
 			networkValue["NicDuplex"] = nic.Duplex
 			networkInfo[fmt.Sprintf("%s%d", "NIC.", index)] = networkValue
+			index += 1
 		}
-		index += 1
 	}
 
 	return networkInfo
