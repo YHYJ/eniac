@@ -14,17 +14,6 @@ import (
 	"fmt"
 )
 
-// GetNicInfo 获取网卡信息
-func GetNicInfo(address string) (nicInfo map[string]interface{}) {
-	nicInfo = make(map[string]interface{})
-	nicInfo["NicAddress"] = pciData.GetDevice(address).Address
-	nicInfo["NicDriver"] = pciData.GetDevice(address).Driver
-	nicInfo["NicVendor"] = pciData.GetDevice(address).Vendor.Name
-	nicInfo["NicProduct"] = pciData.GetDevice(address).Product.Name
-
-	return nicInfo
-}
-
 // GetStorageInfo 获取存储设备信息
 func GetStorageInfo() (storageInfo map[string]interface{}) {
 	storageInfo = make(map[string]interface{})
@@ -40,7 +29,7 @@ func GetStorageInfo() (storageInfo map[string]interface{}) {
 			storageValue["StorageSerial"] = disk.SerialNumber
 			storageSize, storageSizeUnit := DataUnitConvert("B", "TB", float64(disk.SizeBytes))
 			storageValue["StorageSize"] = fmt.Sprintf("%.1f %s", storageSize, storageSizeUnit)
-			storageInfo[fmt.Sprintf("%s%d", "Storage", index)] = storageValue
+			storageInfo[fmt.Sprintf("%s%d", "Storage.", index)] = storageValue
 		}
 	}
 
@@ -95,7 +84,6 @@ func GetGPUInfo() (gpuInfo map[string]interface{}) {
 	err := json.Unmarshal([]byte(gpuDataJson), &gpuDataJ2S)
 	if err != nil {
 		fmt.Println("Error:", err)
-		return
 	}
 
 	gpuInfo = make(map[string]interface{})
@@ -105,4 +93,54 @@ func GetGPUInfo() (gpuInfo map[string]interface{}) {
 	gpuInfo["GPUProduct"] = gpuDataJ2S.GPU.Cards[0].PCI.Product.NAME
 
 	return gpuInfo
+}
+
+// GetNetworkInfo 获取网络信息
+func GetNetworkInfo() (networkInfo map[string]interface{}) {
+	type NICDataJ2S struct {
+		Name       string `json:"name"`
+		MacAddress string `json:"mac_address"`
+		IsVirtual  bool   `json:"is_virtual"`
+		PCIAddress string `json:"pci_address"`
+		Speed      string `json:"speed"`
+		Duplex     string `json:"duplex"`
+	}
+	type NetworkDataJ2S struct {
+		Nics []NICDataJ2S `json:"nics"`
+	}
+
+	// 获取JSON类型的网络信息
+	networkDataJson := networkData.JSONString(false)
+
+	// 解析JSON
+	var networkDataJ2S map[string]NetworkDataJ2S
+	err := json.Unmarshal([]byte(networkDataJson), &networkDataJ2S)
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
+
+	// 访问解析后的数据
+	networkInfo = make(map[string]interface{})
+	network := networkDataJ2S["network"]
+	for index, nic := range network.Nics {
+		networkValue := make(map[string]interface{})
+		networkValue["NicName"] = nic.Name
+		if nic.PCIAddress != "" {
+			networkValue["NicDriver"] = pciData.GetDevice(nic.PCIAddress).Driver
+			networkValue["NicProduct"] = pciData.GetDevice(nic.PCIAddress).Product.Name
+			networkValue["NicVendor"] = pciData.GetDevice(nic.PCIAddress).Vendor.Name
+		} else {
+			networkValue["NicDriver"] = "unknown"
+			networkValue["NicProduct"] = "unknown"
+			networkValue["NicVendor"] = "unknown"
+		}
+		networkValue["NicMacAddress"] = nic.MacAddress
+		networkValue["NicIsVirtual"] = nic.IsVirtual
+		networkValue["NicPCIAddress"] = nic.PCIAddress
+		networkValue["NicSpeed"] = nic.Speed
+		networkValue["NicDuplex"] = nic.Duplex
+		networkInfo[fmt.Sprintf("%s%d", "NIC.", index)] = networkValue
+	}
+
+	return networkInfo
 }
