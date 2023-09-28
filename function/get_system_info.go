@@ -54,6 +54,16 @@ func GetCPUInfo(sysInfo sysinfo.SysInfo, dataUnit string) (cpuInfo map[string]in
 	return cpuInfo, err
 }
 
+// GetNicInfo 获取网卡信息
+func GetNicInfo(address string) (nicInfo map[string]interface{}, err error) {
+	nicInfo = make(map[string]interface{})
+	nicInfo["NicDriver"] = pciInfo.GetDevice(address).Driver
+	nicInfo["NicVendor"] = pciInfo.GetDevice(address).Vendor.Name
+	nicInfo["NicProduct"] = pciInfo.GetDevice(address).Product.Name
+
+	return nicInfo, err
+}
+
 // GetOSInfo 获取系统信息
 func GetOSInfo(sysInfo sysinfo.SysInfo) (osInfo map[string]interface{}, err error) {
 	osInfo = make(map[string]interface{})

@@ -52,8 +52,12 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"percent_unit": "%",
 		},
 		"storage": map[string]interface{}{
-			// 存储设备的PCI ID，使用命令`lspci`查看，例如`lspci`结果是'01:00.0'，则实际值为'0000:01:00.0'
-			"address":    "0000:01:00.0",
+			// 设备的PCI ID，使用命令`lspci`查看，例如`lspci`结果是'01:00.0'，则实际值为'0000:02:00.0'
+			"address": "0000:02:00.0",
+		},
+		"nic": map[string]interface{}{
+			// 设备的PCI ID，使用命令`lspci`查看，例如`lspci`结果是'01:00.0'，则实际值为'0000:01:00.0'
+			"address": "0000:01:00.0",
 		},
 		"genealogy": map[string]interface{}{
 			"BIOSVendor":        "BIOS厂商",
@@ -76,6 +80,9 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"Load1":             "1分钟负载",
 			"Load5":             "5分钟负载",
 			"Load15":            "15分钟负载",
+			"NicDriver":         "网卡驱动",
+			"NicProduct":        "网卡型号",
+			"NicVendor":         "网卡厂商",
 			"MemoryTotal":       "内存大小",
 			"MemoryUsed":        "已用内存",
 			"MemoryUsedPercent": "内存使用率",

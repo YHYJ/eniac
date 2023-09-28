@@ -36,6 +36,7 @@ var getCmd = &cobra.Command{
 			memoryDataUnit    string     = "GB"
 			memoryPercentUnit string     = "%"
 			storageAddress    string     = ""
+			nicAddress        string     = ""
 			genealogyCfg      *toml.Tree = defaultGenealogyCfg
 			updateRecordFile  string     = "/tmp/system-checkupdates.log"
 		)
@@ -51,7 +52,7 @@ var getCmd = &cobra.Command{
 		var sysInfo sysinfo.SysInfo
 		sysInfo.GetSysInfo()
 		// 解析参数
-		var biosFlag, boardFlag, cpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, timeFlag, userFlag, updateFlag, onlyFlag bool
+		var biosFlag, boardFlag, cpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, nicFlag, timeFlag, userFlag, updateFlag, onlyFlag bool
 		allFlag, _ := cmd.Flags().GetBool("all")
 		if allFlag {
 			biosFlag = true
@@ -64,6 +65,7 @@ var getCmd = &cobra.Command{
 			productFlag = true
 			storageFlag = true
 			swapFlag = true
+			nicFlag = true
 			timeFlag = true
 			userFlag = true
 			updateFlag = true
@@ -79,6 +81,7 @@ var getCmd = &cobra.Command{
 			productFlag, _ = cmd.Flags().GetBool("product")
 			storageFlag, _ = cmd.Flags().GetBool("storage")
 			swapFlag, _ = cmd.Flags().GetBool("swap")
+			nicFlag, _ = cmd.Flags().GetBool("nic")
 			timeFlag, _ = cmd.Flags().GetBool("time")
 			userFlag, _ = cmd.Flags().GetBool("user")
 			updateFlag, _ = cmd.Flags().GetBool("update")
@@ -235,6 +238,28 @@ var getCmd = &cobra.Command{
 				}
 			}
 		}
+		if nicFlag {
+			fmt.Println("----------NIC Information----------")
+			// 获取NIC配置项
+			if confTree != nil {
+				if confTree.Has("nic.address") {
+					nicAddress = confTree.Get("nic.address").(string)
+				} else {
+					fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", "nic.address")
+				}
+			}
+			nicInfo, _ := function.GetNicInfo(nicAddress)
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
+			// 顺序输出
+			var slice = []string{"NicDriver", "NicVendor", "NicProduct"}
+			for _, key := range slice {
+				if genealogyCfg.Has(key) {
+					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), nicInfo[key])
+				} else {
+					fmt.Printf(textFormat, key, nicInfo[key])
+				}
+			}
+		}
 		if osFlag {
 			fmt.Println("----------OS Information----------")
 			osInfo, _ := function.GetOSInfo(sysInfo)
@@ -370,6 +395,7 @@ func init() {
 	getCmd.Flags().BoolP("product", "", false, "Get Product information")
 	getCmd.Flags().BoolP("storage", "", false, "Get Storage information")
 	getCmd.Flags().BoolP("swap", "", false, "Get Swap information")
+	getCmd.Flags().BoolP("nic", "", false, "Get NIC information")
 	getCmd.Flags().BoolP("time", "", false, "Get Time information")
 	getCmd.Flags().BoolP("user", "", false, "Get User information")
 	getCmd.Flags().BoolP("update", "", false, "Get Update information")
