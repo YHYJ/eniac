@@ -13,13 +13,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jaypipes/ghw"
-	"github.com/shirou/gopsutil/v3/host"
 	"github.com/zcalusic/sysinfo"
 )
-
-var hostInfo, _ = host.Info()
-var pciInfo, _ = ghw.PCI()
 
 // GetBIOSInfo 获取BIOS信息
 func GetBIOSInfo(sysInfo sysinfo.SysInfo) (biosInfo map[string]interface{}, err error) {
@@ -54,16 +49,6 @@ func GetCPUInfo(sysInfo sysinfo.SysInfo, dataUnit string) (cpuInfo map[string]in
 	return cpuInfo, err
 }
 
-// GetNicInfo 获取网卡信息
-func GetNicInfo(address string) (nicInfo map[string]interface{}, err error) {
-	nicInfo = make(map[string]interface{})
-	nicInfo["NicDriver"] = pciInfo.GetDevice(address).Driver
-	nicInfo["NicVendor"] = pciInfo.GetDevice(address).Vendor.Name
-	nicInfo["NicProduct"] = pciInfo.GetDevice(address).Product.Name
-
-	return nicInfo, err
-}
-
 // GetOSInfo 获取系统信息
 func GetOSInfo(sysInfo sysinfo.SysInfo) (osInfo map[string]interface{}, err error) {
 	osInfo = make(map[string]interface{})
@@ -71,7 +56,7 @@ func GetOSInfo(sysInfo sysinfo.SysInfo) (osInfo map[string]interface{}, err erro
 	osInfo["Arch"] = sysInfo.OS.Architecture                     // 系统架构
 	osInfo["Kernel"] = sysInfo.Kernel.Release                    // 内核版本
 	osInfo["Platform"] = UpperStringFirstChar(sysInfo.OS.Vendor) // 平台
-	osInfo["Hostname"] = hostInfo.Hostname                       // 主机名
+	osInfo["Hostname"] = hostData.Hostname                       // 主机名
 	osInfo["TimeZone"] = sysInfo.Node.Timezone                   // 时区
 
 	return osInfo, err
@@ -80,7 +65,7 @@ func GetOSInfo(sysInfo sysinfo.SysInfo) (osInfo map[string]interface{}, err erro
 // GetProcessInfo 获取进程信息
 func GetProcessInfo() (procsInfo map[string]interface{}, err error) {
 	procsInfo = make(map[string]interface{})
-	procsInfo["Process"] = hostInfo.Procs // 进程数
+	procsInfo["Process"] = hostData.Procs // 进程数
 
 	return procsInfo, err
 }
@@ -94,38 +79,11 @@ func GetProductInfo(sysInfo sysinfo.SysInfo) (productInfo map[string]interface{}
 	return productInfo, err
 }
 
-// GetStorageInfo 获取存储设备信息
-func GetStorageInfo(address string) (storageInfo map[string]interface{}, err error) {
-	block, err := ghw.Block()
-	if err != nil {
-		fmt.Println("Failed to get block storage information:", err)
-		return
-	}
-	storageInfo = make(map[string]interface{})
-	for index, disk := range block.Disks {
-		storageValue := make(map[string]interface{})
-		if disk.SizeBytes > 0 {
-			storageValue["StorageName"] = disk.Name
-			storageValue["StorageDriver"] = disk.StorageController
-			storageValue["StorageVendor"] = pciInfo.GetDevice(address).Vendor.Name
-			storageValue["StorageModel"] = disk.Model
-			storageValue["StorageType"] = disk.DriveType
-			storageValue["StorageRemovable"] = disk.IsRemovable
-			storageValue["StorageSerial"] = disk.SerialNumber
-			storageSize, storageSizeUnit := DataUnitConvert("B", "TB", float64(disk.SizeBytes))
-			storageValue["StorageSize"] = fmt.Sprintf("%.1f %s", storageSize, storageSizeUnit)
-			storageInfo[fmt.Sprintf("%s%d", "Storage", index)] = storageValue
-		}
-	}
-
-	return storageInfo, err
-}
-
 // GetTimeInfo 获取时间信息
 func GetTimeInfo() (timeInfo map[string]interface{}, err error) {
 	timeInfo = make(map[string]interface{})
-	timeInfo["BootTime"] = Uint2TimeString(hostInfo.BootTime) // 系统启动时间
-	day, hour, minute, second := Second2DayHourMinuteSecond(hostInfo.Uptime)
+	timeInfo["BootTime"] = Uint2TimeString(hostData.BootTime) // 系统启动时间
+	day, hour, minute, second := Second2DayHourMinuteSecond(hostData.Uptime)
 	result := fmt.Sprintf("%vd %vh %vm %vs", day, hour, minute, second)
 	timeInfo["Uptime"] = result // 系统运行时间
 	starttimeArgs := []string{"time"}

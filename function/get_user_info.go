@@ -9,17 +9,14 @@ Description: 获取用户信息
 
 package function
 
-import "os/user"
-
 // GetUserInfo 获取用户信息
 func GetUserInfo() (userInfo map[string]interface{}, err error) {
-	info, _ := user.Current()
 	userInfo = make(map[string]interface{})
-	userInfo["User"] = info.Name           // 用户昵称
-	userInfo["UserName"] = info.Username   // 用户名
-	userInfo["UserUid"] = info.Uid         // 用户ID
-	userInfo["UserGid"] = info.Gid         // 用户组ID
-	userInfo["UserHomeDir"] = info.HomeDir // 用户主目录
+	userInfo["User"] = userData.Name           // 用户昵称
+	userInfo["UserName"] = userData.Username   // 用户名
+	userInfo["UserUid"] = userData.Uid         // 用户ID
+	userInfo["UserGid"] = userData.Gid         // 用户组ID
+	userInfo["UserHomeDir"] = userData.HomeDir // 用户主目录
 
 	return userInfo, err
 }

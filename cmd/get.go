@@ -52,11 +52,12 @@ var getCmd = &cobra.Command{
 		var sysInfo sysinfo.SysInfo
 		sysInfo.GetSysInfo()
 		// 解析参数
-		var biosFlag, boardFlag, cpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, nicFlag, timeFlag, userFlag, updateFlag, onlyFlag bool
+		var biosFlag, boardFlag, cpuFlag, gpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, nicFlag, timeFlag, userFlag, updateFlag, onlyFlag bool
 		allFlag, _ := cmd.Flags().GetBool("all")
 		if allFlag {
 			biosFlag = true
 			boardFlag = true
+			gpuFlag = true
 			cpuFlag = true
 			loadFlag = true
 			memoryFlag = true
@@ -73,6 +74,7 @@ var getCmd = &cobra.Command{
 		} else {
 			biosFlag, _ = cmd.Flags().GetBool("bios")
 			boardFlag, _ = cmd.Flags().GetBool("board")
+			gpuFlag, _ = cmd.Flags().GetBool("gpu")
 			cpuFlag, _ = cmd.Flags().GetBool("cpu")
 			loadFlag, _ = cmd.Flags().GetBool("load")
 			memoryFlag, _ = cmd.Flags().GetBool("memory")
@@ -141,7 +143,7 @@ var getCmd = &cobra.Command{
 				}
 			}
 			cpuInfo, _ := function.GetCPUInfo(sysInfo, cpuCacheUnit)
-			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
 			// 顺序输出
 			var slice = []string{"CPUModel", "CPUCache", "CPUNumber", "CPUCores", "CPUThreads"}
 			for _, key := range slice {
@@ -149,6 +151,20 @@ var getCmd = &cobra.Command{
 					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), cpuInfo[key])
 				} else {
 					fmt.Printf(textFormat, key, cpuInfo[key])
+				}
+			}
+		}
+		if gpuFlag {
+			fmt.Println("----------GPU Information----------")
+			gpuInfo := function.GetGPUInfo()
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
+			// 顺序输出
+			var slice = []string{"GPUAddress", "GPUDriver", "GPUProduct", "GPUVendor"}
+			for _, key := range slice {
+				if genealogyCfg.Has(key) {
+					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), gpuInfo[key])
+				} else {
+					fmt.Printf(textFormat, key, gpuInfo[key])
 				}
 			}
 		}
@@ -162,12 +178,12 @@ var getCmd = &cobra.Command{
 					fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", "storage.address")
 				}
 			}
-			storageInfo, _ := function.GetStorageInfo(storageAddress)
+			storageInfo := function.GetStorageInfo(storageAddress)
 			titleFormat := "\x1b[30;1m%v\x1b[0m\n"
 			textFormat := "\x1b[34;1m%4v%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
 			for index, values := range storageInfo {
 				// 顺序输出
-				var slice = []string{"StorageName", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
+				var slice = []string{"StorageName", "StorageAddress", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
 				fmt.Printf(titleFormat, index)
 				for _, name := range slice {
 					if genealogyCfg.Has(name) {
@@ -248,10 +264,10 @@ var getCmd = &cobra.Command{
 					fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", "nic.address")
 				}
 			}
-			nicInfo, _ := function.GetNicInfo(nicAddress)
-			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
+			nicInfo := function.GetNicInfo(nicAddress)
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
 			// 顺序输出
-			var slice = []string{"NicDriver", "NicVendor", "NicProduct"}
+			var slice = []string{"NicAddress", "NicDriver", "NicVendor", "NicProduct"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
 					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), nicInfo[key])
@@ -388,6 +404,7 @@ func init() {
 	getCmd.Flags().BoolP("bios", "", false, "Get BIOS information")
 	getCmd.Flags().BoolP("board", "", false, "Get Board information")
 	getCmd.Flags().BoolP("cpu", "", false, "Get CPU information")
+	getCmd.Flags().BoolP("gpu", "", false, "Get GPU information")
 	getCmd.Flags().BoolP("load", "", false, "Get Load information")
 	getCmd.Flags().BoolP("memory", "", false, "Get Memory information")
 	getCmd.Flags().BoolP("os", "", false, "Get OS information")
