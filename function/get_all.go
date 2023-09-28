@@ -20,6 +20,7 @@ import (
 
 var pciData, _ = ghw.PCI()           // PCI信息
 var blockData, _ = ghw.Block()       // 存储设备信息
+var networkData, _ = ghw.Network()   // 网络设备信息
 var gpuData, _ = ghw.GPU()           // 显卡信息
 var loadData, _ = load.Avg()         // 系统负载信息
 var memData, _ = mem.VirtualMemory() // 内存信息

@@ -92,7 +92,7 @@ func GetGPUInfo() (gpuInfo map[string]interface{}) {
 
 	// 解析JSON
 	var gpuDataJ2S GPUDataJ2S
-	err = json.Unmarshal([]byte(gpuDataJson), &gpuDataJ2S)
+	err := json.Unmarshal([]byte(gpuDataJson), &gpuDataJ2S)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
