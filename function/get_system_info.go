@@ -19,6 +19,7 @@ import (
 )
 
 var hostInfo, _ = host.Info()
+var pciInfo, _ = ghw.PCI()
 
 // GetBIOSInfo 获取BIOS信息
 func GetBIOSInfo(sysInfo sysinfo.SysInfo) (biosInfo map[string]interface{}, err error) {
@@ -84,7 +85,7 @@ func GetProductInfo(sysInfo sysinfo.SysInfo) (productInfo map[string]interface{}
 }
 
 // GetStorageInfo 获取存储设备信息
-func GetStorageInfo() (storageInfo map[string]interface{}, err error) {
+func GetStorageInfo(address string) (storageInfo map[string]interface{}, err error) {
 	block, err := ghw.Block()
 	if err != nil {
 		fmt.Println("Failed to get block storage information:", err)
@@ -96,7 +97,7 @@ func GetStorageInfo() (storageInfo map[string]interface{}, err error) {
 		if disk.SizeBytes > 0 {
 			storageValue["StorageName"] = disk.Name
 			storageValue["StorageDriver"] = disk.StorageController
-			storageValue["StorageVendor"] = disk.Vendor
+			storageValue["StorageVendor"] = pciInfo.GetDevice(address).Vendor.Name
 			storageValue["StorageModel"] = disk.Model
 			storageValue["StorageType"] = disk.DriveType
 			storageValue["StorageRemovable"] = disk.IsRemovable
