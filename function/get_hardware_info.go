@@ -124,22 +124,24 @@ func GetNetworkInfo() (networkInfo map[string]interface{}) {
 	network := networkDataJ2S["network"]
 	for index, nic := range network.Nics {
 		networkValue := make(map[string]interface{})
-		networkValue["NicName"] = nic.Name
-		if nic.PCIAddress != "" {
-			networkValue["NicDriver"] = pciData.GetDevice(nic.PCIAddress).Driver
-			networkValue["NicProduct"] = pciData.GetDevice(nic.PCIAddress).Product.Name
-			networkValue["NicVendor"] = pciData.GetDevice(nic.PCIAddress).Vendor.Name
-		} else {
-			networkValue["NicDriver"] = "unknown"
-			networkValue["NicProduct"] = "unknown"
-			networkValue["NicVendor"] = "unknown"
+		if !nic.IsVirtual {
+			networkValue["NicName"] = nic.Name
+			if nic.PCIAddress != "" {
+				networkValue["NicDriver"] = pciData.GetDevice(nic.PCIAddress).Driver
+				networkValue["NicProduct"] = pciData.GetDevice(nic.PCIAddress).Product.Name
+				networkValue["NicVendor"] = pciData.GetDevice(nic.PCIAddress).Vendor.Name
+			} else {
+				networkValue["NicDriver"] = "unknown"
+				networkValue["NicProduct"] = "unknown"
+				networkValue["NicVendor"] = "unknown"
+			}
+			networkValue["NicMacAddress"] = nic.MacAddress
+			networkValue["NicIsVirtual"] = nic.IsVirtual
+			networkValue["NicPCIAddress"] = nic.PCIAddress
+			networkValue["NicSpeed"] = nic.Speed
+			networkValue["NicDuplex"] = nic.Duplex
+			networkInfo[fmt.Sprintf("%s%d", "NIC.", index)] = networkValue
 		}
-		networkValue["NicMacAddress"] = nic.MacAddress
-		networkValue["NicIsVirtual"] = nic.IsVirtual
-		networkValue["NicPCIAddress"] = nic.PCIAddress
-		networkValue["NicSpeed"] = nic.Speed
-		networkValue["NicDuplex"] = nic.Duplex
-		networkInfo[fmt.Sprintf("%s%d", "NIC.", index)] = networkValue
 	}
 
 	return networkInfo
