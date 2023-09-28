@@ -51,10 +51,6 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"data_unit":    "GB",
 			"percent_unit": "%",
 		},
-		"storage": map[string]interface{}{
-			// 设备的PCI ID，使用命令`lspci`查看，例如`lspci`结果是'01:00.0'，则实际值为'0000:02:00.0'
-			"address": "0000:02:00.0",
-		},
 		"nic": map[string]interface{}{
 			// 设备的PCI ID，使用命令`lspci`查看，例如`lspci`结果是'01:00.0'，则实际值为'0000:01:00.0'
 			"address": "0000:01:00.0",

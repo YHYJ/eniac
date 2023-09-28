@@ -26,14 +26,14 @@ func GetNicInfo(address string) (nicInfo map[string]interface{}) {
 }
 
 // GetStorageInfo 获取存储设备信息
-func GetStorageInfo(address string) (storageInfo map[string]interface{}) {
+func GetStorageInfo() (storageInfo map[string]interface{}) {
 	storageInfo = make(map[string]interface{})
 	for index, disk := range blockData.Disks {
 		storageValue := make(map[string]interface{})
 		if disk.SizeBytes > 0 {
 			storageValue["StorageName"] = disk.Name
 			storageValue["StorageDriver"] = disk.StorageController
-			storageValue["StorageVendor"] = pciData.GetDevice(address).Vendor.Name
+			storageValue["StorageVendor"] = disk.Vendor
 			storageValue["StorageModel"] = disk.Model
 			storageValue["StorageType"] = disk.DriveType
 			storageValue["StorageRemovable"] = disk.IsRemovable

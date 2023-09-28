@@ -35,7 +35,6 @@ var getCmd = &cobra.Command{
 			cpuCacheUnit      string     = "KB"
 			memoryDataUnit    string     = "GB"
 			memoryPercentUnit string     = "%"
-			storageAddress    string     = ""
 			nicAddress        string     = ""
 			genealogyCfg      *toml.Tree = defaultGenealogyCfg
 			updateRecordFile  string     = "/tmp/system-checkupdates.log"
@@ -170,15 +169,7 @@ var getCmd = &cobra.Command{
 		}
 		if storageFlag {
 			fmt.Println("----------Storage Information----------")
-			// 获取Storage配置项
-			if confTree != nil {
-				if confTree.Has("storage.address") {
-					storageAddress = confTree.Get("storage.address").(string)
-				} else {
-					fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", "storage.address")
-				}
-			}
-			storageInfo := function.GetStorageInfo(storageAddress)
+			storageInfo := function.GetStorageInfo()
 			titleFormat := "\x1b[30;1m%v\x1b[0m\n"
 			textFormat := "\x1b[34;1m%4v%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
 			for index, values := range storageInfo {
