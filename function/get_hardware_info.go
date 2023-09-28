@@ -33,7 +33,6 @@ func GetStorageInfo(address string) (storageInfo map[string]interface{}) {
 		if disk.SizeBytes > 0 {
 			storageValue["StorageName"] = disk.Name
 			storageValue["StorageDriver"] = disk.StorageController
-			storageValue["StorageAddress"] = pciData.GetDevice(address).Address
 			storageValue["StorageVendor"] = pciData.GetDevice(address).Vendor.Name
 			storageValue["StorageModel"] = disk.Model
 			storageValue["StorageType"] = disk.DriveType

@@ -183,7 +183,7 @@ var getCmd = &cobra.Command{
 			textFormat := "\x1b[34;1m%4v%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
 			for index, values := range storageInfo {
 				// 顺序输出
-				var slice = []string{"StorageName", "StorageAddress", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
+				var slice = []string{"StorageName", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
 				fmt.Printf(titleFormat, index)
 				for _, name := range slice {
 					if genealogyCfg.Has(name) {

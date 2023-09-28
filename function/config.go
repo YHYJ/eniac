@@ -102,7 +102,6 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"ProductVendor":     "产品厂商",
 			"ProductName":       "产品名称",
 			"StorageName":       "存储设备名称",
-			"StorageAddress":    "存储设备地址",
 			"StorageType":       "存储设备类型",
 			"StorageDriver":     "存储设备驱动",
 			"StorageVendor":     "存储设备厂商",
