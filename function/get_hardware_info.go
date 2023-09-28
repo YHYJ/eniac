@@ -122,7 +122,8 @@ func GetNetworkInfo() (networkInfo map[string]interface{}) {
 	// 访问解析后的数据
 	networkInfo = make(map[string]interface{})
 	network := networkDataJ2S["network"]
-	for index, nic := range network.Nics {
+	index := 0 // 排除虚拟网卡影响的编号
+	for _, nic := range network.Nics {
 		networkValue := make(map[string]interface{})
 		if !nic.IsVirtual {
 			networkValue["NicName"] = nic.Name
@@ -142,6 +143,7 @@ func GetNetworkInfo() (networkInfo map[string]interface{}) {
 			networkValue["NicDuplex"] = nic.Duplex
 			networkInfo[fmt.Sprintf("%s%d", "NIC.", index)] = networkValue
 		}
+		index += 1
 	}
 
 	return networkInfo
