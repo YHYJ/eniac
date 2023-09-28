@@ -169,12 +169,13 @@ var getCmd = &cobra.Command{
 		if storageFlag {
 			fmt.Println("----------Storage Information----------")
 			storageInfo := function.GetStorageInfo()
-			titleFormat := "\x1b[30;1m%v\x1b[0m\n"
+			titleFormat := "\x1b[30;1m%v%v\x1b[0m\n"
 			textFormat := "\x1b[34;1m%4v%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
-			for index, values := range storageInfo {
+			index := 1 // 设备编号
+			for _, values := range storageInfo {
 				// 顺序输出
 				var slice = []string{"StorageName", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
-				fmt.Printf(titleFormat, index)
+				fmt.Printf(titleFormat, "Storage.", index)
 				for _, name := range slice {
 					if genealogyCfg.Has(name) {
 						fmt.Printf(textFormat, "", genealogyCfg.Get(name).(string), values.(map[string]interface{})[name])
@@ -182,6 +183,7 @@ var getCmd = &cobra.Command{
 						fmt.Printf(textFormat, "", name, values.(map[string]interface{})[name])
 					}
 				}
+				index += 1
 			}
 		}
 		if memoryFlag {
@@ -247,12 +249,13 @@ var getCmd = &cobra.Command{
 		if netFlag {
 			fmt.Println("----------Network Information----------")
 			networkInfo := function.GetNetworkInfo()
-			titleFormat := "\x1b[30;1m%v\x1b[0m\n"
+			titleFormat := "\x1b[30;1m%v%v\x1b[0m\n"
 			textFormat := "\x1b[34;1m%4v%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
-			for index, values := range networkInfo {
+			index := 1 // 设备编号
+			for _, values := range networkInfo {
 				// 顺序输出
 				var slice = []string{"NicName", "NicMacAddress", "NicDriver", "NicVendor", "NicProduct", "NicPCIAddress", "NicSpeed", "NicDuplex", "NicIsVirtual"}
-				fmt.Printf(titleFormat, index)
+				fmt.Printf(titleFormat, "NIC.", index)
 				for _, name := range slice {
 					if genealogyCfg.Has(name) {
 						fmt.Printf(textFormat, "", genealogyCfg.Get(name).(string), values.(map[string]interface{})[name])
@@ -260,6 +263,7 @@ var getCmd = &cobra.Command{
 						fmt.Printf(textFormat, "", name, values.(map[string]interface{})[name])
 					}
 				}
+				index += 1
 			}
 		}
 		if osFlag {

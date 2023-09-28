@@ -30,7 +30,7 @@ func GetStorageInfo() (storageInfo map[string]interface{}) {
 			storageValue["StorageSerial"] = disk.SerialNumber
 			storageSize, storageSizeUnit := DataUnitConvert("B", "TB", float64(disk.SizeBytes))
 			storageValue["StorageSize"] = fmt.Sprintf("%.1f %s", storageSize, storageSizeUnit)
-			storageInfo[fmt.Sprintf("%s%d", "Storage.", index)] = storageValue
+			storageInfo[fmt.Sprintf("%d", index)] = storageValue
 			index += 1
 		}
 	}
@@ -143,7 +143,7 @@ func GetNetworkInfo() (networkInfo map[string]interface{}) {
 			networkValue["NicPCIAddress"] = nic.PCIAddress
 			networkValue["NicSpeed"] = nic.Speed
 			networkValue["NicDuplex"] = nic.Duplex
-			networkInfo[fmt.Sprintf("%s%d", "NIC.", index)] = networkValue
+			networkInfo[fmt.Sprintf("%d", index)] = networkValue
 			index += 1
 		}
 	}
