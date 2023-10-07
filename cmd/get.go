@@ -408,6 +408,6 @@ func init() {
 	getCmd.Flags().BoolP("update", "", false, "Get Update information")
 	getCmd.Flags().BoolP("only", "", false, "Get update package information only")
 
-	getCmd.Flags().BoolP("help", "h", false, "help for get")
+	getCmd.Flags().BoolP("help", "h", false, "help for get command")
 	rootCmd.AddCommand(getCmd)
 }
