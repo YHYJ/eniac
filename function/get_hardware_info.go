@@ -12,6 +12,7 @@ package function
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 )
 
 // GetStorageInfo 获取存储设备信息
@@ -22,11 +23,11 @@ func GetStorageInfo() (storageInfo map[string]interface{}) {
 		storageValue := make(map[string]interface{})
 		if disk.SizeBytes > 0 {
 			storageValue["StorageName"] = disk.Name
-			storageValue["StorageDriver"] = disk.StorageController
+			storageValue["StorageDriver"] = disk.StorageController.String()
 			storageValue["StorageVendor"] = disk.Vendor
 			storageValue["StorageModel"] = disk.Model
-			storageValue["StorageType"] = disk.DriveType
-			storageValue["StorageRemovable"] = disk.IsRemovable
+			storageValue["StorageType"] = disk.DriveType.String()
+			storageValue["StorageRemovable"] = strconv.FormatBool(disk.IsRemovable)
 			storageValue["StorageSerial"] = disk.SerialNumber
 			storageSize, storageSizeUnit := DataUnitConvert("B", "TB", float64(disk.SizeBytes))
 			storageValue["StorageSize"] = fmt.Sprintf("%.1f %s", storageSize, storageSizeUnit)
