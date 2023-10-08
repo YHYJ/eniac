@@ -53,21 +53,7 @@ var getCmd = &cobra.Command{
 		var biosFlag, boardFlag, cpuFlag, gpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, netFlag, timeFlag, userFlag, updateFlag, onlyFlag bool
 		allFlag, _ := cmd.Flags().GetBool("all")
 		if allFlag {
-			biosFlag = true
-			boardFlag = true
-			gpuFlag = true
-			cpuFlag = true
-			loadFlag = true
-			memoryFlag = true
-			osFlag = true
-			processFlag = true
-			productFlag = true
-			storageFlag = true
-			swapFlag = true
-			netFlag = true
-			timeFlag = true
-			userFlag = true
-			updateFlag = true
+			biosFlag, boardFlag, gpuFlag, cpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, netFlag, timeFlag, userFlag, updateFlag = true, true, true, true, true, true, true, true, true, true, true, true, true, true, true
 			onlyFlag = false
 		} else {
 			biosFlag, _ = cmd.Flags().GetBool("bios")
@@ -87,13 +73,16 @@ var getCmd = &cobra.Command{
 			updateFlag, _ = cmd.Flags().GetBool("update")
 			onlyFlag, _ = cmd.Flags().GetBool("only")
 		}
+
+		var slice []string // 输出项名称参数
+
 		// 执行对应函数
 		if productFlag {
 			fmt.Println("----------Product Information----------")
 			productInfo, _ := function.GetProductInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
-			var slice = []string{"ProductVendor", "ProductName"}
+			slice = []string{"ProductVendor", "ProductName"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
 					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), productInfo[key])
@@ -107,7 +96,7 @@ var getCmd = &cobra.Command{
 			boardInfo, _ := function.GetBoardInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
-			var slice = []string{"BoardVendor", "BoardName", "BoardVersion"}
+			slice = []string{"BoardVendor", "BoardName", "BoardVersion"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
 					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), boardInfo[key])
@@ -121,7 +110,7 @@ var getCmd = &cobra.Command{
 			biosInfo, _ := function.GetBIOSInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
-			var slice = []string{"BIOSVendor", "BIOSVersion", "BIOSDate"}
+			slice = []string{"BIOSVendor", "BIOSVersion", "BIOSDate"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
 					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), biosInfo[key])
@@ -143,7 +132,7 @@ var getCmd = &cobra.Command{
 			cpuInfo, _ := function.GetCPUInfo(sysInfo, cpuCacheUnit)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
 			// 顺序输出
-			var slice = []string{"CPUModel", "CPUCache", "CPUNumber", "CPUCores", "CPUThreads"}
+			slice = []string{"CPUModel", "CPUCache", "CPUNumber", "CPUCores", "CPUThreads"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
 					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), cpuInfo[key])
@@ -157,7 +146,7 @@ var getCmd = &cobra.Command{
 			gpuInfo := function.GetGPUInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
 			// 顺序输出
-			var slice = []string{"GPUAddress", "GPUDriver", "GPUProduct", "GPUVendor"}
+			slice = []string{"GPUAddress", "GPUDriver", "GPUProduct", "GPUVendor"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
 					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), gpuInfo[key])
@@ -174,7 +163,7 @@ var getCmd = &cobra.Command{
 			index := 1 // 设备编号
 			for _, values := range storageInfo {
 				// 顺序输出
-				var slice = []string{"StorageName", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
+				slice = []string{"StorageName", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
 				fmt.Printf(titleFormat, "Storage.", index)
 				for _, name := range slice {
 					if genealogyCfg.Has(name) {
@@ -204,7 +193,7 @@ var getCmd = &cobra.Command{
 			memInfo, _ := function.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
 			// 顺序输出
-			var slice = []string{"MemoryUsedPercent", "MemoryTotal", "MemoryUsed", "MemoryAvail", "MemoryFree", "MemoryBuffCache", "MemoryShared"}
+			slice = []string{"MemoryUsedPercent", "MemoryTotal", "MemoryUsed", "MemoryAvail", "MemoryFree", "MemoryBuffCache", "MemoryShared"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
 					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), memInfo[key])
@@ -227,7 +216,7 @@ var getCmd = &cobra.Command{
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
 			// 顺序输出
 			if swapInfo["SwapDisabled"] == true {
-				var slice = []string{"SwapDisabled"}
+				slice = []string{"SwapDisabled"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
 						fmt.Printf("🚫%v\n", genealogyCfg.Get(key).(string))
@@ -236,7 +225,7 @@ var getCmd = &cobra.Command{
 					}
 				}
 			} else {
-				var slice = []string{"SwapTotal", "SwapFree"}
+				slice = []string{"SwapTotal", "SwapFree"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
 						fmt.Printf(textFormat, genealogyCfg.Get(key).(string), swapInfo[key])
@@ -254,7 +243,7 @@ var getCmd = &cobra.Command{
 			index := 1 // 设备编号
 			for _, values := range networkInfo {
 				// 顺序输出
-				var slice = []string{"NicName", "NicMacAddress", "NicDriver", "NicVendor", "NicProduct", "NicPCIAddress", "NicSpeed", "NicDuplex", "NicIsVirtual"}
+				slice = []string{"NicName", "NicMacAddress", "NicDriver", "NicVendor", "NicProduct", "NicPCIAddress", "NicSpeed", "NicDuplex", "NicIsVirtual"}
 				fmt.Printf(titleFormat, "NIC.", index)
 				for _, name := range slice {
 					if genealogyCfg.Has(name) {
@@ -271,7 +260,7 @@ var getCmd = &cobra.Command{
 			osInfo, _ := function.GetOSInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
-			var slice = []string{"Arch", "Platform", "OS", "Kernel", "TimeZone", "Hostname"}
+			slice = []string{"Arch", "Platform", "OS", "Kernel", "TimeZone", "Hostname"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
 					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), osInfo[key])
@@ -285,7 +274,7 @@ var getCmd = &cobra.Command{
 			loadInfo, _ := function.GetLoadInfo()
 			textFormat := "\x1b[30;1m%-6v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
-			var slice = []string{"Load1", "Load5", "Load15"}
+			slice = []string{"Load1", "Load5", "Load15"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
 					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), loadInfo[key])
@@ -299,7 +288,7 @@ var getCmd = &cobra.Command{
 			procsInfo, _ := function.GetProcessInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
-			var slice = []string{"Process"}
+			slice = []string{"Process"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
 					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), procsInfo[key])
@@ -313,7 +302,7 @@ var getCmd = &cobra.Command{
 			timeInfo, _ := function.GetTimeInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[36m%v\x1b[0m\n"
 			// 顺序输出
-			var slice = []string{"StartTime", "Uptime", "BootTime"}
+			slice = []string{"StartTime", "Uptime", "BootTime"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
 					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), timeInfo[key])
@@ -327,7 +316,7 @@ var getCmd = &cobra.Command{
 			userInfo, _ := function.GetUserInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[36m%v\x1b[0m\n"
 			// 顺序输出
-			var slice = []string{"UserName", "User", "UserUid", "UserGid", "UserHomeDir"}
+			slice = []string{"UserName", "User", "UserUid", "UserGid", "UserHomeDir"}
 			for _, key := range slice {
 				if genealogyCfg.Has(key) {
 					fmt.Printf(textFormat, genealogyCfg.Get(key).(string), userInfo[key])
@@ -361,7 +350,7 @@ var getCmd = &cobra.Command{
 				listFormat := "%8v: \x1b[32m%v\x1b[0m\n"
 				// 输出更新状态监测
 				daemonInfo, _ := function.GetUpdateDaemonInfo()
-				var slice = []string{"DaemonStatus"}
+				slice = []string{"DaemonStatus"}
 				for _, key := range slice {
 					if genealogyCfg.Has(key) {
 						fmt.Printf(textFormat, genealogyCfg.Get(key).(string), daemonInfo[key])

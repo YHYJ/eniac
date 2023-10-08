@@ -18,11 +18,13 @@ import (
 	"github.com/shirou/gopsutil/v3/mem"
 )
 
-var pciData, _ = ghw.PCI()           // PCI信息
-var blockData, _ = ghw.Block()       // 存储设备信息
-var networkData, _ = ghw.Network()   // 网络设备信息
-var gpuData, _ = ghw.GPU()           // 显卡信息
-var loadData, _ = load.Avg()         // 系统负载信息
-var memData, _ = mem.VirtualMemory() // 内存信息
-var hostData, _ = host.Info()        // 主机信息
-var userData, _ = user.Current()     // 用户信息
+var (
+	pciData, _     = ghw.PCI()           // PCI信息
+	blockData, _   = ghw.Block()         // 存储设备信息
+	networkData, _ = ghw.Network()       // 网络设备信息
+	gpuData, _     = ghw.GPU()           // 显卡信息
+	loadData, _    = load.Avg()          // 系统负载信息
+	memData, _     = mem.VirtualMemory() // 内存信息
+	hostData, _    = host.Info()         // 主机信息
+	userData, _    = user.Current()      // 用户信息
+)
