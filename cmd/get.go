@@ -11,7 +11,10 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"strconv"
 
+	"github.com/olekukonko/tablewriter"
 	"github.com/pelletier/go-toml"
 	"github.com/spf13/cobra"
 	"github.com/yhyj/eniac/function"
@@ -130,7 +133,7 @@ var getCmd = &cobra.Command{
 				}
 			}
 			cpuInfo, _ := function.GetCPUInfo(sysInfo, cpuCacheUnit)
-			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"CPUModel", "CPUCache", "CPUNumber", "CPUCores", "CPUThreads"}
 			for _, item := range items {
@@ -144,7 +147,7 @@ var getCmd = &cobra.Command{
 		if gpuFlag {
 			fmt.Println("----------GPU Information----------")
 			gpuInfo := function.GetGPUInfo()
-			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"GPUAddress", "GPUDriver", "GPUProduct", "GPUVendor"}
 			for _, item := range items {
@@ -158,22 +161,56 @@ var getCmd = &cobra.Command{
 		if storageFlag {
 			fmt.Println("----------Storage Information----------")
 			storageInfo := function.GetStorageInfo()
-			titleFormat := "\x1b[30;1m%v%v\x1b[0m\n"
-			textFormat := "\x1b[34;1m%4v%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
-			index := 1 // 设备编号
-			for _, values := range storageInfo {
-				// 顺序输出
-				items = []string{"StorageName", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
-				fmt.Printf(titleFormat, "Storage.", index)
-				for _, name := range items {
-					if genealogyCfg.Has(name) {
-						fmt.Printf(textFormat, "", genealogyCfg.Get(name).(string), values.(map[string]interface{})[name])
-					} else {
-						fmt.Printf(textFormat, "", name, values.(map[string]interface{})[name])
-					}
+			items = []string{"StorageName", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
+			// 组装表头
+			tableHeader := []string{""}
+			for _, item := range items {
+				if genealogyCfg.Has(item) {
+					item = genealogyCfg.Get(item).(string)
 				}
-				index += 1
+				tableHeader = append(tableHeader, item)
 			}
+			// 组装表数据
+			tableData := [][]string{}
+			for index := 1; index <= len(storageInfo); index++ {
+				outputInfo := []string{"Storage." + strconv.Itoa(index)}
+				for _, item := range items {
+					outputValue := storageInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string)
+					outputInfo = append(outputInfo, outputValue)
+				}
+				tableData = append(tableData, outputInfo)
+			}
+
+			table := tablewriter.NewWriter(os.Stdout)  // 初始化表格
+			table.SetAlignment(tablewriter.ALIGN_LEFT) // 设置对齐方式
+			table.SetRowLine(false)                    // 设置是否显示行边框
+			table.SetHeader(tableHeader)               // 设置表头
+			table.SetHeaderColor(                      // 设置表头颜色
+				tablewriter.Colors{tablewriter.BgHiBlackColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+			)
+			table.SetColumnColor( // 设置列颜色
+				tablewriter.Colors{tablewriter.FgHiBlackColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+			)
+			for _, data := range tableData { // 填充表格
+				table.Append(data)
+			}
+			table.Render() // 渲染表格
 		}
 		if memoryFlag {
 			fmt.Println("----------Memory Information----------")
@@ -191,7 +228,7 @@ var getCmd = &cobra.Command{
 				}
 			}
 			memInfo, _ := function.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
-			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"MemoryUsedPercent", "MemoryTotal", "MemoryUsed", "MemoryAvail", "MemoryFree", "MemoryBuffCache", "MemoryShared"}
 			for _, item := range items {
@@ -213,7 +250,7 @@ var getCmd = &cobra.Command{
 				}
 			}
 			swapInfo, _ := function.GetSwapInfo(memoryDataUnit)
-			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
 			// 顺序输出
 			if swapInfo["SwapDisabled"] == true {
 				items = []string{"SwapDisabled"}
@@ -238,22 +275,59 @@ var getCmd = &cobra.Command{
 		if netFlag {
 			fmt.Println("----------Network Information----------")
 			networkInfo := function.GetNetworkInfo()
-			titleFormat := "\x1b[30;1m%v%v\x1b[0m\n"
-			textFormat := "\x1b[34;1m%4v%v:\x1b[0m \x1b[34m%v\x1b[0m\n"
-			index := 1 // 设备编号
-			for _, values := range networkInfo {
-				// 顺序输出
-				items = []string{"NicName", "NicMacAddress", "NicDriver", "NicVendor", "NicProduct", "NicPCIAddress", "NicSpeed", "NicDuplex", "NicIsVirtual"}
-				fmt.Printf(titleFormat, "NIC.", index)
-				for _, name := range items {
-					if genealogyCfg.Has(name) {
-						fmt.Printf(textFormat, "", genealogyCfg.Get(name).(string), values.(map[string]interface{})[name])
-					} else {
-						fmt.Printf(textFormat, "", name, values.(map[string]interface{})[name])
-					}
+			items = []string{"NicName", "NicMacAddress", "NicDriver", "NicVendor", "NicProduct", "NicPCIAddress", "NicSpeed", "NicDuplex", "NicIsVirtual"}
+			// 组装表头
+			tableHeader := []string{""}
+			for _, item := range items {
+				if genealogyCfg.Has(item) {
+					item = genealogyCfg.Get(item).(string)
 				}
-				index += 1
+				tableHeader = append(tableHeader, item)
 			}
+			// 组装表数据
+			tableData := [][]string{}
+			for index := 1; index <= len(networkInfo); index++ {
+				outputInfo := []string{"NIC." + strconv.Itoa(index)}
+				for _, item := range items {
+					outputValue := networkInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string)
+					outputInfo = append(outputInfo, outputValue)
+				}
+				tableData = append(tableData, outputInfo)
+			}
+
+			table := tablewriter.NewWriter(os.Stdout)  // 初始化表格
+			table.SetAlignment(tablewriter.ALIGN_LEFT) // 设置对齐方式
+			table.SetRowLine(false)                    // 设置是否显示行边框
+			table.SetHeader(tableHeader)               // 设置表头
+			table.SetHeaderColor(                      // 设置表头颜色
+				tablewriter.Colors{tablewriter.BgHiBlackColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+			)
+			table.SetColumnColor( // 设置列颜色
+				tablewriter.Colors{tablewriter.FgHiBlackColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+			)
+
+			for _, data := range tableData { // 填充表格
+				table.Append(data)
+			}
+			table.Render() // 渲染表格
 		}
 		if osFlag {
 			fmt.Println("----------OS Information----------")
