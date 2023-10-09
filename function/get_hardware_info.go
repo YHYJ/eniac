@@ -13,6 +13,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 // GetStorageInfo 获取存储设备信息
@@ -26,7 +27,7 @@ func GetStorageInfo() (storageInfo map[string]interface{}) {
 			storageValue["StorageDriver"] = disk.StorageController.String()
 			storageValue["StorageVendor"] = func() string {
 				if disk.Vendor == "unknown" {
-					return "<unknown>"
+					return pciData.GetDevice(strings.Split(disk.BusPath, "-")[1]).Vendor.Name
 				}
 				return disk.Vendor
 			}()
