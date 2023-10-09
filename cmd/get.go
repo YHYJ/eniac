@@ -276,7 +276,7 @@ var getCmd = &cobra.Command{
 		if netFlag {
 			fmt.Println("----------Network Information----------")
 			networkInfo := function.GetNetworkInfo()
-			items = []string{"NicName", "NicMacAddress", "NicDriver", "NicVendor", "NicProduct", "NicPCIAddress", "NicSpeed", "NicDuplex", "NicIsVirtual"}
+			items = []string{"NicName", "NicMacAddress", "NicDriver", "NicVendor", "NicProduct", "NicPCIAddress", "NicSpeed", "NicDuplex"}
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
@@ -311,11 +311,9 @@ var getCmd = &cobra.Command{
 				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
 				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
 				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
 			)
 			table.SetColumnColor( // 设置列颜色
 				tablewriter.Colors{tablewriter.FgHiBlackColor},
-				tablewriter.Colors{tablewriter.FgBlueColor},
 				tablewriter.Colors{tablewriter.FgBlueColor},
 				tablewriter.Colors{tablewriter.FgBlueColor},
 				tablewriter.Colors{tablewriter.FgBlueColor},

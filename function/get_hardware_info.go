@@ -153,7 +153,6 @@ func GetNetworkInfo() (networkInfo map[string]interface{}) {
 				}
 				return nic.MacAddress
 			}()
-			networkValue["NicIsVirtual"] = strconv.FormatBool(nic.IsVirtual)
 			networkValue["NicSpeed"] = func() string {
 				if nic.Speed == "" {
 					return "<unknown>"
