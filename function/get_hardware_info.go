@@ -149,20 +149,20 @@ func GetNetworkInfo() (networkInfo map[string]interface{}) {
 			}
 			networkValue["NicMacAddress"] = func() string {
 				if nic.MacAddress == "" {
-					return "unknown"
+					return "<unknown>"
 				}
 				return nic.MacAddress
 			}()
 			networkValue["NicIsVirtual"] = strconv.FormatBool(nic.IsVirtual)
 			networkValue["NicSpeed"] = func() string {
 				if nic.Speed == "" {
-					return "unknown"
+					return "<unknown>"
 				}
 				return nic.Speed
 			}()
 			networkValue["NicDuplex"] = func() string {
 				if nic.Duplex == "" {
-					return "unknown"
+					return "<unknown>"
 				}
 				return nic.Duplex
 			}()
