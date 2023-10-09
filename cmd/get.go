@@ -183,6 +183,7 @@ var getCmd = &cobra.Command{
 
 			table := tablewriter.NewWriter(os.Stdout)  // 初始化表格
 			table.SetAlignment(tablewriter.ALIGN_LEFT) // 设置对齐方式
+			table.SetAutoWrapText(false)               // 设置是否自动换行
 			table.SetRowLine(false)                    // 设置是否显示行边框
 			table.SetHeader(tableHeader)               // 设置表头
 			table.SetHeaderColor(                      // 设置表头颜色
