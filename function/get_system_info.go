@@ -44,7 +44,7 @@ func GetCPUInfo(sysInfo sysinfo.SysInfo, dataUnit string) (cpuInfo map[string]in
 	cpuInfo["CPUCores"] = sysInfo.CPU.Cores                                               // cpu核心数
 	cpuInfo["CPUThreads"] = sysInfo.CPU.Threads                                           // cpu线程数
 	cpuCache, cpuCacheUnit := DataUnitConvert("KB", dataUnit, float64(sysInfo.CPU.Cache)) // cpu缓存
-	cpuInfo["CPUCache"] = fmt.Sprintf("%.2f %s", cpuCache, cpuCacheUnit)                  // cpu缓存
+	cpuInfo["CPUCache"] = fmt.Sprintf("%.2f%s", cpuCache, cpuCacheUnit)                  // cpu缓存
 
 	return cpuInfo, err
 }
