@@ -81,7 +81,7 @@ var getCmd = &cobra.Command{
 
 		// 执行对应函数
 		if productFlag {
-			fmt.Println("----------Product Information----------")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Product")
 			productInfo, _ := function.GetProductInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
@@ -95,7 +95,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if boardFlag {
-			fmt.Println("----------Board Information----------")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Board")
 			boardInfo, _ := function.GetBoardInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
@@ -109,7 +109,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if biosFlag {
-			fmt.Println("----------BIOS Information----------")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "BIOS")
 			biosInfo, _ := function.GetBIOSInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
@@ -123,7 +123,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if cpuFlag {
-			fmt.Println("----------CPU Information----------")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "CPU")
 			// 获取CPU配置项
 			if confTree != nil {
 				if confTree.Has("cpu.cache_unit") {
@@ -145,7 +145,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if gpuFlag {
-			fmt.Println("----------GPU Information----------")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "GPU")
 			gpuInfo := function.GetGPUInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
 			// 顺序输出
@@ -159,7 +159,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if memoryFlag {
-			fmt.Println("----------Memory Information----------")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Memory")
 			// 获取Memory配置项
 			if confTree != nil {
 				if confTree.Has("memory.data_unit") {
@@ -186,7 +186,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if swapFlag {
-			fmt.Println("----------Swap Information----------")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Swap")
 			// 获取Memory配置项
 			if confTree != nil {
 				if confTree.Has("memory.data_unit") {
@@ -219,7 +219,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if storageFlag {
-			fmt.Println("----------Storage Information----------")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Storage")
 			storageInfo := function.GetStorageInfo()
 			items = []string{"StorageName", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
 			// 组装表头
@@ -241,12 +241,14 @@ var getCmd = &cobra.Command{
 				tableData = append(tableData, outputInfo)
 			}
 
-			table := tablewriter.NewWriter(os.Stdout)  // 初始化表格
-			table.SetAlignment(tablewriter.ALIGN_LEFT) // 设置对齐方式
-			table.SetAutoWrapText(false)               // 设置是否自动换行
-			table.SetRowLine(false)                    // 设置是否显示行边框
-			table.SetHeader(tableHeader)               // 设置表头
-			table.SetHeaderColor(                      // 设置表头颜色
+			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
+			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
+			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
+			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
+			table.SetRowLine(false)                                                                // 设置是否显示行边框
+			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
 				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
 				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
@@ -274,7 +276,7 @@ var getCmd = &cobra.Command{
 			table.Render() // 渲染表格
 		}
 		if netFlag {
-			fmt.Println("----------Network Information----------")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Network")
 			networkInfo := function.GetNetworkInfo()
 			items = []string{"NicName", "NicMacAddress", "NicDriver", "NicVendor", "NicProduct", "NicPCIAddress", "NicSpeed", "NicDuplex"}
 			// 组装表头
@@ -296,12 +298,14 @@ var getCmd = &cobra.Command{
 				tableData = append(tableData, outputInfo)
 			}
 
-			table := tablewriter.NewWriter(os.Stdout)  // 初始化表格
-			table.SetAlignment(tablewriter.ALIGN_LEFT) // 设置对齐方式
-			table.SetAutoWrapText(false)               // 设置是否自动换行
-			table.SetRowLine(false)                    // 设置是否显示行边框
-			table.SetHeader(tableHeader)               // 设置表头
-			table.SetHeaderColor(                      // 设置表头颜色
+			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
+			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
+			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
+			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
+			table.SetRowLine(false)                                                                // 设置是否显示行边框
+			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
 				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
 				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
@@ -330,7 +334,7 @@ var getCmd = &cobra.Command{
 			table.Render() // 渲染表格
 		}
 		if osFlag {
-			fmt.Println("----------OS Information----------")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "OS")
 			osInfo, _ := function.GetOSInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
@@ -344,7 +348,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if loadFlag {
-			fmt.Println("----------Load Information----------")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Load")
 			loadInfo, _ := function.GetLoadInfo()
 			textFormat := "\x1b[30;1m%-6v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
@@ -358,7 +362,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if processFlag {
-			fmt.Println("----------Process Information----------")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Process")
 			procsInfo, _ := function.GetProcessInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
@@ -372,7 +376,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if timeFlag {
-			fmt.Println("----------Time Information----------")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Time")
 			timeInfo, _ := function.GetTimeInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[36m%v\x1b[0m\n"
 			// 顺序输出
@@ -386,7 +390,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if userFlag {
-			fmt.Println("----------User Information----------")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "User")
 			userInfo, _ := function.GetUserInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[36m%v\x1b[0m\n"
 			// 顺序输出
@@ -411,7 +415,7 @@ var getCmd = &cobra.Command{
 					}
 				}
 			} else {
-				fmt.Println("----------Update Information----------")
+				fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Update")
 				// 获取update配置项
 				if confTree != nil {
 					if confTree.Has("update.record_file") {
