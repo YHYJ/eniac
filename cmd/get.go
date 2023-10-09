@@ -198,14 +198,14 @@ var getCmd = &cobra.Command{
 			)
 			table.SetColumnColor( // 设置列颜色
 				tablewriter.Colors{tablewriter.FgHiBlackColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
 			)
 			for _, data := range tableData { // 填充表格
 				table.Append(data)
@@ -314,15 +314,15 @@ var getCmd = &cobra.Command{
 			)
 			table.SetColumnColor( // 设置列颜色
 				tablewriter.Colors{tablewriter.FgHiBlackColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
 			)
 
 			for _, data := range tableData { // 填充表格
