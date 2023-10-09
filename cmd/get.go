@@ -158,61 +158,6 @@ var getCmd = &cobra.Command{
 				}
 			}
 		}
-		if storageFlag {
-			fmt.Println("----------Storage Information----------")
-			storageInfo := function.GetStorageInfo()
-			items = []string{"StorageName", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
-			// 组装表头
-			tableHeader := []string{""}
-			for _, item := range items {
-				if genealogyCfg.Has(item) {
-					item = genealogyCfg.Get(item).(string)
-				}
-				tableHeader = append(tableHeader, item)
-			}
-			// 组装表数据
-			tableData := [][]string{}
-			for index := 1; index <= len(storageInfo); index++ {
-				outputInfo := []string{"Storage." + strconv.Itoa(index)}
-				for _, item := range items {
-					outputValue := storageInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string)
-					outputInfo = append(outputInfo, outputValue)
-				}
-				tableData = append(tableData, outputInfo)
-			}
-
-			table := tablewriter.NewWriter(os.Stdout)  // 初始化表格
-			table.SetAlignment(tablewriter.ALIGN_LEFT) // 设置对齐方式
-			table.SetAutoWrapText(false)               // 设置是否自动换行
-			table.SetRowLine(false)                    // 设置是否显示行边框
-			table.SetHeader(tableHeader)               // 设置表头
-			table.SetHeaderColor(                      // 设置表头颜色
-				tablewriter.Colors{tablewriter.BgHiBlackColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-			)
-			table.SetColumnColor( // 设置列颜色
-				tablewriter.Colors{tablewriter.FgHiBlackColor},
-				tablewriter.Colors{tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.FgBlueColor},
-				tablewriter.Colors{tablewriter.FgBlueColor},
-			)
-			for _, data := range tableData { // 填充表格
-				table.Append(data)
-			}
-			table.Render() // 渲染表格
-		}
 		if memoryFlag {
 			fmt.Println("----------Memory Information----------")
 			// 获取Memory配置项
@@ -272,6 +217,61 @@ var getCmd = &cobra.Command{
 					}
 				}
 			}
+		}
+		if storageFlag {
+			fmt.Println("----------Storage Information----------")
+			storageInfo := function.GetStorageInfo()
+			items = []string{"StorageName", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
+			// 组装表头
+			tableHeader := []string{""}
+			for _, item := range items {
+				if genealogyCfg.Has(item) {
+					item = genealogyCfg.Get(item).(string)
+				}
+				tableHeader = append(tableHeader, item)
+			}
+			// 组装表数据
+			tableData := [][]string{}
+			for index := 1; index <= len(storageInfo); index++ {
+				outputInfo := []string{"Storage." + strconv.Itoa(index)}
+				for _, item := range items {
+					outputValue := storageInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string)
+					outputInfo = append(outputInfo, outputValue)
+				}
+				tableData = append(tableData, outputInfo)
+			}
+
+			table := tablewriter.NewWriter(os.Stdout)  // 初始化表格
+			table.SetAlignment(tablewriter.ALIGN_LEFT) // 设置对齐方式
+			table.SetAutoWrapText(false)               // 设置是否自动换行
+			table.SetRowLine(false)                    // 设置是否显示行边框
+			table.SetHeader(tableHeader)               // 设置表头
+			table.SetHeaderColor(                      // 设置表头颜色
+				tablewriter.Colors{tablewriter.BgHiBlackColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+			)
+			table.SetColumnColor( // 设置列颜色
+				tablewriter.Colors{tablewriter.FgHiBlackColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+			)
+			for _, data := range tableData { // 填充表格
+				table.Append(data)
+			}
+			table.Render() // 渲染表格
 		}
 		if netFlag {
 			fmt.Println("----------Network Information----------")
