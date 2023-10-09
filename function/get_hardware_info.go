@@ -13,7 +13,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
-	"strings"
 )
 
 // GetStorageInfo 获取存储设备信息
@@ -139,7 +138,7 @@ func GetNetworkInfo() (networkInfo map[string]interface{}) {
 			if nic.PCIAddress != "" {
 				networkValue["NicPCIAddress"] = nic.PCIAddress
 				networkValue["NicDriver"] = pciData.GetDevice(nic.PCIAddress).Driver
-				networkValue["NicProduct"] = strings.ReplaceAll(pciData.GetDevice(nic.PCIAddress).Product.Name, " ", ".")
+				networkValue["NicProduct"] = pciData.GetDevice(nic.PCIAddress).Product.Name
 				networkValue["NicVendor"] = pciData.GetDevice(nic.PCIAddress).Vendor.Name
 			} else {
 				networkValue["NicPCIAddress"] = "<unknown>"
