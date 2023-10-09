@@ -13,6 +13,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 // GetStorageInfo 获取存储设备信息
@@ -24,7 +25,12 @@ func GetStorageInfo() (storageInfo map[string]interface{}) {
 		if disk.SizeBytes > 0 {
 			storageValue["StorageName"] = disk.Name
 			storageValue["StorageDriver"] = disk.StorageController.String()
-			storageValue["StorageVendor"] = disk.Vendor
+			storageValue["StorageVendor"] = func() string {
+				if disk.Vendor == "unknown" {
+					return "<unknown>"
+				}
+				return disk.Vendor
+			}()
 			storageValue["StorageModel"] = disk.Model
 			storageValue["StorageType"] = disk.DriveType.String()
 			storageValue["StorageRemovable"] = strconv.FormatBool(disk.IsRemovable)
@@ -131,19 +137,35 @@ func GetNetworkInfo() (networkInfo map[string]interface{}) {
 		if !nic.IsVirtual {
 			networkValue["NicName"] = nic.Name
 			if nic.PCIAddress != "" {
+				networkValue["NicPCIAddress"] = nic.PCIAddress
 				networkValue["NicDriver"] = pciData.GetDevice(nic.PCIAddress).Driver
-				networkValue["NicProduct"] = pciData.GetDevice(nic.PCIAddress).Product.Name
+				networkValue["NicProduct"] = strings.ReplaceAll(pciData.GetDevice(nic.PCIAddress).Product.Name, " ", ".")
 				networkValue["NicVendor"] = pciData.GetDevice(nic.PCIAddress).Vendor.Name
 			} else {
-				networkValue["NicDriver"] = "unknown"
-				networkValue["NicProduct"] = "unknown"
-				networkValue["NicVendor"] = "unknown"
+				networkValue["NicPCIAddress"] = "<unknown>"
+				networkValue["NicDriver"] = "<unknown>"
+				networkValue["NicProduct"] = "<unknown>"
+				networkValue["NicVendor"] = "<unknown>"
 			}
-			networkValue["NicMacAddress"] = nic.MacAddress
-			networkValue["NicIsVirtual"] = nic.IsVirtual
-			networkValue["NicPCIAddress"] = nic.PCIAddress
-			networkValue["NicSpeed"] = nic.Speed
-			networkValue["NicDuplex"] = nic.Duplex
+			networkValue["NicMacAddress"] = func() string {
+				if nic.MacAddress == "" {
+					return "unknown"
+				}
+				return nic.MacAddress
+			}()
+			networkValue["NicIsVirtual"] = strconv.FormatBool(nic.IsVirtual)
+			networkValue["NicSpeed"] = func() string {
+				if nic.Speed == "" {
+					return "unknown"
+				}
+				return nic.Speed
+			}()
+			networkValue["NicDuplex"] = func() string {
+				if nic.Duplex == "" {
+					return "unknown"
+				}
+				return nic.Duplex
+			}()
 			networkInfo[fmt.Sprintf("%d", index)] = networkValue
 			index += 1
 		}
