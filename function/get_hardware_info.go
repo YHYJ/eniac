@@ -30,7 +30,12 @@ func GetStorageInfo() (storageInfo map[string]interface{}) {
 				if disk.Vendor == "unknown" {
 					// 检测是否符合PCI地址格式
 					pciPattern := "^[0-9A-Fa-f]{4}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}\\.[0-9A-Fa-f]$"
-					diskPciAddress := strings.Split(disk.BusPath, "-")[1]
+					diskPciAddress := func() string {
+						if len(strings.Split(disk.BusPath, "-")) < 2 {
+							return ""
+						}
+						return strings.Split(disk.BusPath, "-")[1]
+					}()
 					matched, err := regexp.MatchString(pciPattern, diskPciAddress)
 					if err != nil {
 						return "<unknown>"
