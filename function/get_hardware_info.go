@@ -12,6 +12,7 @@ package function
 import (
 	"encoding/json"
 	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -27,7 +28,18 @@ func GetStorageInfo() (storageInfo map[string]interface{}) {
 			storageValue["StorageDriver"] = disk.StorageController.String()
 			storageValue["StorageVendor"] = func() string {
 				if disk.Vendor == "unknown" {
-					return pciData.GetDevice(strings.Split(disk.BusPath, "-")[1]).Vendor.Name
+					// 检测是否符合PCI地址格式
+					pciPattern := "^[0-9A-Fa-f]{4}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}\\.[0-9A-Fa-f]$"
+					diskPciAddress := strings.Split(disk.BusPath, "-")[1]
+					matched, err := regexp.MatchString(pciPattern, diskPciAddress)
+					if err != nil {
+						return "<unknown>"
+					}
+					if matched {
+						return pciData.GetDevice(diskPciAddress).Vendor.Name
+					} else {
+						return "<unknown>"
+					}
 				}
 				return disk.Vendor
 			}()
