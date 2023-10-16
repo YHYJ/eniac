@@ -82,7 +82,7 @@ var getCmd = &cobra.Command{
 		// 执行对应函数
 		if productFlag {
 			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Product")
-			productInfo, _ := function.GetProductInfo(sysInfo)
+			productInfo := function.GetProductInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"ProductVendor", "ProductName"}
@@ -96,7 +96,7 @@ var getCmd = &cobra.Command{
 		}
 		if boardFlag {
 			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Board")
-			boardInfo, _ := function.GetBoardInfo(sysInfo)
+			boardInfo := function.GetBoardInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"BoardVendor", "BoardName", "BoardVersion"}
@@ -110,7 +110,7 @@ var getCmd = &cobra.Command{
 		}
 		if biosFlag {
 			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "BIOS")
-			biosInfo, _ := function.GetBIOSInfo(sysInfo)
+			biosInfo := function.GetBIOSInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"BIOSVendor", "BIOSVersion", "BIOSDate"}
@@ -132,7 +132,7 @@ var getCmd = &cobra.Command{
 					fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", "cpu.cache_unit")
 				}
 			}
-			cpuInfo, _ := function.GetCPUInfo(sysInfo, cpuCacheUnit)
+			cpuInfo := function.GetCPUInfo(sysInfo, cpuCacheUnit)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"CPUModel", "CPUCache", "CPUNumber", "CPUCores", "CPUThreads"}
@@ -173,7 +173,7 @@ var getCmd = &cobra.Command{
 					fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", "memory.percent_unit")
 				}
 			}
-			memInfo, _ := function.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
+			memInfo := function.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"MemoryUsedPercent", "MemoryTotal", "MemoryUsed", "MemoryAvail", "MemoryFree", "MemoryBuffCache", "MemoryShared"}
@@ -195,7 +195,7 @@ var getCmd = &cobra.Command{
 					fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", "memory.data_unit")
 				}
 			}
-			swapInfo, _ := function.GetSwapInfo(memoryDataUnit)
+			swapInfo := function.GetSwapInfo(memoryDataUnit)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
 			// 顺序输出
 			if swapInfo["SwapDisabled"] == true {
@@ -335,7 +335,7 @@ var getCmd = &cobra.Command{
 		}
 		if osFlag {
 			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "OS")
-			osInfo, _ := function.GetOSInfo(sysInfo)
+			osInfo := function.GetOSInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"Arch", "Platform", "OS", "Kernel", "TimeZone", "Hostname"}
@@ -349,7 +349,7 @@ var getCmd = &cobra.Command{
 		}
 		if loadFlag {
 			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Load")
-			loadInfo, _ := function.GetLoadInfo()
+			loadInfo := function.GetLoadInfo()
 			textFormat := "\x1b[30;1m%-6v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"Load1", "Load5", "Load15"}
@@ -363,7 +363,7 @@ var getCmd = &cobra.Command{
 		}
 		if processFlag {
 			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Process")
-			procsInfo, _ := function.GetProcessInfo()
+			procsInfo := function.GetProcessInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"Process"}
@@ -391,7 +391,7 @@ var getCmd = &cobra.Command{
 		}
 		if userFlag {
 			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "User")
-			userInfo, _ := function.GetUserInfo()
+			userInfo := function.GetUserInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[36m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"UserName", "User", "UserUid", "UserGid", "UserHomeDir"}
