@@ -46,14 +46,14 @@ func GetUpdateInfo(filePath string, line int) ([]string, error) {
 }
 
 // 获取更新检测服务信息
-func GetUpdateDaemonInfo() (daemonInfo map[string]interface{}, err error) {
-	daemonInfo = make(map[string]interface{})
+func GetUpdateDaemonInfo() (map[string]interface{}, error) {
+	daemonInfo := make(map[string]interface{})
 	daemonArgs := []string{"is-active", "system-checkupdates.timer"}
 	daemonStatus, err := RunCommandGetResult("systemctl", daemonArgs)
 	if err != nil {
-		fmt.Printf("\x1b[31m%s\x1b[0m\n", err)
+		return nil, err
 	}
 	daemonInfo["DaemonStatus"] = daemonStatus
 
-	return daemonInfo, err
+	return daemonInfo, nil
 }

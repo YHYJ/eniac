@@ -12,8 +12,8 @@ package function
 import "fmt"
 
 // GetMemoryInfo 获取内存信息
-func GetMemoryInfo(dataUnit string, percentUnit string) (memoryInfo map[string]interface{}, err error) {
-	memoryInfo = make(map[string]interface{})
+func GetMemoryInfo(dataUnit string, percentUnit string) map[string]interface{} {
+	memoryInfo := make(map[string]interface{})
 	memTotal, memTotalUnit := DataUnitConvert("B", dataUnit, float64(memData.Total))
 	memoryInfo["MemoryTotal"] = fmt.Sprintf("%6.2f%s", memTotal, memTotalUnit) // 内存总量
 	memUsed, memUsedUnit := DataUnitConvert("B", dataUnit, float64(memData.Used))
@@ -29,12 +29,12 @@ func GetMemoryInfo(dataUnit string, percentUnit string) (memoryInfo map[string]i
 	memAvail, memAvailUnit := DataUnitConvert("B", dataUnit, float64(memData.Available))
 	memoryInfo["MemoryAvail"] = fmt.Sprintf("%6.2f%s", memAvail, memAvailUnit) // 可用内存
 
-	return memoryInfo, err
+	return memoryInfo
 }
 
 // GetSwapInfo 获取交换分区信息
-func GetSwapInfo(dataUnit string) (swapInfo map[string]interface{}, err error) {
-	swapInfo = make(map[string]interface{})
+func GetSwapInfo(dataUnit string) map[string]interface{} {
+	swapInfo := make(map[string]interface{})
 	swapTotal, swapTotalUnit := DataUnitConvert("B", dataUnit, float64(memData.SwapTotal))
 	swapInfo["SwapDisabled"] = false
 	if swapTotal == 0 {
@@ -44,5 +44,5 @@ func GetSwapInfo(dataUnit string) (swapInfo map[string]interface{}, err error) {
 	swapFree, swapFreeUnit := DataUnitConvert("B", dataUnit, float64(memData.SwapFree))
 	swapInfo["SwapFree"] = fmt.Sprintf("%.2f%s", swapFree, swapFreeUnit) // 交换分区空闲量
 
-	return swapInfo, err
+	return swapInfo
 }

@@ -107,8 +107,7 @@ func GetGPUInfo() (gpuInfo map[string]interface{}) {
 
 	// 解析JSON
 	var gpuDataJ2S GPUDataJ2S
-	err := json.Unmarshal([]byte(gpuDataJson), &gpuDataJ2S)
-	if err != nil {
+	if err := json.Unmarshal([]byte(gpuDataJson), &gpuDataJ2S); err != nil {
 		fmt.Println("Error:", err)
 	}
 
@@ -140,8 +139,7 @@ func GetNetworkInfo() (networkInfo map[string]interface{}) {
 
 	// 解析JSON
 	var networkDataJ2S map[string]NetworkDataJ2S
-	err := json.Unmarshal([]byte(networkDataJson), &networkDataJ2S)
-	if err != nil {
+	if err := json.Unmarshal([]byte(networkDataJson), &networkDataJ2S); err != nil {
 		fmt.Println("Error:", err)
 	}
 

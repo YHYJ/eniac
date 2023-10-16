@@ -15,11 +15,11 @@ import (
 )
 
 // 秒转换为天、小时、分钟、秒
-func Second2DayHourMinuteSecond(second uint64) (uint64, uint64, uint64, uint64) {
-	day := second / 86400
-	hour := (second - day*86400) / 3600
-	minute := (second - day*86400 - hour*3600) / 60
-	second = second - day*86400 - hour*3600 - minute*60
+func Second2DayHourMinuteSecond(totalSeconds uint64) (day, hour, minute, second uint64) {
+	day = totalSeconds / 86400
+	hour = (totalSeconds - day*86400) / 3600
+	minute = (totalSeconds - day*86400 - hour*3600) / 60
+	second = totalSeconds - day*86400 - hour*3600 - minute*60
 	return day, hour, minute, second
 }
 
