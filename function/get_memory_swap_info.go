@@ -19,7 +19,7 @@ func GetMemoryInfo(dataUnit string, percentUnit string) map[string]interface{} {
 	memUsed, memUsedUnit := DataUnitConvert("B", dataUnit, float64(memData.Used))
 	memoryInfo["MemoryUsed"] = fmt.Sprintf("%6.2f%s", memUsed, memUsedUnit) // 已用内存
 	memUsedPercent, _ := DataUnitConvert("B", percentUnit, float64(memData.UsedPercent))
-	memoryInfo["MemoryUsedPercent"] = fmt.Sprintf("%5.2f%s", memUsedPercent, percentUnit) // 内存使用率
+	memoryInfo["MemoryUsedPercent"] = fmt.Sprintf("%6.2f%s", memUsedPercent, percentUnit) // 内存使用率
 	memFree, memFreeUnit := DataUnitConvert("B", dataUnit, float64(memData.Free))
 	memoryInfo["MemoryFree"] = fmt.Sprintf("%6.2f%s", memFree, memFreeUnit) // 空闲内存
 	memShared, memSharedUnit := DataUnitConvert("B", dataUnit, float64(memData.Shared))

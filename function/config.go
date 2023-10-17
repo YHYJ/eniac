@@ -86,7 +86,7 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"NicVendor":         "网卡厂商",
 			"MemoryTotal":       "内存大小",
 			"MemoryUsed":        "已用内存",
-			"MemoryUsedPercent": "内存使用率",
+			"MemoryUsedPercent": "内存占用",
 			"MemoryFree":        "空闲内存",
 			"MemoryShared":      "共享内存",
 			"MemoryBuffCache":   "缓冲内存",
