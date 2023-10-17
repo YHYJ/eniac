@@ -81,7 +81,7 @@ var getCmd = &cobra.Command{
 
 		// 执行对应函数
 		if productFlag {
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Product")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", "Product")
 			productInfo := function.GetProductInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
@@ -95,7 +95,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if boardFlag {
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Board")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", "Board")
 			boardInfo := function.GetBoardInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
@@ -109,7 +109,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if biosFlag {
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "BIOS")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", "BIOS")
 			biosInfo := function.GetBIOSInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
@@ -123,7 +123,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if cpuFlag {
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "CPU")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", "CPU")
 			// 获取CPU配置项
 			if confTree != nil {
 				if confTree.Has("cpu.cache_unit") {
@@ -145,7 +145,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if gpuFlag {
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "GPU")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", "GPU")
 			gpuInfo := function.GetGPUInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
 			// 顺序输出
@@ -159,7 +159,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if memoryFlag {
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Memory")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", "Memory")
 			// 获取Memory配置项
 			if confTree != nil {
 				if confTree.Has("memory.data_unit") {
@@ -186,7 +186,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if swapFlag {
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Swap")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", "Swap")
 			// 获取Memory配置项
 			if confTree != nil {
 				if confTree.Has("memory.data_unit") {
@@ -219,7 +219,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if storageFlag {
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Storage")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", "Storage")
 			storageInfo := function.GetStorageInfo()
 			items = []string{"StorageName", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
 			// 组装表头
@@ -276,7 +276,7 @@ var getCmd = &cobra.Command{
 			table.Render() // 渲染表格
 		}
 		if netFlag {
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Network")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", "Network")
 			networkInfo := function.GetNetworkInfo()
 			items = []string{"NicName", "NicMacAddress", "NicDriver", "NicVendor", "NicProduct", "NicPCIAddress", "NicSpeed", "NicDuplex"}
 			// 组装表头
@@ -334,7 +334,7 @@ var getCmd = &cobra.Command{
 			table.Render() // 渲染表格
 		}
 		if osFlag {
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "OS")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", "OS")
 			osInfo := function.GetOSInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
@@ -348,7 +348,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if loadFlag {
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Load")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", "Load")
 			loadInfo := function.GetLoadInfo()
 			textFormat := "\x1b[30;1m%-6v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
@@ -362,7 +362,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if processFlag {
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Process")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", "Process")
 			procsInfo := function.GetProcessInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
@@ -376,7 +376,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if timeFlag {
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Time")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", "Time")
 			timeInfo, _ := function.GetTimeInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[36m%v\x1b[0m\n"
 			// 顺序输出
@@ -390,7 +390,7 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if userFlag {
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "User")
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", "User")
 			userInfo := function.GetUserInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[36m%v\x1b[0m\n"
 			// 顺序输出
@@ -415,7 +415,7 @@ var getCmd = &cobra.Command{
 					}
 				}
 			} else {
-				fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s Information\n", "Update")
+				fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", "Update")
 				// 获取update配置项
 				if confTree != nil {
 					if confTree.Has("update.record_file") {
