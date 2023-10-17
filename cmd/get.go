@@ -233,7 +233,7 @@ var getCmd = &cobra.Command{
 			// 组装表数据
 			tableData := [][]string{}
 			for index := 1; index <= len(storageInfo); index++ {
-				outputInfo := []string{"Storage." + strconv.Itoa(index)}
+				outputInfo := []string{"磁盘." + strconv.Itoa(index)}
 				for _, item := range items {
 					outputValue := storageInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string)
 					outputInfo = append(outputInfo, outputValue)
@@ -290,7 +290,7 @@ var getCmd = &cobra.Command{
 			// 组装表数据
 			tableData := [][]string{}
 			for index := 1; index <= len(networkInfo); index++ {
-				outputInfo := []string{"NIC." + strconv.Itoa(index)}
+				outputInfo := []string{"网卡." + strconv.Itoa(index)}
 				for _, item := range items {
 					outputValue := networkInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string)
 					outputInfo = append(outputInfo, outputValue)
