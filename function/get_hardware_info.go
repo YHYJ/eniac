@@ -23,7 +23,7 @@ func GetStorageInfo() (storageInfo map[string]interface{}) {
 	index := 1 // 排除虚拟设备影响的编号
 	for _, disk := range blockData.Disks {
 		storageValue := make(map[string]interface{})
-		if disk.SizeBytes > 0 {
+		if disk.SizeBytes > 0 && disk.DriveType.String() != "virtual" {
 			storageValue["StorageName"] = disk.Name
 			storageValue["StorageDriver"] = disk.StorageController.String()
 			storageValue["StorageVendor"] = func() string {
