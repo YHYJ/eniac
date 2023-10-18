@@ -13,36 +13,51 @@ import "fmt"
 
 // GetMemoryInfo 获取内存信息
 func GetMemoryInfo(dataUnit string, percentUnit string) map[string]interface{} {
-	memoryInfo := make(map[string]interface{})
+	// 内存数据
 	memTotal, memTotalUnit := DataUnitConvert("B", dataUnit, float64(memData.Total))
-	memoryInfo["MemoryTotal"] = fmt.Sprintf("%6.1f%s", memTotal, memTotalUnit) // 内存总量
 	memUsed, memUsedUnit := DataUnitConvert("B", dataUnit, float64(memData.Used))
-	memoryInfo["MemoryUsed"] = fmt.Sprintf("%6.1f%s", memUsed, memUsedUnit) // 已用内存
 	memUsedPercent, _ := DataUnitConvert("B", percentUnit, float64(memData.UsedPercent))
-	memoryInfo["MemoryUsedPercent"] = fmt.Sprintf("%6.1f%s", memUsedPercent, percentUnit) // 内存使用率
 	memFree, memFreeUnit := DataUnitConvert("B", dataUnit, float64(memData.Free))
-	memoryInfo["MemoryFree"] = fmt.Sprintf("%6.1f%s", memFree, memFreeUnit) // 空闲内存
 	memShared, memSharedUnit := DataUnitConvert("B", dataUnit, float64(memData.Shared))
-	memoryInfo["MemoryShared"] = fmt.Sprintf("%6.1f%s", memShared, memSharedUnit) // 共享内存
 	memBuffCache, memBuffCacheUnit := DataUnitConvert("B", dataUnit, float64(memData.Buffers+memData.Cached))
-	memoryInfo["MemoryBuffCache"] = fmt.Sprintf("%6.1f%s", memBuffCache, memBuffCacheUnit) // 缓存内存
 	memAvail, memAvailUnit := DataUnitConvert("B", dataUnit, float64(memData.Available))
-	memoryInfo["MemoryAvail"] = fmt.Sprintf("%6.1f%s", memAvail, memAvailUnit) // 可用内存
+
+	// 使用冒泡排序找出最大值用以组装格式字符串
+	memData := []float64{memTotal, memUsed, memUsedPercent, memFree, memShared, memBuffCache, memAvail}
+	BubbleSort(memData)
+	max := memData[len(memData)-1]
+	formatString := FormatFloat(max, 1)
+
+	memoryInfo := make(map[string]interface{})
+	memoryInfo["MemoryTotal"] = fmt.Sprintf(formatString, memTotal, memTotalUnit)             // 内存总量
+	memoryInfo["MemoryUsed"] = fmt.Sprintf(formatString, memUsed, memUsedUnit)                // 已用内存
+	memoryInfo["MemoryUsedPercent"] = fmt.Sprintf(formatString, memUsedPercent, percentUnit)  // 内存使用率
+	memoryInfo["MemoryFree"] = fmt.Sprintf(formatString, memFree, memFreeUnit)                // 空闲内存
+	memoryInfo["MemoryShared"] = fmt.Sprintf(formatString, memShared, memSharedUnit)          // 共享内存
+	memoryInfo["MemoryBuffCache"] = fmt.Sprintf(formatString, memBuffCache, memBuffCacheUnit) // 缓存内存
+	memoryInfo["MemoryAvail"] = fmt.Sprintf(formatString, memAvail, memAvailUnit)             // 可用内存
 
 	return memoryInfo
 }
 
 // GetSwapInfo 获取交换分区信息
 func GetSwapInfo(dataUnit string) map[string]interface{} {
-	swapInfo := make(map[string]interface{})
 	swapTotal, swapTotalUnit := DataUnitConvert("B", dataUnit, float64(memData.SwapTotal))
+	swapFree, swapFreeUnit := DataUnitConvert("B", dataUnit, float64(memData.SwapFree))
+
+	// 使用冒泡排序找出最大值用以组装格式字符串
+	swapData := []float64{swapTotal, swapFree}
+	BubbleSort(swapData)
+	max := swapData[len(swapData)-1]
+	formatString := FormatFloat(max, 1)
+
+	swapInfo := make(map[string]interface{})
 	swapInfo["SwapDisabled"] = false
 	if swapTotal == 0 {
 		swapInfo["SwapDisabled"] = true
 	}
-	swapInfo["SwapTotal"] = fmt.Sprintf("%6.1f%s", swapTotal, swapTotalUnit) // 交换分区总量
-	swapFree, swapFreeUnit := DataUnitConvert("B", dataUnit, float64(memData.SwapFree))
-	swapInfo["SwapFree"] = fmt.Sprintf("%6.1f%s", swapFree, swapFreeUnit) // 交换分区空闲量
+	swapInfo["SwapTotal"] = fmt.Sprintf(formatString, swapTotal, swapTotalUnit) // 交换分区总量
+	swapInfo["SwapFree"] = fmt.Sprintf(formatString, swapFree, swapFreeUnit)    // 交换分区空闲量
 
 	return swapInfo
 }
