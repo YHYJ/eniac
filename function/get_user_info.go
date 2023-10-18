@@ -12,8 +12,8 @@ package function
 // GetUserInfo 获取用户信息
 func GetUserInfo() map[string]interface{} {
 	userInfo := make(map[string]interface{})
-	userInfo["User"] = userData.Name           // 用户昵称
-	userInfo["UserName"] = userData.Username   // 用户名
+	userInfo["User"] = userData.Name           // 用户名称
+	userInfo["UserName"] = userData.Username   // 用户昵称
 	userInfo["UserUid"] = userData.Uid         // 用户ID
 	userInfo["UserGid"] = userData.Gid         // 用户组ID
 	userInfo["UserHomeDir"] = userData.HomeDir // 用户主目录
