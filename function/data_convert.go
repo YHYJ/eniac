@@ -10,9 +10,31 @@ Description: 数据转换（包括单位和格式）
 package function
 
 import (
+	"fmt"
 	"strings"
 	"time"
 )
+
+// 冒泡排序
+func BubbleSort(arr []float64) {
+	n := len(arr)
+
+	for i := 0; i < n-1; i++ {
+		for j := 0; j < n-i-1; j++ {
+			if arr[j] > arr[j+1] {
+				// 交换 arr[j] 和 arr[j+1] 的位置
+				arr[j], arr[j+1] = arr[j+1], arr[j]
+			}
+		}
+	}
+}
+
+// 动态计算浮点数长度并输出合适的格式字符串
+func FormatFloat(value float64, precision int) string {
+	digits := len(fmt.Sprint(int(value))) + 1 + precision // 整数部分长度 + 小数点 + 小数部分长度
+	formatString := "%" + fmt.Sprintf("%d.1f", digits) + "%s"
+	return formatString
+}
 
 // 秒转换为天、小时、分钟、秒
 func Second2DayHourMinuteSecond(totalSeconds uint64) (day, hour, minute, second uint64) {
