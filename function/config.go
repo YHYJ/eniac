@@ -55,6 +55,7 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"GPU":     "显卡",
 			"Memory":  "内存",
 			"Swap":    "交换分区",
+			"Storage": "存储",
 			"NIC":     "网卡",
 			"OS":      "系统",
 			"Load":    "负载",
