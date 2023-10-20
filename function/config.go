@@ -51,7 +51,7 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"Product": "设备",
 			"Board":   "主板",
 			"BIOS":    "BIOS",
-			"CPU":     "CPU",
+			"CPU":     "处理器",
 			"GPU":     "显卡",
 			"Memory":  "内存",
 			"Swap":    "交换分区",
