@@ -120,8 +120,8 @@ func GetGPUInfo() (gpuInfo map[string]interface{}) {
 	return gpuInfo
 }
 
-// GetNetworkInfo 获取网络信息
-func GetNetworkInfo() (networkInfo map[string]interface{}) {
+// GetNicInfo 获取网卡信息
+func GetNicInfo() (networkInfo map[string]interface{}) {
 	type NICDataJ2S struct {
 		Name       string `json:"name"`
 		MacAddress string `json:"mac_address"`

@@ -53,10 +53,10 @@ var getCmd = &cobra.Command{
 		var sysInfo sysinfo.SysInfo
 		sysInfo.GetSysInfo()
 		// 解析参数
-		var biosFlag, boardFlag, cpuFlag, gpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, netFlag, timeFlag, userFlag, updateFlag, onlyFlag bool
+		var biosFlag, boardFlag, cpuFlag, gpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, nicFlag, timeFlag, userFlag, updateFlag, onlyFlag bool
 		allFlag, _ := cmd.Flags().GetBool("all")
 		if allFlag {
-			biosFlag, boardFlag, gpuFlag, cpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, netFlag, timeFlag, userFlag, updateFlag = true, true, true, true, true, true, true, true, true, true, true, true, true, true, true
+			biosFlag, boardFlag, gpuFlag, cpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, nicFlag, timeFlag, userFlag, updateFlag = true, true, true, true, true, true, true, true, true, true, true, true, true, true, true
 			onlyFlag = false
 		} else {
 			biosFlag, _ = cmd.Flags().GetBool("bios")
@@ -70,7 +70,7 @@ var getCmd = &cobra.Command{
 			productFlag, _ = cmd.Flags().GetBool("product")
 			storageFlag, _ = cmd.Flags().GetBool("storage")
 			swapFlag, _ = cmd.Flags().GetBool("swap")
-			netFlag, _ = cmd.Flags().GetBool("net")
+			nicFlag, _ = cmd.Flags().GetBool("nic")
 			timeFlag, _ = cmd.Flags().GetBool("time")
 			userFlag, _ = cmd.Flags().GetBool("user")
 			updateFlag, _ = cmd.Flags().GetBool("update")
@@ -275,9 +275,9 @@ var getCmd = &cobra.Command{
 			}
 			table.Render() // 渲染表格
 		}
-		if netFlag {
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", "Network")
-			networkInfo := function.GetNetworkInfo()
+		if nicFlag {
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", "NIC")
+			nicInfo := function.GetNicInfo()
 			items = []string{"NicName", "NicMacAddress", "NicDriver", "NicVendor", "NicProduct", "NicPCIAddress", "NicSpeed", "NicDuplex"}
 			// 组装表头
 			tableHeader := []string{""}
@@ -289,10 +289,10 @@ var getCmd = &cobra.Command{
 			}
 			// 组装表数据
 			tableData := [][]string{}
-			for index := 1; index <= len(networkInfo); index++ {
+			for index := 1; index <= len(nicInfo); index++ {
 				outputInfo := []string{"网卡." + strconv.Itoa(index)}
 				for _, item := range items {
-					outputValue := networkInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string)
+					outputValue := nicInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string)
 					outputInfo = append(outputInfo, outputValue)
 				}
 				tableData = append(tableData, outputInfo)
@@ -469,7 +469,7 @@ func init() {
 	getCmd.Flags().BoolP("product", "", false, "Get Product information")
 	getCmd.Flags().BoolP("storage", "", false, "Get Storage information")
 	getCmd.Flags().BoolP("swap", "", false, "Get Swap information")
-	getCmd.Flags().BoolP("net", "", false, "Get Network information")
+	getCmd.Flags().BoolP("nic", "", false, "Get NIC information")
 	getCmd.Flags().BoolP("time", "", false, "Get Time information")
 	getCmd.Flags().BoolP("user", "", false, "Get User information")
 	getCmd.Flags().BoolP("update", "", false, "Get Update information")
