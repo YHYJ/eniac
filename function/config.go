@@ -56,6 +56,7 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"Memory":  "内存",
 			"Swap":    "交换分区",
 			"Storage": "存储",
+			"Disk":    "磁盘",
 			"NIC":     "网卡",
 			"OS":      "系统",
 			"Load":    "负载",
