@@ -47,6 +47,22 @@ func WriteTomlConfig(filePath string) (int64, error) {
 		"cpu": map[string]interface{}{
 			"cache_unit": "KB",
 		},
+		"devices": map[string]interface{}{
+			"Product": "产品",
+			"Board":   "主板",
+			"BIOS":    "BIOS",
+			"CPU":     "CPU",
+			"GPU":     "显卡",
+			"Memory":  "内存",
+			"Swap":    "交换分区",
+			"NIC":     "网卡",
+			"OS":      "系统",
+			"Load":    "负载",
+			"Process": "进程",
+			"Time":    "时间",
+			"User":    "用户",
+			"Update":  "更新",
+		},
 		"memory": map[string]interface{}{
 			"data_unit":    "GB",
 			"percent_unit": "%",
