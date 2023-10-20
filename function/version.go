@@ -14,7 +14,7 @@ import "fmt"
 // 程序信息
 var (
 	name    string = "Eniac"
-	version string = "v1.0.6"
+	version string = "v1.0.7"
 )
 
 func ProgramInfo(only bool) string {
