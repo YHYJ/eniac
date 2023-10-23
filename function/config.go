@@ -47,7 +47,7 @@ func WriteTomlConfig(filePath string) (int64, error) {
 		"cpu": map[string]interface{}{
 			"cache_unit": "KB",
 		},
-		"devices": map[string]interface{}{
+		"parts": map[string]interface{}{
 			"Product": "设备",
 			"Board":   "主板",
 			"BIOS":    "BIOS",

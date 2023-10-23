@@ -34,14 +34,14 @@ var getCmd = &cobra.Command{
 		}
 		// 设置配置项默认值
 		defaultGenealogyCfg, _ := toml.TreeFromMap(map[string]interface{}{"genealogy": map[string]string{}})
-		defaultDevicesCfg, _ := toml.TreeFromMap(map[string]interface{}{"devices": map[string]string{}})
+		defaultPartsCfg, _ := toml.TreeFromMap(map[string]interface{}{"parts": map[string]string{}})
 		var (
 			cpuCacheUnit      string     = "KB"
 			memoryDataUnit    string     = "GB"
 			memoryPercentUnit string     = "%"
 			updateRecordFile  string     = "/tmp/system-checkupdates.log"
 			genealogyCfg      *toml.Tree = defaultGenealogyCfg
-			devicesCfg        *toml.Tree = defaultDevicesCfg
+			partsCfg          *toml.Tree = defaultPartsCfg
 		)
 		// 获取genealogy配置项
 		if confTree != nil {
@@ -52,12 +52,12 @@ var getCmd = &cobra.Command{
 				fmt.Printf("\x1b[34;1mConfig file is missing '%s' configuration item, using default value\x1b[0m\n", "genealogy")
 				return defaultGenealogyCfg
 			}()
-			devicesCfg = func() *toml.Tree {
-				if confTree.Has("devices") {
-					return confTree.Get("devices").(*toml.Tree)
+			partsCfg = func() *toml.Tree {
+				if confTree.Has("parts") {
+					return confTree.Get("parts").(*toml.Tree)
 				}
-				fmt.Printf("\x1b[34;1mConfig file is missing '%s' configuration item, using default value\x1b[0m\n", "devices")
-				return defaultDevicesCfg
+				fmt.Printf("\x1b[34;1mConfig file is missing '%s' configuration item, using default value\x1b[0m\n", "parts")
+				return defaultPartsCfg
 			}()
 		} else {
 			fmt.Printf("\x1b[34;1mConfig file is empty, using default value\x1b[0m\n")
@@ -94,13 +94,13 @@ var getCmd = &cobra.Command{
 
 		// 执行对应函数
 		if productFlag {
-			productDevice := func() string {
-				if devicesCfg.Has("Product") {
-					return devicesCfg.Get("Product").(string)
+			productPart := func() string {
+				if partsCfg.Has("Product") {
+					return partsCfg.Get("Product").(string)
 				}
 				return "Product"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", productDevice)
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", productPart)
 			productInfo := function.GetProductInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
@@ -114,13 +114,13 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if boardFlag {
-			boardDevice := func() string {
-				if devicesCfg.Has("Board") {
-					return devicesCfg.Get("Board").(string)
+			boardPart := func() string {
+				if partsCfg.Has("Board") {
+					return partsCfg.Get("Board").(string)
 				}
 				return "Board"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", boardDevice)
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", boardPart)
 			boardInfo := function.GetBoardInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
@@ -134,13 +134,13 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if biosFlag {
-			biosDevice := func() string {
-				if devicesCfg.Has("BIOS") {
-					return devicesCfg.Get("BIOS").(string)
+			biosPart := func() string {
+				if partsCfg.Has("BIOS") {
+					return partsCfg.Get("BIOS").(string)
 				}
 				return "BIOS"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", biosDevice)
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", biosPart)
 			biosInfo := function.GetBIOSInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
@@ -154,13 +154,13 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if cpuFlag {
-			cpuDevice := func() string {
-				if devicesCfg.Has("CPU") {
-					return devicesCfg.Get("CPU").(string)
+			cpuPart := func() string {
+				if partsCfg.Has("CPU") {
+					return partsCfg.Get("CPU").(string)
 				}
 				return "CPU"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", cpuDevice)
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", cpuPart)
 			// 获取CPU配置项
 			if confTree != nil {
 				if confTree.Has("cpu.cache_unit") {
@@ -182,13 +182,13 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if gpuFlag {
-			gpuDevice := func() string {
-				if devicesCfg.Has("GPU") {
-					return devicesCfg.Get("GPU").(string)
+			gpuPart := func() string {
+				if partsCfg.Has("GPU") {
+					return partsCfg.Get("GPU").(string)
 				}
 				return "GPU"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", gpuDevice)
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", gpuPart)
 			gpuInfo := function.GetGPUInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
 			// 顺序输出
@@ -202,13 +202,13 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if memoryFlag {
-			memoryDevice := func() string {
-				if devicesCfg.Has("Memory") {
-					return devicesCfg.Get("Memory").(string)
+			memoryPart := func() string {
+				if partsCfg.Has("Memory") {
+					return partsCfg.Get("Memory").(string)
 				}
 				return "Memory"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", memoryDevice)
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", memoryPart)
 			// 获取Memory配置项
 			if confTree != nil {
 				if confTree.Has("memory.data_unit") {
@@ -235,13 +235,13 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if swapFlag {
-			swapDevice := func() string {
-				if devicesCfg.Has("Swap") {
-					return devicesCfg.Get("Swap").(string)
+			swapPart := func() string {
+				if partsCfg.Has("Swap") {
+					return partsCfg.Get("Swap").(string)
 				}
 				return "Swap"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", swapDevice)
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", swapPart)
 			// 获取Memory配置项
 			if confTree != nil {
 				if confTree.Has("memory.data_unit") {
@@ -274,13 +274,13 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if storageFlag {
-			storageDevice := func() string {
-				if devicesCfg.Has("Storage") {
-					return devicesCfg.Get("Storage").(string)
+			storagePart := func() string {
+				if partsCfg.Has("Storage") {
+					return partsCfg.Get("Storage").(string)
 				}
 				return "Storage"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", storageDevice)
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", storagePart)
 			storageInfo := function.GetStorageInfo()
 			items = []string{"StorageName", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
 			// 组装表头
@@ -293,14 +293,14 @@ var getCmd = &cobra.Command{
 			}
 			// 组装表数据
 			tableData := [][]string{}
-			diskDevice := func() string {
-				if devicesCfg.Has("Disk") {
-					return devicesCfg.Get("Disk").(string)
+			diskPart := func() string {
+				if partsCfg.Has("Disk") {
+					return partsCfg.Get("Disk").(string)
 				}
 				return "Disk"
 			}()
 			for index := 1; index <= len(storageInfo); index++ {
-				outputInfo := []string{diskDevice + "." + strconv.Itoa(index)}
+				outputInfo := []string{diskPart + "." + strconv.Itoa(index)}
 				for _, item := range items {
 					outputValue := storageInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string)
 					outputInfo = append(outputInfo, outputValue)
@@ -343,13 +343,13 @@ var getCmd = &cobra.Command{
 			table.Render() // 渲染表格
 		}
 		if nicFlag {
-			nicDevice := func() string {
-				if devicesCfg.Has("NIC") {
-					return devicesCfg.Get("NIC").(string)
+			nicPart := func() string {
+				if partsCfg.Has("NIC") {
+					return partsCfg.Get("NIC").(string)
 				}
 				return "NIC"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", nicDevice)
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", nicPart)
 			nicInfo := function.GetNicInfo()
 			items = []string{"NicName", "NicMacAddress", "NicDriver", "NicVendor", "NicProduct", "NicPCIAddress", "NicSpeed", "NicDuplex"}
 			// 组装表头
@@ -363,7 +363,7 @@ var getCmd = &cobra.Command{
 			// 组装表数据
 			tableData := [][]string{}
 			for index := 1; index <= len(nicInfo); index++ {
-				outputInfo := []string{nicDevice + "." + strconv.Itoa(index)}
+				outputInfo := []string{nicPart + "." + strconv.Itoa(index)}
 				for _, item := range items {
 					outputValue := nicInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string)
 					outputInfo = append(outputInfo, outputValue)
@@ -407,13 +407,13 @@ var getCmd = &cobra.Command{
 			table.Render() // 渲染表格
 		}
 		if osFlag {
-			osDevice := func() string {
-				if devicesCfg.Has("OS") {
-					return devicesCfg.Get("OS").(string)
+			osPart := func() string {
+				if partsCfg.Has("OS") {
+					return partsCfg.Get("OS").(string)
 				}
 				return "OS"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", osDevice)
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", osPart)
 			osInfo := function.GetOSInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
@@ -427,13 +427,13 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if loadFlag {
-			loadDevice := func() string {
-				if devicesCfg.Has("Load") {
-					return devicesCfg.Get("Load").(string)
+			loadPart := func() string {
+				if partsCfg.Has("Load") {
+					return partsCfg.Get("Load").(string)
 				}
 				return "Load"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", loadDevice)
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", loadPart)
 			loadInfo := function.GetLoadInfo()
 			textFormat := "\x1b[30;1m%-6v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
@@ -447,13 +447,13 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if processFlag {
-			processDevice := func() string {
-				if devicesCfg.Has("Process") {
-					return devicesCfg.Get("Process").(string)
+			processPart := func() string {
+				if partsCfg.Has("Process") {
+					return partsCfg.Get("Process").(string)
 				}
 				return "Process"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", processDevice)
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", processPart)
 			procsInfo := function.GetProcessInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
@@ -467,13 +467,13 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if timeFlag {
-			timeDevice := func() string {
-				if devicesCfg.Has("Time") {
-					return devicesCfg.Get("Time").(string)
+			timePart := func() string {
+				if partsCfg.Has("Time") {
+					return partsCfg.Get("Time").(string)
 				}
 				return "Time"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", timeDevice)
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", timePart)
 			timeInfo, _ := function.GetTimeInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[36m%v\x1b[0m\n"
 			// 顺序输出
@@ -487,13 +487,13 @@ var getCmd = &cobra.Command{
 			}
 		}
 		if userFlag {
-			userDevice := func() string {
-				if devicesCfg.Has("User") {
-					return devicesCfg.Get("User").(string)
+			userPart := func() string {
+				if partsCfg.Has("User") {
+					return partsCfg.Get("User").(string)
 				}
 				return "User"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", userDevice)
+			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", userPart)
 			userInfo := function.GetUserInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[36m%v\x1b[0m\n"
 			// 顺序输出
@@ -518,13 +518,13 @@ var getCmd = &cobra.Command{
 					}
 				}
 			} else {
-				updateDevice := func() string {
-					if devicesCfg.Has("Update") {
-						return devicesCfg.Get("Update").(string)
+				updatePart := func() string {
+					if partsCfg.Has("Update") {
+						return partsCfg.Get("Update").(string)
 					}
 					return "Update"
 				}()
-				fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", updateDevice)
+				fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", updatePart)
 				// 获取update配置项
 				if confTree != nil {
 					if confTree.Has("update.record_file") {
