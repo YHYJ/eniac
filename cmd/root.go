@@ -19,7 +19,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "eniac",
 	Short: "For system interaction",
-	Long:  `Eniac is a system interactive command line tool.`,
+	Long:  `eniac is a system interactive command line tool.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -35,7 +35,7 @@ func Execute() {
 var cfgFile = function.UserInfo.HomeDir + "/.config" + "/eniac/config.toml"
 
 func init() {
-	rootCmd.Flags().BoolP("help", "h", false, "help for Eniac")
+	rootCmd.Flags().BoolP("help", "h", false, "help for eniac")
 
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", cfgFile, "Config file")
 }
