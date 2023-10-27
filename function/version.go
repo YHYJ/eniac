@@ -14,7 +14,7 @@ import "fmt"
 // 程序信息
 const (
 	Name    = "Eniac"
-	Version = "v1.0.9"
+	Version = "v1.1.0"
 	Path    = "github.com/yhyj/eniac"
 )
 
