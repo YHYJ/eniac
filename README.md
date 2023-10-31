@@ -13,7 +13,11 @@
 
 * [Usage](#usage)
 * [Compile](#compile)
-* [Dependencies](#dependencies)
+  * [当前平台](#当前平台)
+  * [交叉编译](#交叉编译)
+    * [Linux](#linux)
+    * [macOS](#macos)
+    * [Windows](#windows)
 
 <!-- vim-markdown-toc -->
 
@@ -55,30 +59,45 @@
 
 ## Compile
 
-- 编译当前平台可执行文件：
+### 当前平台
 
 ```bash
-go build main.go
+go build -gcflags="-trimpath" -ldflags="-s -w -X github.com/yhyj/eniac/function.buildTime=`date +%s` -X github.com/yhyj/eniac/function.buildBy=$USER" -o eniac main.go
 ```
 
-- **交叉编译**指定平台可执行文件：
+### 交叉编译
+
+使用命令`go tool dist list`查看支持的平台
+
+#### Linux
 
 ```bash
-# 适用于Linux AArch64平台
-CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags='-s -w' -trimpath -o eniac main.go
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -gcflags="-trimpath" -ldflags="-s -w -X github.com/yhyj/eniac/function.buildTime=`date +%s` -X github.com/yhyj/eniac/function.buildBy=$USER" -o eniac main.go
 ```
+
+> 使用`uname -m`确定硬件架构
+>
+> - 结果是x86_64则GOARCH=amd64
+> - 结果是aarch64则GOARCH=arm64
+
+#### macOS
 
 ```bash
-# 适用于macOS amd64平台
-CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags='-s -w' -trimpath -o eniac main.go
+CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -gcflags="-trimpath" -ldflags="-s -w -X github.com/yhyj/eniac/function.buildTime=`date +%s` -X github.com/yhyj/eniac/function.buildBy=$USER" -o eniac main.go
 ```
 
-```bash
-# 适用于Windows amd64平台
-CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags='-s -w' -trimpath -o eniac main.go
+> 使用`uname -m`确定硬件架构
+>
+> - 结果是x86_64则GOARCH=amd64
+> - 结果是aarch64则GOARCH=arm64
+
+#### Windows
+
+```powershell
+CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -gcflags="-trimpath" -ldflags="-s -w -H windowsgui -X github.com/yhyj/eniac/function.buildTime=`date +%s` -X github.com/yhyj/eniac/function.buildBy=$USER" -o eniac main.go
 ```
 
-## Dependencies
-
-- systemd
-- ethtool
+> 使用`echo %PROCESSOR_ARCHITECTURE%`确定硬件架构
+>
+> - 结果是x86_64则GOARCH=amd64
+> - 结果是aarch64则GOARCH=arm64
