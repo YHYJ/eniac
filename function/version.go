@@ -13,15 +13,22 @@ import "fmt"
 
 // 程序信息
 const (
-	Name    = "Eniac"
-	Version = "v1.1.0"
-	Path    = "github.com/yhyj/eniac"
+	name    = "Eniac"
+	version = "v1.1.0"
+	project = "github.com/yhyj/eniac"
+)
+
+// 编译信息
+var (
+	gitCommitHash string = "unknown"
+	buildTime     string = "unknown"
+	buildBy       string = "unknown"
 )
 
 func ProgramInfo(only bool) string {
-	programInfo := fmt.Sprintf("%s\n", Version)
+	programInfo := fmt.Sprintf("%s\n", version)
 	if !only {
-		programInfo = fmt.Sprintf("%s version %s\n", Name, Version)
+		programInfo = fmt.Sprintf("%s version: %s\nGit commit hash: %s\nBuilt on: %s\nBuilt by: %s\n", name, version, gitCommitHash, buildTime, buildBy)
 	}
 	return programInfo
 }
