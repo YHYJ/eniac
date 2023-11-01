@@ -1,9 +1,15 @@
-# README
+<h1 align="center">Eniac</h1>
 
 <!-- File: README.md -->
 <!-- Author: YJ -->
 <!-- Email: yj1516268@outlook.com -->
 <!-- Created Time: 2023-04-19 11:19:47 -->
+
+---
+
+<p align="center">
+  <a href="https://github.com/YHYJ/eniac/actions/workflows/release.yml"><img src="https://github.com/YHYJ/eniac/actions/workflows/release.yml/badge.svg" alt="Go build and release by GoReleaser"></a>
+</p>
 
 ---
 
@@ -33,29 +39,29 @@
 
 ---
 
-一个Linux系统交互工具
+一个 Linux 系统交互工具
 
 ## Usage
 
 - `config`子命令
 
-    该子命令用于操作配置文件，有以下参数：
+  该子命令用于操作配置文件，有以下参数：
 
-    - 'create'：创建默认内容的配置文件，可以使用全局参数'--config'指定配置文件路径
-    - 'force'：当指定的配置文件已存在时，使用该参数强制覆盖原文件
-    - 'print'：打印配置文件内容
+  - 'create'：创建默认内容的配置文件，可以使用全局参数'--config'指定配置文件路径
+  - 'force'：当指定的配置文件已存在时，使用该参数强制覆盖原文件
+  - 'print'：打印配置文件内容
 
 - `get`子命令
 
-    该子命令用于获取系统信息，参数用于指定获取哪部分
+  该子命令用于获取系统信息，参数用于指定获取哪部分
 
 - `version`子命令
 
-    查看程序版本信息
+  查看程序版本信息
 
 - `help`
 
-    查看程序帮助信息
+  查看程序帮助信息
 
 ## Compile
 
@@ -77,8 +83,8 @@ CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -gcflags="-trimpath" -ldflags="-s
 
 > 使用`uname -m`确定硬件架构
 >
-> - 结果是x86_64则GOARCH=amd64
-> - 结果是aarch64则GOARCH=arm64
+> - 结果是 x86_64 则 GOARCH=amd64
+> - 结果是 aarch64 则 GOARCH=arm64
 
 #### macOS
 
@@ -88,8 +94,8 @@ CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build -gcflags="-trimpath" -ldflags="-
 
 > 使用`uname -m`确定硬件架构
 >
-> - 结果是x86_64则GOARCH=amd64
-> - 结果是aarch64则GOARCH=arm64
+> - 结果是 x86_64 则 GOARCH=amd64
+> - 结果是 aarch64 则 GOARCH=arm64
 
 #### Windows
 
@@ -99,5 +105,5 @@ CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -gcflags="-trimpath" -ldflags="
 
 > 使用`echo %PROCESSOR_ARCHITECTURE%`确定硬件架构
 >
-> - 结果是x86_64则GOARCH=amd64
-> - 结果是aarch64则GOARCH=arm64
+> - 结果是 x86_64 则 GOARCH=amd64
+> - 结果是 aarch64 则 GOARCH=arm64
