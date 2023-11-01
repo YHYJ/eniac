@@ -7,7 +7,7 @@ Created Time: 2023-04-20 11:20:33
 Description: 获取负载信息
 */
 
-package function
+package cli
 
 // GetLoadInfo 获取负载信息
 func GetLoadInfo() map[string]interface{} {

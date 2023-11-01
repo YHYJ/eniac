@@ -13,7 +13,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/yhyj/eniac/function"
+	"github.com/yhyj/eniac/general"
 )
 
 var rootCmd = &cobra.Command{
@@ -32,7 +32,7 @@ func Execute() {
 	}
 }
 
-var cfgFile = function.UserInfo.HomeDir + "/.config" + "/eniac/config.toml"
+var cfgFile = general.UserInfo.HomeDir + "/.config" + "/eniac/config.toml"
 
 func init() {
 	rootCmd.Flags().BoolP("help", "h", false, "help for eniac")

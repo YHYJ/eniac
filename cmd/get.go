@@ -17,7 +17,7 @@ import (
 	"github.com/olekukonko/tablewriter"
 	"github.com/pelletier/go-toml"
 	"github.com/spf13/cobra"
-	"github.com/yhyj/eniac/function"
+	"github.com/yhyj/eniac/cli"
 	"github.com/zcalusic/sysinfo"
 )
 
@@ -28,7 +28,7 @@ var getCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		// 读取配置文件
 		cfgFile, _ := cmd.Flags().GetString("config")
-		confTree, err := function.GetTomlConfig(cfgFile)
+		confTree, err := cli.GetTomlConfig(cfgFile)
 		if err != nil {
 			fmt.Printf("\x1b[36;1m%s, %s\x1b[0m\n", err, "use default configuration")
 		}
@@ -101,7 +101,7 @@ var getCmd = &cobra.Command{
 				return "Product"
 			}()
 			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", productPart)
-			productInfo := function.GetProductInfo(sysInfo)
+			productInfo := cli.GetProductInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"ProductVendor", "ProductName"}
@@ -121,7 +121,7 @@ var getCmd = &cobra.Command{
 				return "Board"
 			}()
 			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", boardPart)
-			boardInfo := function.GetBoardInfo(sysInfo)
+			boardInfo := cli.GetBoardInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"BoardVendor", "BoardName", "BoardVersion"}
@@ -141,7 +141,7 @@ var getCmd = &cobra.Command{
 				return "BIOS"
 			}()
 			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", biosPart)
-			biosInfo := function.GetBIOSInfo(sysInfo)
+			biosInfo := cli.GetBIOSInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"BIOSVendor", "BIOSVersion", "BIOSDate"}
@@ -169,7 +169,7 @@ var getCmd = &cobra.Command{
 					fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", "cpu.cache_unit")
 				}
 			}
-			cpuInfo := function.GetCPUInfo(sysInfo, cpuCacheUnit)
+			cpuInfo := cli.GetCPUInfo(sysInfo, cpuCacheUnit)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"CPUModel", "CPUCache", "CPUNumber", "CPUCores", "CPUThreads"}
@@ -189,7 +189,7 @@ var getCmd = &cobra.Command{
 				return "GPU"
 			}()
 			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", gpuPart)
-			gpuInfo := function.GetGPUInfo()
+			gpuInfo := cli.GetGPUInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"GPUAddress", "GPUDriver", "GPUProduct", "GPUVendor"}
@@ -222,7 +222,7 @@ var getCmd = &cobra.Command{
 					fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", "memory.percent_unit")
 				}
 			}
-			memInfo := function.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
+			memInfo := cli.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"MemoryUsedPercent", "MemoryTotal", "MemoryUsed", "MemoryAvail", "MemoryFree", "MemoryBuffCache", "MemoryShared"}
@@ -250,7 +250,7 @@ var getCmd = &cobra.Command{
 					fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", "memory.data_unit")
 				}
 			}
-			swapInfo := function.GetSwapInfo(memoryDataUnit)
+			swapInfo := cli.GetSwapInfo(memoryDataUnit)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
 			// 顺序输出
 			if swapInfo["SwapDisabled"] == true {
@@ -281,7 +281,7 @@ var getCmd = &cobra.Command{
 				return "Storage"
 			}()
 			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", storagePart)
-			storageInfo := function.GetStorageInfo()
+			storageInfo := cli.GetStorageInfo()
 			items = []string{"StorageName", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
 			// 组装表头
 			tableHeader := []string{""}
@@ -350,7 +350,7 @@ var getCmd = &cobra.Command{
 				return "NIC"
 			}()
 			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", nicPart)
-			nicInfo := function.GetNicInfo()
+			nicInfo := cli.GetNicInfo()
 			items = []string{"NicName", "NicMacAddress", "NicDriver", "NicVendor", "NicProduct", "NicPCIAddress", "NicSpeed", "NicDuplex"}
 			// 组装表头
 			tableHeader := []string{""}
@@ -414,7 +414,7 @@ var getCmd = &cobra.Command{
 				return "OS"
 			}()
 			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", osPart)
-			osInfo := function.GetOSInfo(sysInfo)
+			osInfo := cli.GetOSInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"Arch", "Platform", "OS", "Kernel", "TimeZone", "Hostname"}
@@ -434,7 +434,7 @@ var getCmd = &cobra.Command{
 				return "Load"
 			}()
 			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", loadPart)
-			loadInfo := function.GetLoadInfo()
+			loadInfo := cli.GetLoadInfo()
 			textFormat := "\x1b[30;1m%-6v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"Load1", "Load5", "Load15"}
@@ -454,7 +454,7 @@ var getCmd = &cobra.Command{
 				return "Process"
 			}()
 			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", processPart)
-			procsInfo := function.GetProcessInfo()
+			procsInfo := cli.GetProcessInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"Process"}
@@ -474,7 +474,7 @@ var getCmd = &cobra.Command{
 				return "Time"
 			}()
 			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", timePart)
-			timeInfo, _ := function.GetTimeInfo()
+			timeInfo, _ := cli.GetTimeInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[36m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"StartTime", "Uptime", "BootTime"}
@@ -494,7 +494,7 @@ var getCmd = &cobra.Command{
 				return "User"
 			}()
 			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", userPart)
-			userInfo := function.GetUserInfo()
+			userInfo := cli.GetUserInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[36m%v\x1b[0m\n"
 			// 顺序输出
 			items = []string{"UserName", "User", "UserUid", "UserGid", "UserHomeDir"}
@@ -509,7 +509,7 @@ var getCmd = &cobra.Command{
 		if updateFlag {
 			if onlyFlag {
 				// 仅输出可更新包信息，专为系统更新检测插件服务
-				updateInfo, err := function.GetUpdateInfo(updateRecordFile, 0)
+				updateInfo, err := cli.GetUpdateInfo(updateRecordFile, 0)
 				if err != nil {
 					fmt.Printf("\x1b[36;1m%s\x1b[0m\n", err)
 				} else {
@@ -536,7 +536,7 @@ var getCmd = &cobra.Command{
 				textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[32;1m%v\x1b[0m\n"
 				listFormat := "%8v: \x1b[32m%v\x1b[0m\n"
 				// 输出更新状态监测
-				daemonInfo, _ := function.GetUpdateDaemonInfo()
+				daemonInfo, _ := cli.GetUpdateDaemonInfo()
 				items = []string{"DaemonStatus"}
 				for _, item := range items {
 					if genealogyCfg.Has(item) {
@@ -546,7 +546,7 @@ var getCmd = &cobra.Command{
 					}
 				}
 				// 输出具体更新信息
-				updateInfo, err := function.GetUpdateInfo(updateRecordFile, 0)
+				updateInfo, err := cli.GetUpdateInfo(updateRecordFile, 0)
 				if err != nil {
 					fmt.Printf("\x1b[36;1m%s\x1b[0m\n", err)
 				} else {

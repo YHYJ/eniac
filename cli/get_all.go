@@ -7,7 +7,7 @@ Created Time: 2023-09-28 12:44:03
 Description:
 */
 
-package function
+package cli
 
 import (
 	"os/user"

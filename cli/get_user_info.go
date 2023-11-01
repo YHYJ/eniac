@@ -7,7 +7,7 @@ Created Time: 2023-04-20 10:37:57
 Description: 获取用户信息
 */
 
-package function
+package cli
 
 // GetUserInfo 获取用户信息
 func GetUserInfo() map[string]interface{} {

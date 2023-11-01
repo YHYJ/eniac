@@ -7,7 +7,7 @@ Created Time: 2023-04-24 16:08:27
 Description: 子命令`config`的实现
 */
 
-package function
+package cli
 
 import (
 	"fmt"
@@ -15,6 +15,7 @@ import (
 	"strings"
 
 	"github.com/pelletier/go-toml"
+	"github.com/yhyj/eniac/general"
 )
 
 // 判断文件是不是toml文件
@@ -27,7 +28,7 @@ func isTomlFile(filePath string) bool {
 
 // 读取toml配置文件
 func GetTomlConfig(filePath string) (*toml.Tree, error) {
-	if !FileExist(filePath) {
+	if !general.FileExist(filePath) {
 		return nil, fmt.Errorf("Open %s: no such file or directory", filePath)
 	}
 	if !isTomlFile(filePath) {
@@ -138,7 +139,7 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"record_file": "/tmp/system-checkupdates.log",
 		},
 	}
-	if !FileExist(filePath) {
+	if !general.FileExist(filePath) {
 		return 0, fmt.Errorf("Open %s: no such file or directory", filePath)
 	}
 	if !isTomlFile(filePath) {

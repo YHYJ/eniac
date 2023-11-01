@@ -7,18 +7,20 @@ Created Time: 2023-04-25 14:30:33
 Description: 获取更新信息
 */
 
-package function
+package cli
 
 import (
 	"bufio"
 	"fmt"
 	"os"
+
+	"github.com/yhyj/eniac/general"
 )
 
 // 读取更新信息文件，参数line为0时读取全部行
 func GetUpdateInfo(filePath string, line int) ([]string, error) {
 	var textSlice []string
-	if !FileExist(filePath) {
+	if !general.FileExist(filePath) {
 		return nil, fmt.Errorf("open %s: no such file", filePath)
 	}
 	// 打开文件
@@ -49,7 +51,7 @@ func GetUpdateInfo(filePath string, line int) ([]string, error) {
 func GetUpdateDaemonInfo() (map[string]interface{}, error) {
 	daemonInfo := make(map[string]interface{})
 	daemonArgs := []string{"is-active", "system-checkupdates.timer"}
-	daemonStatus, err := RunCommandGetResult("systemctl", daemonArgs)
+	daemonStatus, err := general.RunCommandGetResult("systemctl", daemonArgs)
 	if err != nil {
 		return nil, err
 	}

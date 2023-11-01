@@ -7,7 +7,7 @@ Created Time: 2023-09-28 12:39:05
 Description: 获取硬件信息
 */
 
-package function
+package cli
 
 import (
 	"encoding/json"
@@ -15,6 +15,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/yhyj/eniac/general"
 )
 
 // GetStorageInfo 获取存储设备信息
@@ -52,7 +54,7 @@ func GetStorageInfo() (storageInfo map[string]interface{}) {
 			storageValue["StorageType"] = disk.DriveType.String()
 			storageValue["StorageRemovable"] = strconv.FormatBool(disk.IsRemovable)
 			storageValue["StorageSerial"] = disk.SerialNumber
-			storageSize, storageSizeUnit := DataUnitConvert("B", "TB", float64(disk.SizeBytes))
+			storageSize, storageSizeUnit := general.DataUnitConvert("B", "TB", float64(disk.SizeBytes))
 			storageValue["StorageSize"] = fmt.Sprintf("%.1f%s", storageSize, storageSizeUnit)
 			storageInfo[fmt.Sprintf("%d", index)] = storageValue
 			index += 1
