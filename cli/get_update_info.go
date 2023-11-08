@@ -17,7 +17,7 @@ import (
 	"github.com/yhyj/eniac/general"
 )
 
-// 读取更新信息文件，参数line为0时读取全部行
+// GetUpdateInfo 读取更新信息文件，参数 line 为0时读取全部行
 func GetUpdateInfo(filePath string, line int) ([]string, error) {
 	var textSlice []string
 	if !general.FileExist(filePath) {
@@ -47,7 +47,7 @@ func GetUpdateInfo(filePath string, line int) ([]string, error) {
 	return textSlice, nil
 }
 
-// 获取更新检测服务信息
+// GetUpdateDaemonInfo 获取更新检测服务信息
 func GetUpdateDaemonInfo() (map[string]interface{}, error) {
 	daemonInfo := make(map[string]interface{})
 	daemonArgs := []string{"is-active", "system-checkupdates.timer"}

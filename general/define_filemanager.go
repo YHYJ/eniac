@@ -14,7 +14,7 @@ import (
 	"strings"
 )
 
-// 判断文件是否存在
+// FileExist 判断文件是否存在
 func FileExist(filePath string) bool {
 	_, err := os.Stat(filePath)
 	if err != nil {
@@ -26,7 +26,7 @@ func FileExist(filePath string) bool {
 	return true
 }
 
-// 创建文件，如果其父目录不存在则创建父目录
+// CreateFile 创建文件，如果其父目录不存在则创建父目录
 func CreateFile(filePath string) error {
 	if FileExist(filePath) {
 		return nil
@@ -40,7 +40,7 @@ func CreateFile(filePath string) error {
 	return err
 }
 
-// 删除文件
+// DeleteFile 删除文件
 func DeleteFile(filePath string) error {
 	if !FileExist(filePath) {
 		return nil

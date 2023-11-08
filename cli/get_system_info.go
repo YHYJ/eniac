@@ -17,7 +17,7 @@ import (
 	"github.com/zcalusic/sysinfo"
 )
 
-// GetBIOSInfo 获取BIOS信息
+// GetBIOSInfo 获取 BIOS 信息
 func GetBIOSInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
 	biosInfo := make(map[string]interface{})
 	biosInfo["BIOSVendor"] = sysInfo.BIOS.Vendor   // BIOS厂商
@@ -37,7 +37,7 @@ func GetBoardInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
 	return boardInfo
 }
 
-// GetCPUInfo 获取CPU信息
+// GetCPUInfo 获取 CPU 信息
 func GetCPUInfo(sysInfo sysinfo.SysInfo, dataUnit string) map[string]interface{} {
 	cpuInfo := make(map[string]interface{})
 	cpuInfo["CPUModel"] = sysInfo.CPU.Model                                               // cpu型号
