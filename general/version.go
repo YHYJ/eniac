@@ -18,7 +18,7 @@ import (
 // 程序信息
 const (
 	Name    string = "Eniac"
-	Version string = "v1.1.4"
+	Version string = "v1.1.5"
 	Project string = "github.com/yhyj/eniac"
 )
 
