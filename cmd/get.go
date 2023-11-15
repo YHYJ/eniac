@@ -18,6 +18,7 @@ import (
 	"github.com/pelletier/go-toml"
 	"github.com/spf13/cobra"
 	"github.com/yhyj/eniac/cli"
+	"github.com/yhyj/eniac/general"
 	"github.com/zcalusic/sysinfo"
 )
 
@@ -30,7 +31,7 @@ var getCmd = &cobra.Command{
 		cfgFile, _ := cmd.Flags().GetString("config")
 		confTree, err := cli.GetTomlConfig(cfgFile)
 		if err != nil {
-			fmt.Printf("\x1b[36;1m%s, %s\x1b[0m\n", err, "use default configuration")
+			fmt.Printf(general.Info2PFormat, err, ", use default configuration")
 		}
 		// 设置配置项默认值
 		defaultGenealogyCfg, _ := toml.TreeFromMap(map[string]interface{}{"genealogy": map[string]string{}})
@@ -49,18 +50,18 @@ var getCmd = &cobra.Command{
 				if confTree.Has("genealogy") {
 					return confTree.Get("genealogy").(*toml.Tree)
 				}
-				fmt.Printf("\x1b[34;1mConfig file is missing '%s' configuration item, using default value\x1b[0m\n", "genealogy")
+				fmt.Printf(general.InfoFormat, "Config file is missing 'genealogy' configuration item, using default value")
 				return defaultGenealogyCfg
 			}()
 			partsCfg = func() *toml.Tree {
 				if confTree.Has("parts") {
 					return confTree.Get("parts").(*toml.Tree)
 				}
-				fmt.Printf("\x1b[34;1mConfig file is missing '%s' configuration item, using default value\x1b[0m\n", "parts")
+				fmt.Printf(general.InfoFormat, "Config file is missing 'parts' configuration item, using default value")
 				return defaultPartsCfg
 			}()
 		} else {
-			fmt.Printf("\x1b[34;1mConfig file is empty, using default value\x1b[0m\n")
+			fmt.Printf(general.InfoFormat, "Config file is empty, using default value")
 		}
 		// 采集系统信息（集中采集一次后分配到不同的参数）
 		var sysInfo sysinfo.SysInfo
@@ -100,7 +101,7 @@ var getCmd = &cobra.Command{
 				}
 				return "Product"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", productPart)
+			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", productPart)
 			productInfo := cli.GetProductInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
@@ -120,7 +121,7 @@ var getCmd = &cobra.Command{
 				}
 				return "Board"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", boardPart)
+			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", boardPart)
 			boardInfo := cli.GetBoardInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
@@ -140,7 +141,7 @@ var getCmd = &cobra.Command{
 				}
 				return "BIOS"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", biosPart)
+			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", biosPart)
 			biosInfo := cli.GetBIOSInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
 			// 顺序输出
@@ -160,13 +161,13 @@ var getCmd = &cobra.Command{
 				}
 				return "CPU"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", cpuPart)
+			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", cpuPart)
 			// 获取CPU配置项
 			if confTree != nil {
 				if confTree.Has("cpu.cache_unit") {
 					cpuCacheUnit = confTree.Get("cpu.cache_unit").(string)
 				} else {
-					fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", "cpu.cache_unit")
+					fmt.Printf(general.InfoFormat, "Config file is missing 'cpu.cache_unit' configuration item, using default value")
 				}
 			}
 			cpuInfo := cli.GetCPUInfo(sysInfo, cpuCacheUnit)
@@ -188,7 +189,7 @@ var getCmd = &cobra.Command{
 				}
 				return "GPU"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", gpuPart)
+			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", gpuPart)
 			gpuInfo := cli.GetGPUInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
 			// 顺序输出
@@ -208,18 +209,18 @@ var getCmd = &cobra.Command{
 				}
 				return "Memory"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", memoryPart)
+			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", memoryPart)
 			// 获取Memory配置项
 			if confTree != nil {
 				if confTree.Has("memory.data_unit") {
 					memoryDataUnit = confTree.Get("memory.data_unit").(string)
 				} else {
-					fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", "memory.data_unit")
+					fmt.Printf(general.InfoFormat, "Config file is missing 'memory.data_unit' configuration item, using default value")
 				}
 				if confTree.Has("memory.percent_unit") {
 					memoryPercentUnit = confTree.Get("memory.percent_unit").(string)
 				} else {
-					fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", "memory.percent_unit")
+					fmt.Printf(general.InfoFormat, "Config file is missing 'memory.percent_unit' configuration item, using default value")
 				}
 			}
 			memInfo := cli.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
@@ -241,13 +242,13 @@ var getCmd = &cobra.Command{
 				}
 				return "Swap"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", swapPart)
+			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", swapPart)
 			// 获取Memory配置项
 			if confTree != nil {
 				if confTree.Has("memory.data_unit") {
 					memoryDataUnit = confTree.Get("memory.data_unit").(string)
 				} else {
-					fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", "memory.data_unit")
+					fmt.Printf(general.InfoFormat, "Config file is missing 'memory.data_unit' configuration item, using default value")
 				}
 			}
 			swapInfo := cli.GetSwapInfo(memoryDataUnit)
@@ -280,7 +281,7 @@ var getCmd = &cobra.Command{
 				}
 				return "Storage"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", storagePart)
+			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", storagePart)
 			storageInfo := cli.GetStorageInfo()
 			items = []string{"StorageName", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
 			// 组装表头
@@ -349,7 +350,7 @@ var getCmd = &cobra.Command{
 				}
 				return "NIC"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", nicPart)
+			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", nicPart)
 			nicInfo := cli.GetNicInfo()
 			items = []string{"NicName", "NicMacAddress", "NicDriver", "NicVendor", "NicProduct", "NicPCIAddress", "NicSpeed", "NicDuplex"}
 			// 组装表头
@@ -413,7 +414,7 @@ var getCmd = &cobra.Command{
 				}
 				return "OS"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", osPart)
+			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", osPart)
 			osInfo := cli.GetOSInfo(sysInfo)
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
@@ -433,7 +434,7 @@ var getCmd = &cobra.Command{
 				}
 				return "Load"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", loadPart)
+			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", loadPart)
 			loadInfo := cli.GetLoadInfo()
 			textFormat := "\x1b[30;1m%-6v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
@@ -453,7 +454,7 @@ var getCmd = &cobra.Command{
 				}
 				return "Process"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", processPart)
+			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", processPart)
 			procsInfo := cli.GetProcessInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
 			// 顺序输出
@@ -473,7 +474,7 @@ var getCmd = &cobra.Command{
 				}
 				return "Time"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", timePart)
+			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", timePart)
 			timeInfo, _ := cli.GetTimeInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[36m%v\x1b[0m\n"
 			// 顺序输出
@@ -493,7 +494,7 @@ var getCmd = &cobra.Command{
 				}
 				return "User"
 			}()
-			fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", userPart)
+			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", userPart)
 			userInfo := cli.GetUserInfo()
 			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[36m%v\x1b[0m\n"
 			// 顺序输出
@@ -511,7 +512,7 @@ var getCmd = &cobra.Command{
 				// 仅输出可更新包信息，专为系统更新检测插件服务
 				updateInfo, err := cli.GetUpdateInfo(updateRecordFile, 0)
 				if err != nil {
-					fmt.Printf("\x1b[36;1m%s\x1b[0m\n", err)
+					fmt.Printf(general.ErrorBaseFormat, err)
 				} else {
 					for num, info := range updateInfo {
 						fmt.Printf("%v: %v\n", num+1, info)
@@ -524,13 +525,13 @@ var getCmd = &cobra.Command{
 					}
 					return "Update"
 				}()
-				fmt.Printf("\x1b[37m>>>>>>>>>>\x1b[0m %s\n", updatePart)
+				fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", updatePart)
 				// 获取update配置项
 				if confTree != nil {
 					if confTree.Has("update.record_file") {
 						updateRecordFile = confTree.Get("update.record_file").(string)
 					} else {
-						fmt.Printf("\x1b[34;1mConfig file is missing '%s' item, using default value\x1b[0m\n", "update.record_file")
+						fmt.Printf(general.InfoFormat, "Config file is missing 'update.record_file' configuration item, using default value")
 					}
 				}
 				textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[32;1m%v\x1b[0m\n"
@@ -548,7 +549,7 @@ var getCmd = &cobra.Command{
 				// 输出具体更新信息
 				updateInfo, err := cli.GetUpdateInfo(updateRecordFile, 0)
 				if err != nil {
-					fmt.Printf("\x1b[36;1m%s\x1b[0m\n", err)
+					fmt.Printf(general.ErrorBaseFormat, err)
 				} else {
 					key := "UpdateList"
 					if genealogyCfg.Has(key) {
