@@ -21,7 +21,7 @@ import (
 var configCmd = &cobra.Command{
 	Use:   "config",
 	Short: "Operate configuration file",
-	Long:  `Operate configuration file.`,
+	Long:  `Manipulate the program's configuration files, including generating and printing.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// 获取配置文件路径
 		cfgFile, _ := cmd.Flags().GetString("config")
@@ -30,6 +30,10 @@ var configCmd = &cobra.Command{
 		forceFlag, _ := cmd.Flags().GetBool("force")
 		printFlag, _ := cmd.Flags().GetBool("print")
 
+		var (
+			cfgFileNotFoundMessage = "Configuration file not found (use --create to create a configuration file)" // 配置文件不存在
+		)
+
 		// 检查配置文件是否存在
 		cfgFileExist := general.FileExist(cfgFile)
 
@@ -37,24 +41,34 @@ var configCmd = &cobra.Command{
 		if createFlag {
 			if cfgFileExist {
 				if forceFlag {
-					general.DeleteFile(cfgFile)
-					general.CreateFile(cfgFile)
-					cli.WriteTomlConfig(cfgFile)
-					fmt.Printf("Create \x1b[33;1m%s\x1b[0m: file overwritten\n", cfgFile)
+					if err := general.DeleteFile(cfgFile); err != nil {
+						fmt.Printf(general.ErrorBaseFormat, err)
+						return
+					}
+					if err := general.CreateFile(cfgFile); err != nil {
+						fmt.Printf(general.ErrorBaseFormat, err)
+						return
+					}
+					_, err := cli.WriteTomlConfig(cfgFile)
+					if err != nil {
+						fmt.Printf(general.ErrorBaseFormat, err)
+						return
+					}
+					fmt.Printf(general.InfoPrefixSuffixFormat, "Create", " ", cfgFile, ": ", "file overwritten")
 				} else {
-					fmt.Printf("Create \x1b[33m%s\x1b[0m: file exists (use --force to overwrite)\n", cfgFile)
+					fmt.Printf(general.InfoPrefixSuffixFormat, "Create", " ", cfgFile, ": ", "file exists (use --force to overwrite)")
 				}
 			} else {
 				if err := general.CreateFile(cfgFile); err != nil {
-					fmt.Printf("\x1b[31m%s\x1b[0m\n", err)
+					fmt.Printf(general.ErrorBaseFormat, err)
 					return
 				}
 				_, err := cli.WriteTomlConfig(cfgFile)
 				if err != nil {
-					fmt.Printf("\x1b[31m%s\x1b[0m\n", err)
+					fmt.Printf(general.ErrorBaseFormat, err)
 					return
 				}
-				fmt.Printf("Create \x1b[33;1m%s\x1b[0m: file created\n", cfgFile)
+				fmt.Printf(general.InfoPrefixSuffixFormat, "Create", " ", cfgFile, ": ", "file created")
 			}
 		}
 
@@ -62,12 +76,12 @@ var configCmd = &cobra.Command{
 			if cfgFileExist {
 				configTree, err := cli.GetTomlConfig(cfgFile)
 				if err != nil {
-					fmt.Printf("\x1b[31m%s\x1b[0m\n", err)
+					fmt.Printf(general.ErrorBaseFormat, err)
 				} else {
 					fmt.Println(configTree)
 				}
 			} else {
-				fmt.Printf("\x1b[31m%s\x1b[0m\n", "Configuration file not found (use --create to create a configuration file)")
+				fmt.Printf(general.ErrorBaseFormat, cfgFileNotFoundMessage)
 			}
 		}
 	},
