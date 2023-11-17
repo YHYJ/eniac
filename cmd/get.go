@@ -33,6 +33,7 @@ var getCmd = &cobra.Command{
 		if err != nil {
 			fmt.Printf(general.Info2PFormat, err, ", use default configuration")
 		}
+
 		// 设置配置项默认值
 		defaultGenealogyCfg, _ := toml.TreeFromMap(map[string]interface{}{"genealogy": map[string]string{}})
 		defaultPartsCfg, _ := toml.TreeFromMap(map[string]interface{}{"parts": map[string]string{}})
@@ -44,6 +45,7 @@ var getCmd = &cobra.Command{
 			genealogyCfg      *toml.Tree = defaultGenealogyCfg
 			partsCfg          *toml.Tree = defaultPartsCfg
 		)
+
 		// 获取genealogy配置项
 		if confTree != nil {
 			genealogyCfg = func() *toml.Tree {
@@ -63,9 +65,11 @@ var getCmd = &cobra.Command{
 		} else {
 			fmt.Printf(general.InfoFormat, "Config file is empty, using default value")
 		}
+
 		// 采集系统信息（集中采集一次后分配到不同的参数）
 		var sysInfo sysinfo.SysInfo
 		sysInfo.GetSysInfo()
+
 		// 解析参数
 		var biosFlag, boardFlag, cpuFlag, gpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, nicFlag, timeFlag, userFlag, updateFlag, onlyFlag bool
 		allFlag, _ := cmd.Flags().GetBool("all")
@@ -114,6 +118,7 @@ var getCmd = &cobra.Command{
 				}
 			}
 		}
+
 		if boardFlag {
 			boardPart := func() string {
 				if partsCfg.Has("Board") {
@@ -134,6 +139,7 @@ var getCmd = &cobra.Command{
 				}
 			}
 		}
+
 		if biosFlag {
 			biosPart := func() string {
 				if partsCfg.Has("BIOS") {
@@ -154,6 +160,7 @@ var getCmd = &cobra.Command{
 				}
 			}
 		}
+
 		if cpuFlag {
 			cpuPart := func() string {
 				if partsCfg.Has("CPU") {
@@ -182,6 +189,7 @@ var getCmd = &cobra.Command{
 				}
 			}
 		}
+
 		if gpuFlag {
 			gpuPart := func() string {
 				if partsCfg.Has("GPU") {
@@ -202,6 +210,7 @@ var getCmd = &cobra.Command{
 				}
 			}
 		}
+
 		if memoryFlag {
 			memoryPart := func() string {
 				if partsCfg.Has("Memory") {
@@ -235,6 +244,7 @@ var getCmd = &cobra.Command{
 				}
 			}
 		}
+
 		if swapFlag {
 			swapPart := func() string {
 				if partsCfg.Has("Swap") {
@@ -274,6 +284,7 @@ var getCmd = &cobra.Command{
 				}
 			}
 		}
+
 		if storageFlag {
 			storagePart := func() string {
 				if partsCfg.Has("Storage") {
@@ -282,8 +293,11 @@ var getCmd = &cobra.Command{
 				return "Storage"
 			}()
 			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", storagePart)
+
+			// 获取数据
 			storageInfo := cli.GetStorageInfo()
 			items = []string{"StorageName", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
+
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
@@ -292,6 +306,7 @@ var getCmd = &cobra.Command{
 				}
 				tableHeader = append(tableHeader, item)
 			}
+
 			// 组装表数据
 			tableData := [][]string{}
 			diskPart := func() string {
@@ -338,11 +353,16 @@ var getCmd = &cobra.Command{
 				tablewriter.Colors{tablewriter.FgBlueColor},
 				tablewriter.Colors{tablewriter.FgBlueColor},
 			)
-			for _, data := range tableData { // 填充表格
+
+			// 填充表格
+			for _, data := range tableData {
 				table.Append(data)
 			}
-			table.Render() // 渲染表格
+
+			// 渲染表格
+			table.Render()
 		}
+
 		if nicFlag {
 			nicPart := func() string {
 				if partsCfg.Has("NIC") {
@@ -351,8 +371,11 @@ var getCmd = &cobra.Command{
 				return "NIC"
 			}()
 			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", nicPart)
+
+			// 获取数据
 			nicInfo := cli.GetNicInfo()
 			items = []string{"NicName", "NicMacAddress", "NicDriver", "NicVendor", "NicProduct", "NicPCIAddress", "NicSpeed", "NicDuplex"}
+
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
@@ -361,6 +384,7 @@ var getCmd = &cobra.Command{
 				}
 				tableHeader = append(tableHeader, item)
 			}
+
 			// 组装表数据
 			tableData := [][]string{}
 			for index := 1; index <= len(nicInfo); index++ {
@@ -402,11 +426,15 @@ var getCmd = &cobra.Command{
 				tablewriter.Colors{tablewriter.FgBlueColor},
 			)
 
-			for _, data := range tableData { // 填充表格
+			// 填充表格
+			for _, data := range tableData {
 				table.Append(data)
 			}
-			table.Render() // 渲染表格
+
+			// 渲染表格
+			table.Render()
 		}
+
 		if osFlag {
 			osPart := func() string {
 				if partsCfg.Has("OS") {
@@ -427,6 +455,7 @@ var getCmd = &cobra.Command{
 				}
 			}
 		}
+
 		if loadFlag {
 			loadPart := func() string {
 				if partsCfg.Has("Load") {
@@ -447,6 +476,7 @@ var getCmd = &cobra.Command{
 				}
 			}
 		}
+
 		if processFlag {
 			processPart := func() string {
 				if partsCfg.Has("Process") {
@@ -467,6 +497,7 @@ var getCmd = &cobra.Command{
 				}
 			}
 		}
+
 		if timeFlag {
 			timePart := func() string {
 				if partsCfg.Has("Time") {
@@ -487,6 +518,7 @@ var getCmd = &cobra.Command{
 				}
 			}
 		}
+
 		if userFlag {
 			userPart := func() string {
 				if partsCfg.Has("User") {
@@ -507,6 +539,7 @@ var getCmd = &cobra.Command{
 				}
 			}
 		}
+
 		if updateFlag {
 			if onlyFlag {
 				// 仅输出可更新包信息，专为系统更新检测插件服务
