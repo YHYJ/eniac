@@ -63,14 +63,6 @@ func GetOSInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
 	return osInfo
 }
 
-// GetProcessInfo 获取进程信息
-func GetProcessInfo() map[string]interface{} {
-	procsInfo := make(map[string]interface{})
-	procsInfo["Process"] = hostData.Procs // 进程数
-
-	return procsInfo
-}
-
 // GetProductInfo 获取产品信息
 func GetProductInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
 	productInfo := make(map[string]interface{})

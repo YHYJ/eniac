@@ -61,7 +61,6 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"NIC":     "网卡",
 			"OS":      "系统",
 			"Load":    "负载",
-			"Process": "进程",
 			"Time":    "时间",
 			"User":    "用户",
 			"Update":  "更新",

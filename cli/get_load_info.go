@@ -15,6 +15,7 @@ func GetLoadInfo() map[string]interface{} {
 	loadInfo["Load1"] = loadData.Load1   // 1分钟内的负载
 	loadInfo["Load5"] = loadData.Load5   // 5分钟内的负载
 	loadInfo["Load15"] = loadData.Load15 // 15分钟内的负载
+	loadInfo["Process"] = hostData.Procs // 进程数
 
 	return loadInfo
 }
