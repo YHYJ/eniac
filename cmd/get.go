@@ -104,7 +104,7 @@ var getCmd = &cobra.Command{
 				}
 				return "Product"
 			}()
-			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", productPart)
+			fmt.Printf(general.LineHiddenFormat, "······ Product ······")
 
 			// 获取数据
 			productInfo := cli.GetProductInfo(sysInfo)
@@ -162,7 +162,7 @@ var getCmd = &cobra.Command{
 				}
 				return "Board"
 			}()
-			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", boardPart)
+			fmt.Printf(general.LineHiddenFormat, "······ Board ······")
 
 			// 获取数据
 			boardInfo := cli.GetBoardInfo(sysInfo)
@@ -222,7 +222,7 @@ var getCmd = &cobra.Command{
 				}
 				return "BIOS"
 			}()
-			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", biosPart)
+			fmt.Printf(general.LineHiddenFormat, "····· BIOS ······")
 
 			// 获取数据
 			biosInfo := cli.GetBIOSInfo(sysInfo)
@@ -282,7 +282,7 @@ var getCmd = &cobra.Command{
 				}
 				return "CPU"
 			}()
-			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", cpuPart)
+			fmt.Printf(general.LineHiddenFormat, "······ CPU ······")
 
 			// 获取CPU配置项
 			if confTree != nil {
@@ -355,7 +355,7 @@ var getCmd = &cobra.Command{
 				}
 				return "GPU"
 			}()
-			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", gpuPart)
+			fmt.Printf(general.LineHiddenFormat, "······ GPU ······")
 
 			// 获取数据
 			gpuInfo := cli.GetGPUInfo()
@@ -417,7 +417,7 @@ var getCmd = &cobra.Command{
 				}
 				return "Memory"
 			}()
-			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", memoryPart)
+			fmt.Printf(general.LineHiddenFormat, "······ Memory ······")
 
 			// 获取Memory配置项
 			if confTree != nil {
@@ -499,7 +499,7 @@ var getCmd = &cobra.Command{
 				}
 				return "Swap"
 			}()
-			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", swapPart)
+			fmt.Printf(general.LineHiddenFormat, "······ Swap ······")
 
 			// 获取Memory配置项
 			if confTree != nil {
@@ -580,13 +580,7 @@ var getCmd = &cobra.Command{
 		}
 
 		if storageFlag {
-			storagePart := func() string {
-				if partsCfg.Has("Storage") {
-					return partsCfg.Get("Storage").(string)
-				}
-				return "Storage"
-			}()
-			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", storagePart)
+			fmt.Printf(general.LineHiddenFormat, "······ Storage ······")
 
 			// 获取数据
 			storageInfo := cli.GetStorageInfo()
@@ -664,7 +658,7 @@ var getCmd = &cobra.Command{
 				}
 				return "NIC"
 			}()
-			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", nicPart)
+			fmt.Printf(general.LineHiddenFormat, "······ Nic ······")
 
 			// 获取数据
 			nicInfo := cli.GetNicInfo()
@@ -736,7 +730,7 @@ var getCmd = &cobra.Command{
 				}
 				return "OS"
 			}()
-			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", osPart)
+			fmt.Printf(general.LineHiddenFormat, "······ OS ······")
 
 			// 获取数据
 			osInfo := cli.GetOSInfo(sysInfo)
@@ -802,7 +796,7 @@ var getCmd = &cobra.Command{
 				}
 				return "Load"
 			}()
-			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", loadPart)
+			fmt.Printf(general.LineHiddenFormat, "······ Load ······")
 
 			// 获取数据
 			loadInfo := cli.GetLoadInfo()
@@ -869,7 +863,7 @@ var getCmd = &cobra.Command{
 				}
 				return "Time"
 			}()
-			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", timePart)
+			fmt.Printf(general.LineHiddenFormat, "······ Time ······")
 
 			// 获取数据
 			timeInfo, _ := cli.GetTimeInfo()
@@ -929,7 +923,7 @@ var getCmd = &cobra.Command{
 				}
 				return "User"
 			}()
-			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", userPart)
+			fmt.Printf(general.LineHiddenFormat, "······ User ······")
 
 			// 获取数据
 			userInfo := cli.GetUserInfo()
@@ -998,13 +992,7 @@ var getCmd = &cobra.Command{
 					}
 				}
 			} else {
-				updatePart := func() string {
-					if partsCfg.Has("Update") {
-						return partsCfg.Get("Update").(string)
-					}
-					return "Update"
-				}()
-				fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", updatePart)
+				fmt.Printf(general.LineHiddenFormat, "······ Update ······")
 				// 获取update配置项
 				if confTree != nil {
 					if confTree.Has("update.record_file") {
