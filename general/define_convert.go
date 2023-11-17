@@ -155,3 +155,16 @@ func DataUnitConvert(oldUnit string, newUnit string, data float64) (float64, str
 		return data, oldUnit
 	}
 }
+
+// Human 数据转换为人类可读的格式
+func Human(size int64) string {
+	floatsize := float32(size)
+	units := [...]string{"", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"}
+	for _, unit := range units {
+		if floatsize < 1024 {
+			return fmt.Sprintf("%.2f %sB", floatsize, unit)
+		}
+		floatsize /= 1024
+	}
+	return fmt.Sprintf("%d%s", size, "B")
+}

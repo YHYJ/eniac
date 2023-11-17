@@ -3,6 +3,7 @@ module github.com/yhyj/eniac
 go 1.20
 
 require (
+	github.com/Jguer/go-alpm/v2 v2.2.1
 	github.com/jaypipes/ghw v0.12.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/pelletier/go-toml v1.9.5

@@ -65,6 +65,7 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"Time":    "时间",
 			"User":    "用户",
 			"Update":  "更新",
+			"Package": "安装包",
 		},
 		"memory": map[string]interface{}{
 			"data_unit":    "GB",
@@ -134,6 +135,8 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"UserHomeDir":       "用户目录",
 			"UpdateList":        "更新列表",
 			"DaemonStatus":      "更新状态",
+			"PackageTotalCount": "安装包总数",
+			"PackageTotalSize":  "安装总大小",
 		},
 		"update": map[string]interface{}{
 			"record_file": "/tmp/system-checkupdates.log",

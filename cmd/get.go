@@ -67,10 +67,10 @@ var getCmd = &cobra.Command{
 		var sysInfo sysinfo.SysInfo
 		sysInfo.GetSysInfo()
 		// 解析参数
-		var biosFlag, boardFlag, cpuFlag, gpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, nicFlag, timeFlag, userFlag, updateFlag, onlyFlag bool
+		var biosFlag, boardFlag, cpuFlag, gpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, nicFlag, packageFlag, timeFlag, userFlag, updateFlag, onlyFlag bool
 		allFlag, _ := cmd.Flags().GetBool("all")
 		if allFlag {
-			biosFlag, boardFlag, gpuFlag, cpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, nicFlag, timeFlag, userFlag, updateFlag = true, true, true, true, true, true, true, true, true, true, true, true, true, true, true
+			biosFlag, boardFlag, gpuFlag, cpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, nicFlag, packageFlag, timeFlag, userFlag, updateFlag = true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true
 			onlyFlag = false
 		} else {
 			biosFlag, _ = cmd.Flags().GetBool("bios")
@@ -85,6 +85,7 @@ var getCmd = &cobra.Command{
 			storageFlag, _ = cmd.Flags().GetBool("storage")
 			swapFlag, _ = cmd.Flags().GetBool("swap")
 			nicFlag, _ = cmd.Flags().GetBool("nic")
+			packageFlag, _ = cmd.Flags().GetBool("package")
 			timeFlag, _ = cmd.Flags().GetBool("time")
 			userFlag, _ = cmd.Flags().GetBool("user")
 			updateFlag, _ = cmd.Flags().GetBool("update")
@@ -427,6 +428,30 @@ var getCmd = &cobra.Command{
 				}
 			}
 		}
+		if packageFlag {
+			packagePart := func() string {
+				if partsCfg.Has("Package") {
+					return partsCfg.Get("Package").(string)
+				}
+				return "Package"
+			}()
+			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", packagePart)
+			packageInfo, err := cli.GetPackageInfo()
+			if err != nil {
+				fmt.Printf(general.ErrorBaseFormat, err)
+				return
+			}
+			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
+			// 顺序输出
+			items = []string{"PackageTotalCount", "PackageTotalSize"}
+			for _, item := range items {
+				if genealogyCfg.Has(item) {
+					fmt.Printf(textFormat, genealogyCfg.Get(item).(string), packageInfo[item])
+				} else {
+					fmt.Printf(textFormat, item, packageInfo[item])
+				}
+			}
+		}
 		if loadFlag {
 			loadPart := func() string {
 				if partsCfg.Has("Load") {
@@ -580,6 +605,7 @@ func init() {
 	getCmd.Flags().BoolP("storage", "", false, "Get Storage information")
 	getCmd.Flags().BoolP("swap", "", false, "Get Swap information")
 	getCmd.Flags().BoolP("nic", "", false, "Get NIC information")
+	getCmd.Flags().BoolP("package", "", false, "Get Package information")
 	getCmd.Flags().BoolP("time", "", false, "Get Time information")
 	getCmd.Flags().BoolP("user", "", false, "Get User information")
 	getCmd.Flags().BoolP("update", "", false, "Get Update information")
