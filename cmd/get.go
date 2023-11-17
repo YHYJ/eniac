@@ -71,10 +71,10 @@ var getCmd = &cobra.Command{
 		sysInfo.GetSysInfo()
 
 		// 解析参数
-		var biosFlag, boardFlag, cpuFlag, gpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, nicFlag, timeFlag, userFlag, updateFlag, onlyFlag bool
+		var biosFlag, boardFlag, cpuFlag, gpuFlag, loadFlag, memoryFlag, osFlag, productFlag, storageFlag, swapFlag, nicFlag, timeFlag, userFlag, updateFlag, onlyFlag bool
 		allFlag, _ := cmd.Flags().GetBool("all")
 		if allFlag {
-			biosFlag, boardFlag, gpuFlag, cpuFlag, loadFlag, memoryFlag, osFlag, processFlag, productFlag, storageFlag, swapFlag, nicFlag, timeFlag, userFlag, updateFlag = true, true, true, true, true, true, true, true, true, true, true, true, true, true, true
+			biosFlag, boardFlag, gpuFlag, cpuFlag, loadFlag, memoryFlag, osFlag, productFlag, storageFlag, swapFlag, nicFlag, timeFlag, userFlag, updateFlag = true, true, true, true, true, true, true, true, true, true, true, true, true, true
 			onlyFlag = false
 		} else {
 			biosFlag, _ = cmd.Flags().GetBool("bios")
@@ -84,7 +84,6 @@ var getCmd = &cobra.Command{
 			loadFlag, _ = cmd.Flags().GetBool("load")
 			memoryFlag, _ = cmd.Flags().GetBool("memory")
 			osFlag, _ = cmd.Flags().GetBool("os")
-			processFlag, _ = cmd.Flags().GetBool("process")
 			productFlag, _ = cmd.Flags().GetBool("product")
 			storageFlag, _ = cmd.Flags().GetBool("storage")
 			swapFlag, _ = cmd.Flags().GetBool("swap")
@@ -106,17 +105,54 @@ var getCmd = &cobra.Command{
 				return "Product"
 			}()
 			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", productPart)
+
+			// 获取数据
 			productInfo := cli.GetProductInfo(sysInfo)
-			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
-			// 顺序输出
 			items = []string{"ProductVendor", "ProductName"}
+
+			// 组装表头
+			tableHeader := []string{""}
 			for _, item := range items {
 				if genealogyCfg.Has(item) {
-					fmt.Printf(textFormat, genealogyCfg.Get(item).(string), productInfo[item])
-				} else {
-					fmt.Printf(textFormat, item, productInfo[item])
+					item = genealogyCfg.Get(item).(string)
 				}
+				tableHeader = append(tableHeader, item)
 			}
+
+			// 组装表数据
+			tableData := [][]string{}
+			outputInfo := []string{productPart}
+			for _, item := range items {
+				outputValue := productInfo[item].(string)
+				outputInfo = append(outputInfo, outputValue)
+			}
+			tableData = append(tableData, outputInfo)
+
+			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
+			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
+			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
+			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
+			table.SetRowLine(false)                                                                // 设置是否显示行边框
+			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetHeaderColor(                                                                  // 设置表头颜色
+				tablewriter.Colors{tablewriter.BgHiBlackColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+			)
+			table.SetColumnColor( // 设置列颜色
+				tablewriter.Colors{tablewriter.FgHiBlackColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+			)
+
+			// 填充表格
+			for _, data := range tableData {
+				table.Append(data)
+			}
+
+			// 渲染表格
+			table.Render()
 		}
 
 		if boardFlag {
@@ -127,17 +163,56 @@ var getCmd = &cobra.Command{
 				return "Board"
 			}()
 			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", boardPart)
+
+			// 获取数据
 			boardInfo := cli.GetBoardInfo(sysInfo)
-			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
-			// 顺序输出
 			items = []string{"BoardVendor", "BoardName", "BoardVersion"}
+
+			// 组装表头
+			tableHeader := []string{""}
 			for _, item := range items {
 				if genealogyCfg.Has(item) {
-					fmt.Printf(textFormat, genealogyCfg.Get(item).(string), boardInfo[item])
-				} else {
-					fmt.Printf(textFormat, item, boardInfo[item])
+					item = genealogyCfg.Get(item).(string)
 				}
+				tableHeader = append(tableHeader, item)
 			}
+
+			// 组装表数据
+			tableData := [][]string{}
+			outputInfo := []string{boardPart}
+			for _, item := range items {
+				outputValue := boardInfo[item].(string)
+				outputInfo = append(outputInfo, outputValue)
+			}
+			tableData = append(tableData, outputInfo)
+
+			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
+			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
+			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
+			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
+			table.SetRowLine(false)                                                                // 设置是否显示行边框
+			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetHeaderColor(                                                                  // 设置表头颜色
+				tablewriter.Colors{tablewriter.BgHiBlackColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+			)
+			table.SetColumnColor( // 设置列颜色
+				tablewriter.Colors{tablewriter.FgHiBlackColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+			)
+
+			// 填充表格
+			for _, data := range tableData {
+				table.Append(data)
+			}
+
+			// 渲染表格
+			table.Render()
 		}
 
 		if biosFlag {
@@ -148,17 +223,56 @@ var getCmd = &cobra.Command{
 				return "BIOS"
 			}()
 			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", biosPart)
+
+			// 获取数据
 			biosInfo := cli.GetBIOSInfo(sysInfo)
-			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[33;1m%v\x1b[0m\n"
-			// 顺序输出
 			items = []string{"BIOSVendor", "BIOSVersion", "BIOSDate"}
+
+			// 组装表头
+			tableHeader := []string{""}
 			for _, item := range items {
 				if genealogyCfg.Has(item) {
-					fmt.Printf(textFormat, genealogyCfg.Get(item).(string), biosInfo[item])
-				} else {
-					fmt.Printf(textFormat, item, biosInfo[item])
+					item = genealogyCfg.Get(item).(string)
 				}
+				tableHeader = append(tableHeader, item)
 			}
+
+			// 组装表数据
+			tableData := [][]string{}
+			outputInfo := []string{biosPart}
+			for _, item := range items {
+				outputValue := biosInfo[item].(string)
+				outputInfo = append(outputInfo, outputValue)
+			}
+			tableData = append(tableData, outputInfo)
+
+			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
+			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
+			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
+			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
+			table.SetRowLine(false)                                                                // 设置是否显示行边框
+			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetHeaderColor(                                                                  // 设置表头颜色
+				tablewriter.Colors{tablewriter.BgHiBlackColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+			)
+			table.SetColumnColor( // 设置列颜色
+				tablewriter.Colors{tablewriter.FgHiBlackColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+			)
+
+			// 填充表格
+			for _, data := range tableData {
+				table.Append(data)
+			}
+
+			// 渲染表格
+			table.Render()
 		}
 
 		if cpuFlag {
@@ -169,6 +283,7 @@ var getCmd = &cobra.Command{
 				return "CPU"
 			}()
 			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", cpuPart)
+
 			// 获取CPU配置项
 			if confTree != nil {
 				if confTree.Has("cpu.cache_unit") {
@@ -177,17 +292,60 @@ var getCmd = &cobra.Command{
 					fmt.Printf(general.InfoFormat, "Config file is missing 'cpu.cache_unit' configuration item, using default value")
 				}
 			}
+
+			// 获取数据
 			cpuInfo := cli.GetCPUInfo(sysInfo, cpuCacheUnit)
-			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
-			// 顺序输出
-			items = []string{"CPUModel", "CPUCache", "CPUNumber", "CPUCores", "CPUThreads"}
+			items = []string{"CPUModel", "CPUNumber", "CPUCores", "CPUThreads", "CPUCache"}
+
+			// 组装表头
+			tableHeader := []string{""}
 			for _, item := range items {
 				if genealogyCfg.Has(item) {
-					fmt.Printf(textFormat, genealogyCfg.Get(item).(string), cpuInfo[item])
-				} else {
-					fmt.Printf(textFormat, item, cpuInfo[item])
+					item = genealogyCfg.Get(item).(string)
 				}
+				tableHeader = append(tableHeader, item)
 			}
+
+			// 组装表数据
+			tableData := [][]string{}
+			outputInfo := []string{cpuPart}
+			for _, item := range items {
+				outputValue := fmt.Sprintf("%v", cpuInfo[item])
+				outputInfo = append(outputInfo, outputValue)
+			}
+			tableData = append(tableData, outputInfo)
+
+			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
+			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
+			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
+			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
+			table.SetRowLine(false)                                                                // 设置是否显示行边框
+			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetHeaderColor(                                                                  // 设置表头颜色
+				tablewriter.Colors{tablewriter.BgHiBlackColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+			)
+			table.SetColumnColor( // 设置列颜色
+				tablewriter.Colors{tablewriter.FgHiBlackColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+			)
+
+			// 填充表格
+			for _, data := range tableData {
+				table.Append(data)
+			}
+
+			// 渲染表格
+			table.Render()
 		}
 
 		if gpuFlag {
@@ -198,17 +356,58 @@ var getCmd = &cobra.Command{
 				return "GPU"
 			}()
 			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", gpuPart)
+
+			// 获取数据
 			gpuInfo := cli.GetGPUInfo()
-			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
-			// 顺序输出
 			items = []string{"GPUAddress", "GPUDriver", "GPUProduct", "GPUVendor"}
+
+			// 组装表头
+			tableHeader := []string{""}
 			for _, item := range items {
 				if genealogyCfg.Has(item) {
-					fmt.Printf(textFormat, genealogyCfg.Get(item).(string), gpuInfo[item])
-				} else {
-					fmt.Printf(textFormat, item, gpuInfo[item])
+					item = genealogyCfg.Get(item).(string)
 				}
+				tableHeader = append(tableHeader, item)
 			}
+
+			// 组装表数据
+			tableData := [][]string{}
+			outputInfo := []string{gpuPart}
+			for _, item := range items {
+				outputValue := gpuInfo[item].(string)
+				outputInfo = append(outputInfo, outputValue)
+			}
+			tableData = append(tableData, outputInfo)
+
+			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
+			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
+			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
+			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
+			table.SetRowLine(false)                                                                // 设置是否显示行边框
+			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetHeaderColor(                                                                  // 设置表头颜色
+				tablewriter.Colors{tablewriter.BgHiBlackColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+			)
+			table.SetColumnColor( // 设置列颜色
+				tablewriter.Colors{tablewriter.FgHiBlackColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+			)
+
+			// 填充表格
+			for _, data := range tableData {
+				table.Append(data)
+			}
+
+			// 渲染表格
+			table.Render()
 		}
 
 		if memoryFlag {
@@ -219,6 +418,7 @@ var getCmd = &cobra.Command{
 				return "Memory"
 			}()
 			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", memoryPart)
+
 			// 获取Memory配置项
 			if confTree != nil {
 				if confTree.Has("memory.data_unit") {
@@ -232,17 +432,64 @@ var getCmd = &cobra.Command{
 					fmt.Printf(general.InfoFormat, "Config file is missing 'memory.percent_unit' configuration item, using default value")
 				}
 			}
-			memInfo := cli.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
-			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
-			// 顺序输出
+
+			// 获取数据
+			memoryInfo := cli.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
 			items = []string{"MemoryUsedPercent", "MemoryTotal", "MemoryUsed", "MemoryAvail", "MemoryFree", "MemoryBuffCache", "MemoryShared"}
+
+			// 组装表头
+			tableHeader := []string{""}
 			for _, item := range items {
 				if genealogyCfg.Has(item) {
-					fmt.Printf(textFormat, genealogyCfg.Get(item).(string), memInfo[item])
-				} else {
-					fmt.Printf(textFormat, item, memInfo[item])
+					item = genealogyCfg.Get(item).(string)
 				}
+				tableHeader = append(tableHeader, item)
 			}
+
+			// 组装表数据
+			tableData := [][]string{}
+			outputInfo := []string{memoryPart}
+			for _, item := range items {
+				outputValue := memoryInfo[item].(string)
+				outputInfo = append(outputInfo, outputValue)
+			}
+			tableData = append(tableData, outputInfo)
+
+			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
+			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
+			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
+			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
+			table.SetRowLine(false)                                                                // 设置是否显示行边框
+			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetHeaderColor(                                                                  // 设置表头颜色
+				tablewriter.Colors{tablewriter.BgHiBlackColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+			)
+			table.SetColumnColor( // 设置列颜色
+				tablewriter.Colors{tablewriter.FgHiBlackColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+			)
+
+			// 填充表格
+			for _, data := range tableData {
+				table.Append(data)
+			}
+
+			// 渲染表格
+			table.Render()
 		}
 
 		if swapFlag {
@@ -253,6 +500,7 @@ var getCmd = &cobra.Command{
 				return "Swap"
 			}()
 			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", swapPart)
+
 			// 获取Memory配置项
 			if confTree != nil {
 				if confTree.Has("memory.data_unit") {
@@ -261,28 +509,74 @@ var getCmd = &cobra.Command{
 					fmt.Printf(general.InfoFormat, "Config file is missing 'memory.data_unit' configuration item, using default value")
 				}
 			}
+
+			// 获取数据
 			swapInfo := cli.GetSwapInfo(memoryDataUnit)
-			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[34;1m%v\x1b[0m\n"
-			// 顺序输出
+
+			table := tablewriter.NewWriter(os.Stdout) // 初始化表格
+
+			// 组装表头
+			tableHeader := []string{""}
 			if swapInfo["SwapDisabled"] == true {
 				items = []string{"SwapDisabled"}
 				for _, item := range items {
 					if genealogyCfg.Has(item) {
-						fmt.Printf("🚫%v\n", genealogyCfg.Get(item).(string))
-					} else {
-						fmt.Printf("🚫%v\n", item)
+						item = genealogyCfg.Get(item).(string)
 					}
+					tableHeader = append(tableHeader, item)
 				}
+				table.SetHeader(tableHeader) // 设置表头
+				table.SetHeaderColor(        // 设置表头颜色
+					tablewriter.Colors{tablewriter.BgHiBlackColor},
+					tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				)
+				table.SetColumnColor( // 设置列颜色
+					tablewriter.Colors{tablewriter.FgHiBlackColor},
+					tablewriter.Colors{tablewriter.FgBlueColor},
+				)
 			} else {
 				items = []string{"SwapTotal", "SwapFree"}
 				for _, item := range items {
 					if genealogyCfg.Has(item) {
-						fmt.Printf(textFormat, genealogyCfg.Get(item).(string), swapInfo[item])
-					} else {
-						fmt.Printf(textFormat, item, swapInfo[item])
+						item = genealogyCfg.Get(item).(string)
 					}
+					tableHeader = append(tableHeader, item)
 				}
+				table.SetHeader(tableHeader) // 设置表头
+				table.SetHeaderColor(        // 设置表头颜色
+					tablewriter.Colors{tablewriter.BgHiBlackColor},
+					tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+					tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				)
+				table.SetColumnColor( // 设置列颜色
+					tablewriter.Colors{tablewriter.FgHiBlackColor},
+					tablewriter.Colors{tablewriter.FgBlueColor},
+					tablewriter.Colors{tablewriter.FgBlueColor},
+				)
 			}
+
+			// 组装表数据
+			tableData := [][]string{}
+			outputInfo := []string{swapPart}
+			for _, item := range items {
+				outputValue := fmt.Sprintf("%v", swapInfo[item])
+				outputInfo = append(outputInfo, outputValue)
+			}
+			tableData = append(tableData, outputInfo)
+
+			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
+			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
+			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
+			table.SetRowLine(false)                                                                // 设置是否显示行边框
+
+			// 填充表格
+			for _, data := range tableData {
+				table.Append(data)
+			}
+
+			// 渲染表格
+			table.Render()
 		}
 
 		if storageFlag {
@@ -443,17 +737,62 @@ var getCmd = &cobra.Command{
 				return "OS"
 			}()
 			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", osPart)
+
+			// 获取数据
 			osInfo := cli.GetOSInfo(sysInfo)
-			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
-			// 顺序输出
-			items = []string{"Arch", "Platform", "OS", "Kernel", "TimeZone", "Hostname"}
+			items = []string{"OS", "Kernel", "Platform", "Arch", "TimeZone", "Hostname"}
+
+			// 组装表头
+			tableHeader := []string{""}
 			for _, item := range items {
 				if genealogyCfg.Has(item) {
-					fmt.Printf(textFormat, genealogyCfg.Get(item).(string), osInfo[item])
-				} else {
-					fmt.Printf(textFormat, item, osInfo[item])
+					item = genealogyCfg.Get(item).(string)
 				}
+				tableHeader = append(tableHeader, item)
 			}
+
+			// 组装表数据
+			tableData := [][]string{}
+			outputInfo := []string{osPart}
+			for _, item := range items {
+				outputValue := osInfo[item].(string)
+				outputInfo = append(outputInfo, outputValue)
+			}
+			tableData = append(tableData, outputInfo)
+
+			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
+			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
+			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
+			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
+			table.SetRowLine(false)                                                                // 设置是否显示行边框
+			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetHeaderColor(                                                                  // 设置表头颜色
+				tablewriter.Colors{tablewriter.BgHiBlackColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+			)
+			table.SetColumnColor( // 设置列颜色
+				tablewriter.Colors{tablewriter.FgHiBlackColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+			)
+
+			// 填充表格
+			for _, data := range tableData {
+				table.Append(data)
+			}
+
+			// 渲染表格
+			table.Render()
 		}
 
 		if loadFlag {
@@ -464,38 +803,63 @@ var getCmd = &cobra.Command{
 				return "Load"
 			}()
 			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", loadPart)
-			loadInfo := cli.GetLoadInfo()
-			textFormat := "\x1b[30;1m%-6v:\x1b[0m \x1b[35m%v\x1b[0m\n"
-			// 顺序输出
-			items = []string{"Load1", "Load5", "Load15"}
-			for _, item := range items {
-				if genealogyCfg.Has(item) {
-					fmt.Printf(textFormat, genealogyCfg.Get(item).(string), loadInfo[item])
-				} else {
-					fmt.Printf(textFormat, item, loadInfo[item])
-				}
-			}
-		}
 
-		if processFlag {
-			processPart := func() string {
-				if partsCfg.Has("Process") {
-					return partsCfg.Get("Process").(string)
-				}
-				return "Process"
-			}()
-			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", processPart)
-			procsInfo := cli.GetProcessInfo()
-			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[35m%v\x1b[0m\n"
-			// 顺序输出
-			items = []string{"Process"}
+			// 获取数据
+			loadInfo := cli.GetLoadInfo()
+			items = []string{"Load1", "Load5", "Load15", "Process"}
+
+			// 组装表头
+			tableHeader := []string{""}
 			for _, item := range items {
 				if genealogyCfg.Has(item) {
-					fmt.Printf(textFormat, genealogyCfg.Get(item).(string), procsInfo[item])
-				} else {
-					fmt.Printf(textFormat, item, procsInfo[item])
+					item = genealogyCfg.Get(item).(string)
 				}
+				tableHeader = append(tableHeader, item)
 			}
+
+			// 组装表数据
+			tableData := [][]string{}
+			outputInfo := []string{loadPart}
+			outputValue := ""
+			for _, item := range items {
+				if item == "Process" {
+					outputValue = fmt.Sprintf("%d", loadInfo[item].(uint64))
+				} else {
+					outputValue = fmt.Sprintf("%.2f", loadInfo[item].(float64))
+				}
+				outputInfo = append(outputInfo, outputValue)
+			}
+			tableData = append(tableData, outputInfo)
+
+			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
+			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
+			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
+			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
+			table.SetRowLine(false)                                                                // 设置是否显示行边框
+			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetHeaderColor(                                                                  // 设置表头颜色
+				tablewriter.Colors{tablewriter.BgHiBlackColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+			)
+			table.SetColumnColor( // 设置列颜色
+				tablewriter.Colors{tablewriter.FgHiBlackColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+			)
+
+			// 填充表格
+			for _, data := range tableData {
+				table.Append(data)
+			}
+
+			// 渲染表格
+			table.Render()
 		}
 
 		if timeFlag {
@@ -506,17 +870,56 @@ var getCmd = &cobra.Command{
 				return "Time"
 			}()
 			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", timePart)
+
+			// 获取数据
 			timeInfo, _ := cli.GetTimeInfo()
-			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[36m%v\x1b[0m\n"
-			// 顺序输出
 			items = []string{"StartTime", "Uptime", "BootTime"}
+
+			// 组装表头
+			tableHeader := []string{""}
 			for _, item := range items {
 				if genealogyCfg.Has(item) {
-					fmt.Printf(textFormat, genealogyCfg.Get(item).(string), timeInfo[item])
-				} else {
-					fmt.Printf(textFormat, item, timeInfo[item])
+					item = genealogyCfg.Get(item).(string)
 				}
+				tableHeader = append(tableHeader, item)
 			}
+
+			// 组装表数据
+			tableData := [][]string{}
+			outputInfo := []string{timePart}
+			for _, item := range items {
+				outputValue := timeInfo[item].(string)
+				outputInfo = append(outputInfo, outputValue)
+			}
+			tableData = append(tableData, outputInfo)
+
+			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
+			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
+			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
+			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
+			table.SetRowLine(false)                                                                // 设置是否显示行边框
+			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetHeaderColor(                                                                  // 设置表头颜色
+				tablewriter.Colors{tablewriter.BgHiBlackColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+			)
+			table.SetColumnColor( // 设置列颜色
+				tablewriter.Colors{tablewriter.FgHiBlackColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+			)
+
+			// 填充表格
+			for _, data := range tableData {
+				table.Append(data)
+			}
+
+			// 渲染表格
+			table.Render()
 		}
 
 		if userFlag {
@@ -527,17 +930,60 @@ var getCmd = &cobra.Command{
 				return "User"
 			}()
 			fmt.Printf(general.Regelar2PFormat, ">>>>>>>>>> ", userPart)
+
+			// 获取数据
 			userInfo := cli.GetUserInfo()
-			textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[36m%v\x1b[0m\n"
-			// 顺序输出
 			items = []string{"UserName", "User", "UserUid", "UserGid", "UserHomeDir"}
+
+			// 组装表头
+			tableHeader := []string{""}
 			for _, item := range items {
 				if genealogyCfg.Has(item) {
-					fmt.Printf(textFormat, genealogyCfg.Get(item).(string), userInfo[item])
-				} else {
-					fmt.Printf(textFormat, item, userInfo[item])
+					item = genealogyCfg.Get(item).(string)
 				}
+				tableHeader = append(tableHeader, item)
 			}
+
+			// 组装表数据
+			tableData := [][]string{}
+			outputInfo := []string{userPart}
+			for _, item := range items {
+				outputValue := userInfo[item].(string)
+				outputInfo = append(outputInfo, outputValue)
+			}
+			tableData = append(tableData, outputInfo)
+
+			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
+			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
+			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
+			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
+			table.SetRowLine(false)                                                                // 设置是否显示行边框
+			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetHeaderColor(                                                                  // 设置表头颜色
+				tablewriter.Colors{tablewriter.BgHiBlackColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+			)
+			table.SetColumnColor( // 设置列颜色
+				tablewriter.Colors{tablewriter.FgHiBlackColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+				tablewriter.Colors{tablewriter.FgBlueColor},
+			)
+
+			// 填充表格
+			for _, data := range tableData {
+				table.Append(data)
+			}
+
+			// 渲染表格
+			table.Render()
 		}
 
 		if updateFlag {
@@ -608,7 +1054,6 @@ func init() {
 	getCmd.Flags().BoolP("load", "", false, "Get Load information")
 	getCmd.Flags().BoolP("memory", "", false, "Get Memory information")
 	getCmd.Flags().BoolP("os", "", false, "Get OS information")
-	getCmd.Flags().BoolP("process", "", false, "Get Process information")
 	getCmd.Flags().BoolP("product", "", false, "Get Product information")
 	getCmd.Flags().BoolP("storage", "", false, "Get Storage information")
 	getCmd.Flags().BoolP("swap", "", false, "Get Swap information")
