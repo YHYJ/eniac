@@ -40,12 +40,12 @@ func GetBoardInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
 // GetCPUInfo 获取 CPU 信息
 func GetCPUInfo(sysInfo sysinfo.SysInfo, dataUnit string) map[string]interface{} {
 	cpuInfo := make(map[string]interface{})
-	cpuInfo["CPUModel"] = sysInfo.CPU.Model                                               // cpu型号
-	cpuInfo["CPUNumber"] = sysInfo.CPU.Cpus                                               // cpu数量
-	cpuInfo["CPUCores"] = sysInfo.CPU.Cores                                               // cpu核心数
-	cpuInfo["CPUThreads"] = sysInfo.CPU.Threads                                           // cpu线程数
-	cpuCache, cpuCacheUnit := general.DataUnitConvert("KB", dataUnit, float64(sysInfo.CPU.Cache)) // cpu缓存
-	cpuInfo["CPUCache"] = fmt.Sprintf("%.1f%s", cpuCache, cpuCacheUnit)
+	cpuInfo["CPUModel"] = sysInfo.CPU.Model                    // cpu型号
+	cpuInfo["CPUNumber"] = sysInfo.CPU.Cpus                    // cpu数量
+	cpuInfo["CPUCores"] = sysInfo.CPU.Cores                    // cpu核心数
+	cpuInfo["CPUThreads"] = sysInfo.CPU.Threads                // cpu线程数
+	cpuCache, cpuCacheUnit := general.Human(float64(sysInfo.CPU.Cache), "KiB") // cpu缓存
+	cpuInfo["CPUCache"] = fmt.Sprintf("%.0f %s", cpuCache, cpuCacheUnit)
 
 	return cpuInfo
 }
@@ -54,11 +54,11 @@ func GetCPUInfo(sysInfo sysinfo.SysInfo, dataUnit string) map[string]interface{}
 func GetOSInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
 	osInfo := make(map[string]interface{})
 	osInfo["OS"] = general.UpperStringFirstChar(sysInfo.OS.Name)         // 操作系统
-	osInfo["Arch"] = sysInfo.OS.Architecture                     // 系统架构
-	osInfo["Kernel"] = sysInfo.Kernel.Release                    // 内核版本
+	osInfo["Arch"] = sysInfo.OS.Architecture                             // 系统架构
+	osInfo["Kernel"] = sysInfo.Kernel.Release                            // 内核版本
 	osInfo["Platform"] = general.UpperStringFirstChar(sysInfo.OS.Vendor) // 平台
-	osInfo["Hostname"] = hostData.Hostname                       // 主机名
-	osInfo["TimeZone"] = sysInfo.Node.Timezone                   // 时区
+	osInfo["Hostname"] = hostData.Hostname                               // 主机名
+	osInfo["TimeZone"] = sysInfo.Node.Timezone                           // 时区
 
 	return osInfo
 }

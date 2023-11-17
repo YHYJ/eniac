@@ -18,13 +18,13 @@ import (
 // GetMemoryInfo 获取内存信息
 func GetMemoryInfo(dataUnit string, percentUnit string) map[string]interface{} {
 	// 内存数据
-	memTotal, memTotalUnit := general.DataUnitConvert("B", dataUnit, float64(memData.Total))
-	memUsed, memUsedUnit := general.DataUnitConvert("B", dataUnit, float64(memData.Used))
-	memUsedPercent, _ := general.DataUnitConvert("B", percentUnit, float64(memData.UsedPercent))
-	memFree, memFreeUnit := general.DataUnitConvert("B", dataUnit, float64(memData.Free))
-	memShared, memSharedUnit := general.DataUnitConvert("B", dataUnit, float64(memData.Shared))
-	memBuffCache, memBuffCacheUnit := general.DataUnitConvert("B", dataUnit, float64(memData.Buffers+memData.Cached))
-	memAvail, memAvailUnit := general.DataUnitConvert("B", dataUnit, float64(memData.Available))
+	memTotal, memTotalUnit := general.Human(float64(memData.Total), "B")
+	memUsed, memUsedUnit := general.Human(float64(memData.Used), "B")
+	memUsedPercent, _ := general.Human(float64(memData.UsedPercent), percentUnit)
+	memFree, memFreeUnit := general.Human(float64(memData.Free), "B")
+	memShared, memSharedUnit := general.Human(float64(memData.Shared), "B")
+	memBuffCache, memBuffCacheUnit := general.Human(float64(memData.Buffers+memData.Cached), "B")
+	memAvail, memAvailUnit := general.Human(float64(memData.Available), "B")
 
 	// 使用冒泡排序找出最大值用以组装格式字符串
 	memData := []float64{memTotal, memUsed, memUsedPercent, memFree, memShared, memBuffCache, memAvail}
@@ -46,8 +46,8 @@ func GetMemoryInfo(dataUnit string, percentUnit string) map[string]interface{} {
 
 // GetSwapInfo 获取交换分区信息
 func GetSwapInfo(dataUnit string) map[string]interface{} {
-	swapTotal, swapTotalUnit := general.DataUnitConvert("B", dataUnit, float64(memData.SwapTotal))
-	swapFree, swapFreeUnit := general.DataUnitConvert("B", dataUnit, float64(memData.SwapFree))
+	swapTotal, swapTotalUnit := general.Human(float64(memData.SwapTotal), "B")
+	swapFree, swapFreeUnit := general.Human(float64(memData.SwapFree), "B")
 
 	// 使用冒泡排序找出最大值用以组装格式字符串
 	swapData := []float64{swapTotal, swapFree}

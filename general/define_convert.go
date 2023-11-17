@@ -32,7 +32,7 @@ func BubbleSort(arr []float64) {
 // FormatFloat 动态计算浮点数长度并输出合适的格式字符串
 func FormatFloat(value float64, precision int) string {
 	digits := len(fmt.Sprint(int(value))) + 1 + precision // 整数部分长度 + 小数点 + 小数部分长度
-	formatString := "%" + fmt.Sprintf("%d.1f", digits) + "%s"
+	formatString := "%" + fmt.Sprintf("%d.1f ", digits) + "%s"
 	return formatString
 }
 
@@ -59,112 +59,26 @@ func UpperStringFirstChar(str string) string {
 	return strings.ToUpper(str[:1]) + str[1:]
 }
 
-// DataUnitConvert 数据单位转换
-func DataUnitConvert(oldUnit string, newUnit string, data float64) (float64, string) {
-	if oldUnit == "B" && newUnit == "KB" {
-		if data < 1024 {
-			newUnit = "B"
-			return data, newUnit
-		} else {
-			return data / 1024, newUnit
-		}
-	} else if oldUnit == "B" && newUnit == "MB" {
-		if data < 1024*1024 {
-			newUnit = "KB"
-			return data / 1024, newUnit
-		} else {
-			return data / 1024 / 1024, newUnit
-		}
-	} else if oldUnit == "B" && newUnit == "GB" {
-		if data < 1024*1024*1024 {
-			newUnit = "MB"
-			return data / 1024 / 1024, newUnit
-		} else {
-			return data / 1024 / 1024 / 1024, newUnit
-		}
-	} else if oldUnit == "B" && newUnit == "TB" {
-		if data < 1024*1024*1024*1024 {
-			newUnit = "GB"
-			return data / 1024 / 1024 / 1024, newUnit
-		} else {
-			return data / 1024 / 1024 / 1024 / 1024, newUnit
-		}
-	} else if oldUnit == "KB" && newUnit == "B" {
-		return data * 1024, newUnit
-	} else if oldUnit == "KB" && newUnit == "MB" {
-		if data < 1024 {
-			newUnit = "KB"
-			return data, newUnit
-		} else {
-			return data / 1024, newUnit
-		}
-	} else if oldUnit == "KB" && newUnit == "GB" {
-		if data < 1024*1024 {
-			newUnit = "MB"
-			return data / 1024, newUnit
-		} else {
-			return data / 1024 / 1024, newUnit
-		}
-	} else if oldUnit == "KB" && newUnit == "TB" {
-		if data < 1024*1024*1024 {
-			newUnit = "GB"
-			return data / 1024 / 1024, newUnit
-		} else {
-			return data / 1024 / 1024 / 1024, newUnit
-		}
-	} else if oldUnit == "MB" && newUnit == "B" {
-		return data * 1024 * 1024, newUnit
-	} else if oldUnit == "MB" && newUnit == "KB" {
-		return data * 1024, newUnit
-	} else if oldUnit == "MB" && newUnit == "GB" {
-		if data < 1024 {
-			newUnit = "MB"
-			return data, newUnit
-		} else {
-			return data / 1024, newUnit
-		}
-	} else if oldUnit == "MB" && newUnit == "TB" {
-		if data < 1024*1024 {
-			newUnit = "GB"
-			return data / 1024, newUnit
-		} else {
-			return data / 1024 / 1024, newUnit
-		}
-	} else if oldUnit == "GB" && newUnit == "B" {
-		return data * 1024 * 1024 * 1024, newUnit
-	} else if oldUnit == "GB" && newUnit == "KB" {
-		return data * 1024 * 1024, newUnit
-	} else if oldUnit == "GB" && newUnit == "MB" {
-		return data * 1024, newUnit
-	} else if oldUnit == "GB" && newUnit == "TB" {
-		if data < 1024 {
-			newUnit = "GB"
-			return data, newUnit
-		} else {
-			return data / 1024, newUnit
-		}
-	} else if oldUnit == "TB" && newUnit == "B" {
-		return data * 1024 * 1024 * 1024 * 1024, newUnit
-	} else if oldUnit == "TB" && newUnit == "KB" {
-		return data * 1024 * 1024 * 1024, newUnit
-	} else if oldUnit == "TB" && newUnit == "MB" {
-		return data * 1024 * 1024, newUnit
-	} else if oldUnit == "TB" && newUnit == "GB" {
-		return data * 1024, newUnit
-	} else {
-		return data, oldUnit
-	}
-}
-
 // Human 数据转换为人类可读的格式
-func Human(size int64) string {
-	floatsize := float32(size)
-	units := [...]string{"", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"}
-	for _, unit := range units {
-		if floatsize < 1024 {
-			return fmt.Sprintf("%.2f %sB", floatsize, unit)
+func Human(size float64, initialUnit string) (float64, string) {
+	allUnits := [...]string{"B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"}
+
+	// 重构单位切片，从initialUnit开始
+	var units []string
+	for i, unit := range allUnits {
+		if unit == initialUnit {
+			units = allUnits[i:]
+			break
 		}
-		floatsize /= 1024
 	}
-	return fmt.Sprintf("%d%s", size, "B")
+
+	// 数据及转换
+	for _, unit := range units {
+		if size < 1024 {
+			return size, unit
+		}
+		size /= 1024
+	}
+
+	return size, initialUnit
 }

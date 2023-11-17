@@ -54,8 +54,8 @@ func GetStorageInfo() (storageInfo map[string]interface{}) {
 			storageValue["StorageType"] = disk.DriveType.String()
 			storageValue["StorageRemovable"] = strconv.FormatBool(disk.IsRemovable)
 			storageValue["StorageSerial"] = disk.SerialNumber
-			storageSize, storageSizeUnit := general.DataUnitConvert("B", "TB", float64(disk.SizeBytes))
-			storageValue["StorageSize"] = fmt.Sprintf("%.1f%s", storageSize, storageSizeUnit)
+			storageSize, storageSizeUnit := general.Human(float64(disk.SizeBytes), "B")
+			storageValue["StorageSize"] = fmt.Sprintf("%.2f %s", storageSize, storageSizeUnit)
 			storageInfo[fmt.Sprintf("%d", index)] = storageValue
 			index += 1
 		}

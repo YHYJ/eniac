@@ -10,6 +10,8 @@ Description: 获取软件信息
 package cli
 
 import (
+	"fmt"
+
 	"github.com/Jguer/go-alpm/v2"
 	"github.com/yhyj/eniac/general"
 )
@@ -36,9 +38,9 @@ func GetPackageInfo() (map[string]interface{}, error) {
 	totalCount := len(pkgSlice)
 
 	// 计算已安装包的总大小
-	var totalSize int64 = 0
+	var totalSize float64 = 0
 	for _, p := range pkgSlice {
-		totalSize += p.ISize()
+		totalSize += float64(p.ISize())
 	}
 
 	// 释放句柄
@@ -47,7 +49,8 @@ func GetPackageInfo() (map[string]interface{}, error) {
 	}
 
 	packageInfo["PackageTotalCount"] = totalCount
-	packageInfo["PackageTotalSize"] = general.Human(totalSize)
+	packageTotalSize, packageTotalSizeUnit := general.Human(totalSize, "B")
+	packageInfo["PackageTotalSize"] = fmt.Sprintf("%.2f %s", packageTotalSize, packageTotalSizeUnit)
 
 	return packageInfo, nil
 }
