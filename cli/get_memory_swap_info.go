@@ -29,13 +29,12 @@ func GetMemoryInfo(dataUnit string, percentUnit string) map[string]interface{} {
 	// 使用冒泡排序找出最大值用以组装格式字符串
 	memData := []float64{memTotal, memUsed, memUsedPercent, memFree, memShared, memBuffCache, memAvail}
 	general.BubbleSort(memData)
-	max := memData[len(memData)-1]
-	formatString := general.FormatFloat(max, 1)
+	formatString := "%.2f %s"
 
 	memoryInfo := make(map[string]interface{})
 	memoryInfo["MemoryTotal"] = fmt.Sprintf(formatString, memTotal, memTotalUnit)             // 内存总量
 	memoryInfo["MemoryUsed"] = fmt.Sprintf(formatString, memUsed, memUsedUnit)                // 已用内存
-	memoryInfo["MemoryUsedPercent"] = fmt.Sprintf(formatString, memUsedPercent, percentUnit)  // 内存使用率
+	memoryInfo["MemoryUsedPercent"] = fmt.Sprintf("%.1f%s", memUsedPercent, percentUnit)      // 内存使用率
 	memoryInfo["MemoryFree"] = fmt.Sprintf(formatString, memFree, memFreeUnit)                // 空闲内存
 	memoryInfo["MemoryShared"] = fmt.Sprintf(formatString, memShared, memSharedUnit)          // 共享内存
 	memoryInfo["MemoryBuffCache"] = fmt.Sprintf(formatString, memBuffCache, memBuffCacheUnit) // 缓存内存
@@ -52,8 +51,7 @@ func GetSwapInfo(dataUnit string) map[string]interface{} {
 	// 使用冒泡排序找出最大值用以组装格式字符串
 	swapData := []float64{swapTotal, swapFree}
 	general.BubbleSort(swapData)
-	max := swapData[len(swapData)-1]
-	formatString := general.FormatFloat(max, 1)
+	formatString := "%.2f %s"
 
 	swapInfo := make(map[string]interface{})
 	swapInfo["SwapDisabled"] = false
