@@ -129,7 +129,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
 			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
 			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
@@ -187,7 +187,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
 			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
 			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
@@ -247,7 +247,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
 			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
 			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
@@ -316,7 +316,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
 			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
 			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
@@ -380,7 +380,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
 			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
 			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
@@ -456,7 +456,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
 			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
 			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
@@ -564,7 +564,7 @@ var getCmd = &cobra.Command{
 			}
 			tableData = append(tableData, outputInfo)
 
-			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
 			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
 			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
@@ -761,7 +761,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
 			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
 			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
@@ -832,7 +832,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
 			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
 			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
@@ -894,7 +894,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
 			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
 			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
@@ -954,7 +954,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
+			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
 			table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
 			table.SetCenterSeparator("·")                                                          // 设置中间分隔符
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
