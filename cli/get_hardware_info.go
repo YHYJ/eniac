@@ -20,8 +20,8 @@ import (
 )
 
 // GetStorageInfo 获取存储设备信息
-func GetStorageInfo() (storageInfo map[string]interface{}) {
-	storageInfo = make(map[string]interface{})
+func GetStorageInfo() map[string]interface{} {
+	storageInfo := make(map[string]interface{})
 	index := 1 // 排除虚拟设备影响的编号
 	for _, disk := range blockData.Disks {
 		storageValue := make(map[string]interface{})
@@ -65,7 +65,7 @@ func GetStorageInfo() (storageInfo map[string]interface{}) {
 }
 
 // GetGPUInfo 获取显卡信息
-func GetGPUInfo() (gpuInfo map[string]interface{}) {
+func GetGPUInfo() map[string]interface{} {
 	type GPUDataJ2S struct {
 		GPU struct {
 			Cards []struct {
@@ -113,7 +113,7 @@ func GetGPUInfo() (gpuInfo map[string]interface{}) {
 		fmt.Println("Error:", err)
 	}
 
-	gpuInfo = make(map[string]interface{})
+	gpuInfo := make(map[string]interface{})
 	gpuInfo["GPUDriver"] = gpuDataJ2S.GPU.Cards[0].PCI.Driver
 	gpuInfo["GPUAddress"] = gpuDataJ2S.GPU.Cards[0].PCI.Address
 	gpuInfo["GPUVendor"] = gpuDataJ2S.GPU.Cards[0].PCI.Vendor.NAME
@@ -123,7 +123,7 @@ func GetGPUInfo() (gpuInfo map[string]interface{}) {
 }
 
 // GetNicInfo 获取网卡信息
-func GetNicInfo() (networkInfo map[string]interface{}) {
+func GetNicInfo() map[string]interface{} {
 	type NICDataJ2S struct {
 		Name       string `json:"name"`
 		MacAddress string `json:"mac_address"`
@@ -146,7 +146,7 @@ func GetNicInfo() (networkInfo map[string]interface{}) {
 	}
 
 	// 访问解析后的数据
-	networkInfo = make(map[string]interface{})
+	networkInfo := make(map[string]interface{})
 	network := networkDataJ2S["network"]
 	index := 1 // 排除虚拟网卡影响的编号
 	for _, nic := range network.Nics {
