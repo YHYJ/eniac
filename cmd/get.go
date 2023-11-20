@@ -38,6 +38,7 @@ var getCmd = &cobra.Command{
 		defaultMainCfg, _ := toml.TreeFromMap(map[string]interface{}{"main": map[string]string{}})
 		defaultGenealogyCfg, _ := toml.TreeFromMap(map[string]interface{}{"genealogy": map[string]string{}})
 		var (
+			color             bool       = true
 			cpuCacheUnit      string     = "KB"
 			memoryDataUnit    string     = "GB"
 			memoryPercentUnit string     = "%"
@@ -46,7 +47,7 @@ var getCmd = &cobra.Command{
 			mainCfg           *toml.Tree = defaultMainCfg
 		)
 
-		// 获取genealogy配置项
+		// 获取配置项
 		if confTree != nil {
 			genealogyCfg = func() *toml.Tree {
 				if confTree.Has("genealogy") {
@@ -61,6 +62,13 @@ var getCmd = &cobra.Command{
 				}
 				fmt.Printf(general.InfoFormat, "Config file is missing 'main' configuration item, using default value")
 				return defaultMainCfg
+			}()
+			color = func() bool {
+				if mainCfg.Has("color") {
+					return mainCfg.Get("color").(bool)
+				}
+				fmt.Printf(general.InfoFormat, "Config file is missing 'main.color' configuration item, using default value")
+				return true
 			}()
 		} else {
 			fmt.Printf(general.InfoFormat, "Config file is empty, using default value")
@@ -97,6 +105,7 @@ var getCmd = &cobra.Command{
 		var (
 			items       []string                   // 输出项名称参数
 			columnColor = tablewriter.FgWhiteColor // 默认列颜色
+			headerColor = tablewriter.FgWhiteColor // 默认表头颜色
 		)
 
 		// 执行对应函数
@@ -131,8 +140,11 @@ var getCmd = &cobra.Command{
 			}
 			tableData = append(tableData, outputInfo)
 
-			// 获取随机的列颜色
-			columnColor = general.GetColor()
+			// 获取随机颜色
+			if color {
+				columnColor = general.GetColor()
+				headerColor = tablewriter.FgCyanColor
+			}
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
 			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
@@ -143,8 +155,8 @@ var getCmd = &cobra.Command{
 			table.SetHeader(tableHeader)                                                           // 设置表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
 			)
 			table.SetColumnColor( // 设置列颜色
 				tablewriter.Colors{tablewriter.FgHiBlackColor},
@@ -192,8 +204,11 @@ var getCmd = &cobra.Command{
 			}
 			tableData = append(tableData, outputInfo)
 
-			// 获取随机的列颜色
-			columnColor = general.GetColor()
+			// 获取随机颜色
+			if color {
+				columnColor = general.GetColor()
+				headerColor = tablewriter.FgCyanColor
+			}
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
 			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
@@ -204,9 +219,9 @@ var getCmd = &cobra.Command{
 			table.SetHeader(tableHeader)                                                           // 设置表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
 			)
 			table.SetColumnColor( // 设置列颜色
 				tablewriter.Colors{tablewriter.FgHiBlackColor},
@@ -255,8 +270,11 @@ var getCmd = &cobra.Command{
 			}
 			tableData = append(tableData, outputInfo)
 
-			// 获取随机的列颜色
-			columnColor = general.GetColor()
+			// 获取随机颜色
+			if color {
+				columnColor = general.GetColor()
+				headerColor = tablewriter.FgCyanColor
+			}
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
 			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
@@ -267,9 +285,9 @@ var getCmd = &cobra.Command{
 			table.SetHeader(tableHeader)                                                           // 设置表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
 			)
 			table.SetColumnColor( // 设置列颜色
 				tablewriter.Colors{tablewriter.FgHiBlackColor},
@@ -325,8 +343,11 @@ var getCmd = &cobra.Command{
 			}
 			tableData = append(tableData, outputInfo)
 
-			// 获取随机的列颜色
-			columnColor = general.GetColor()
+			// 获取随机颜色
+			if color {
+				columnColor = general.GetColor()
+				headerColor = tablewriter.FgCyanColor
+			}
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
 			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
@@ -337,11 +358,11 @@ var getCmd = &cobra.Command{
 			table.SetHeader(tableHeader)                                                           // 设置表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
 			)
 			table.SetColumnColor( // 设置列颜色
 				tablewriter.Colors{tablewriter.FgHiBlackColor},
@@ -392,8 +413,11 @@ var getCmd = &cobra.Command{
 			}
 			tableData = append(tableData, outputInfo)
 
-			// 获取随机的列颜色
-			columnColor = general.GetColor()
+			// 获取随机颜色
+			if color {
+				columnColor = general.GetColor()
+				headerColor = tablewriter.FgCyanColor
+			}
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
 			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
@@ -404,10 +428,10 @@ var getCmd = &cobra.Command{
 			table.SetHeader(tableHeader)                                                           // 设置表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
 			)
 			table.SetColumnColor( // 设置列颜色
 				tablewriter.Colors{tablewriter.FgHiBlackColor},
@@ -469,8 +493,11 @@ var getCmd = &cobra.Command{
 			}
 			tableData = append(tableData, outputInfo)
 
-			// 获取随机的列颜色
-			columnColor = general.GetColor()
+			// 获取随机颜色
+			if color {
+				columnColor = general.GetColor()
+				headerColor = tablewriter.FgCyanColor
+			}
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
 			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
@@ -481,13 +508,13 @@ var getCmd = &cobra.Command{
 			table.SetHeader(tableHeader)                                                           // 设置表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
 			)
 			table.SetColumnColor( // 设置列颜色
 				tablewriter.Colors{tablewriter.FgHiBlackColor},
@@ -530,8 +557,11 @@ var getCmd = &cobra.Command{
 
 			table := tablewriter.NewWriter(os.Stdout) // 初始化表格
 
-			// 获取随机的列颜色
-			columnColor = general.GetColor()
+			// 获取随机颜色
+			if color {
+				columnColor = general.GetColor()
+				headerColor = tablewriter.FgCyanColor
+			}
 
 			// 组装表头
 			tableHeader := []string{""}
@@ -546,7 +576,7 @@ var getCmd = &cobra.Command{
 				table.SetHeader(tableHeader) // 设置表头
 				table.SetHeaderColor(        // 设置表头颜色
 					tablewriter.Colors{tablewriter.BgHiBlackColor},
-					tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+					tablewriter.Colors{tablewriter.Bold, headerColor},
 				)
 				table.SetColumnColor( // 设置列颜色
 					tablewriter.Colors{tablewriter.FgHiBlackColor},
@@ -563,8 +593,8 @@ var getCmd = &cobra.Command{
 				table.SetHeader(tableHeader) // 设置表头
 				table.SetHeaderColor(        // 设置表头颜色
 					tablewriter.Colors{tablewriter.BgHiBlackColor},
-					tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-					tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+					tablewriter.Colors{tablewriter.Bold, headerColor},
+					tablewriter.Colors{tablewriter.Bold, headerColor},
 				)
 				table.SetColumnColor( // 设置列颜色
 					tablewriter.Colors{tablewriter.FgHiBlackColor},
@@ -630,8 +660,11 @@ var getCmd = &cobra.Command{
 				tableData = append(tableData, outputInfo)
 			}
 
-			// 获取随机的列颜色
-			columnColor = general.GetColor()
+			// 获取随机颜色
+			if color {
+				columnColor = general.GetColor()
+				headerColor = tablewriter.FgCyanColor
+			}
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
 			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
@@ -642,14 +675,14 @@ var getCmd = &cobra.Command{
 			table.SetHeader(tableHeader)                                                           // 设置表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
 			)
 			table.SetColumnColor( // 设置列颜色
 				tablewriter.Colors{tablewriter.FgHiBlackColor},
@@ -705,8 +738,11 @@ var getCmd = &cobra.Command{
 				tableData = append(tableData, outputInfo)
 			}
 
-			// 获取随机的列颜色
-			columnColor = general.GetColor()
+			// 获取随机颜色
+			if color {
+				columnColor = general.GetColor()
+				headerColor = tablewriter.FgCyanColor
+			}
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
 			table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
@@ -717,14 +753,14 @@ var getCmd = &cobra.Command{
 			table.SetHeader(tableHeader)                                                           // 设置表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
 			)
 			table.SetColumnColor( // 设置列颜色
 				tablewriter.Colors{tablewriter.FgHiBlackColor},
@@ -778,8 +814,11 @@ var getCmd = &cobra.Command{
 			}
 			tableData = append(tableData, outputInfo)
 
-			// 获取随机的列颜色
-			columnColor = general.GetColor()
+			// 获取随机颜色
+			if color {
+				columnColor = general.GetColor()
+				headerColor = tablewriter.FgCyanColor
+			}
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
 			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
@@ -790,12 +829,12 @@ var getCmd = &cobra.Command{
 			table.SetHeader(tableHeader)                                                           // 设置表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
 			)
 			table.SetColumnColor( // 设置列颜色
 				tablewriter.Colors{tablewriter.FgHiBlackColor},
@@ -852,8 +891,11 @@ var getCmd = &cobra.Command{
 			}
 			tableData = append(tableData, outputInfo)
 
-			// 获取随机的列颜色
-			columnColor = general.GetColor()
+			// 获取随机颜色
+			if color {
+				columnColor = general.GetColor()
+				headerColor = tablewriter.FgCyanColor
+			}
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
 			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
@@ -864,10 +906,10 @@ var getCmd = &cobra.Command{
 			table.SetHeader(tableHeader)                                                           // 设置表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
 			)
 			table.SetColumnColor( // 设置列颜色
 				tablewriter.Colors{tablewriter.FgHiBlackColor},
@@ -917,8 +959,11 @@ var getCmd = &cobra.Command{
 			}
 			tableData = append(tableData, outputInfo)
 
-			// 获取随机的列颜色
-			columnColor = general.GetColor()
+			// 获取随机颜色
+			if color {
+				columnColor = general.GetColor()
+				headerColor = tablewriter.FgCyanColor
+			}
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
 			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
@@ -929,9 +974,9 @@ var getCmd = &cobra.Command{
 			table.SetHeader(tableHeader)                                                           // 设置表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
 			)
 			table.SetColumnColor( // 设置列颜色
 				tablewriter.Colors{tablewriter.FgHiBlackColor},
@@ -980,8 +1025,11 @@ var getCmd = &cobra.Command{
 			}
 			tableData = append(tableData, outputInfo)
 
-			// 获取随机的列颜色
-			columnColor = general.GetColor()
+			// 获取随机颜色
+			if color {
+				columnColor = general.GetColor()
+				headerColor = tablewriter.FgCyanColor
+			}
 
 			table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
 			table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
@@ -992,11 +1040,11 @@ var getCmd = &cobra.Command{
 			table.SetHeader(tableHeader)                                                           // 设置表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
-				tablewriter.Colors{tablewriter.Bold, tablewriter.FgCyanColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
+				tablewriter.Colors{tablewriter.Bold, headerColor},
 			)
 			table.SetColumnColor( // 设置列颜色
 				tablewriter.Colors{tablewriter.FgHiBlackColor},
@@ -1035,8 +1083,12 @@ var getCmd = &cobra.Command{
 				} else {
 					fmt.Printf(general.InfoFormat, "Config file is missing 'update.record_file' configuration item, using default value")
 				}
-				textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[32;1m%v\x1b[0m\n"
-				listFormat := "%8v: \x1b[32m%v\x1b[0m\n"
+				textFormat := "\x1b[37;1m%v:\x1b[0m \x1b[37;1m%v\x1b[0m\n"
+				listFormat := "%8v: \x1b[37m%v\x1b[0m\n"
+				if color {
+					textFormat = "\x1b[30;1m%v:\x1b[0m \x1b[32;1m%v\x1b[0m\n"
+					listFormat = "%8v: \x1b[32m%v\x1b[0m\n"
+				}
 				// 输出更新状态监测
 				daemonInfo, _ := cli.GetUpdateDaemonInfo()
 				items = []string{"DaemonStatus"}

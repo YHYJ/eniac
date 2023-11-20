@@ -46,6 +46,7 @@ func WriteTomlConfig(filePath string) (int64, error) {
 	// 定义一个map[string]interface{}类型的变量并赋值
 	exampleConf := map[string]interface{}{
 		"main": map[string]interface{}{
+			"color": true,
 			"parts": map[string]interface{}{
 				"Product": "设备",
 				"Board":   "主板",
