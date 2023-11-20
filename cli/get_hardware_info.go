@@ -40,12 +40,12 @@ func GetStorageInfo() map[string]interface{} {
 					}()
 					matched, err := regexp.MatchString(pciPattern, diskPciAddress)
 					if err != nil {
-						return "<unknown>"
+						return "--/--"
 					}
 					if matched {
 						return pciData.GetDevice(diskPciAddress).Vendor.Name
 					} else {
-						return "<unknown>"
+						return "--/--"
 					}
 				}
 				return disk.Vendor
@@ -159,26 +159,26 @@ func GetNicInfo() map[string]interface{} {
 				networkValue["NicProduct"] = pciData.GetDevice(nic.PCIAddress).Product.Name
 				networkValue["NicVendor"] = pciData.GetDevice(nic.PCIAddress).Vendor.Name
 			} else {
-				networkValue["NicPCIAddress"] = "<unknown>"
-				networkValue["NicDriver"] = "<unknown>"
-				networkValue["NicProduct"] = "<unknown>"
-				networkValue["NicVendor"] = "<unknown>"
+				networkValue["NicPCIAddress"] = "--/--"
+				networkValue["NicDriver"] = "--/--"
+				networkValue["NicProduct"] = "--/--"
+				networkValue["NicVendor"] = "--/--"
 			}
 			networkValue["NicMacAddress"] = func() string {
 				if nic.MacAddress == "" {
-					return "<unknown>"
+					return "--/--"
 				}
 				return nic.MacAddress
 			}()
 			networkValue["NicSpeed"] = func() string {
 				if nic.Speed == "" {
-					return "<unknown>"
+					return "--/--"
 				}
 				return nic.Speed
 			}()
 			networkValue["NicDuplex"] = func() string {
 				if nic.Duplex == "" {
-					return "<unknown>"
+					return "--/--"
 				}
 				return nic.Duplex
 			}()
