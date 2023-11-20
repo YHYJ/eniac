@@ -45,27 +45,23 @@ func GetTomlConfig(filePath string) (*toml.Tree, error) {
 func WriteTomlConfig(filePath string) (int64, error) {
 	// 定义一个map[string]interface{}类型的变量并赋值
 	exampleConf := map[string]interface{}{
-		"cpu": map[string]interface{}{
-			"cache_unit": "KB",
-		},
-		"parts": map[string]interface{}{
-			"Product": "设备",
-			"Board":   "主板",
-			"BIOS":    "BIOS",
-			"CPU":     "处理器",
-			"GPU":     "显卡",
-			"Memory":  "内存",
-			"Swap":    "交换分区",
-			"Disk":    "磁盘",
-			"NIC":     "网卡",
-			"OS":      "系统",
-			"Load":    "负载",
-			"Time":    "时间",
-			"User":    "用户",
-		},
-		"memory": map[string]interface{}{
-			"data_unit":    "GB",
-			"percent_unit": "%",
+		"main": map[string]interface{}{
+			"parts": map[string]interface{}{
+				"Product": "设备",
+				"Board":   "主板",
+				"BIOS":    "BIOS",
+				"CPU":     "处理器",
+				"GPU":     "显卡",
+				"Memory":  "内存",
+				"Swap":    "交换分区",
+				"Disk":    "磁盘",
+				"NIC":     "网卡",
+				"OS":      "系统",
+				"Load":    "负载",
+				"Time":    "时间",
+				"User":    "用户",
+				"Update":  "更新",
+			},
 		},
 		"genealogy": map[string]interface{}{
 			"BIOSVendor":        "BIOS厂商",
@@ -131,9 +127,16 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"UserHomeDir":       "用户目录",
 			"UpdateList":        "更新列表",
 			"DaemonStatus":      "更新状态",
-		},
-		"update": map[string]interface{}{
-			"record_file": "/tmp/system-checkupdates.log",
+			"cpu": map[string]interface{}{
+				"cache_unit": "KB",
+			},
+			"memory": map[string]interface{}{
+				"data_unit":    "GB",
+				"percent_unit": "%",
+			},
+			"update": map[string]interface{}{
+				"record_file": "/tmp/system-checkupdates.log",
+			},
 		},
 	}
 	// 检测配置文件是否存在

@@ -35,15 +35,15 @@ var getCmd = &cobra.Command{
 		}
 
 		// 设置配置项默认值
+		defaultMainCfg, _ := toml.TreeFromMap(map[string]interface{}{"main": map[string]string{}})
 		defaultGenealogyCfg, _ := toml.TreeFromMap(map[string]interface{}{"genealogy": map[string]string{}})
-		defaultPartsCfg, _ := toml.TreeFromMap(map[string]interface{}{"parts": map[string]string{}})
 		var (
 			cpuCacheUnit      string     = "KB"
 			memoryDataUnit    string     = "GB"
 			memoryPercentUnit string     = "%"
 			updateRecordFile  string     = "/tmp/system-checkupdates.log"
 			genealogyCfg      *toml.Tree = defaultGenealogyCfg
-			partsCfg          *toml.Tree = defaultPartsCfg
+			mainCfg           *toml.Tree = defaultMainCfg
 		)
 
 		// 获取genealogy配置项
@@ -55,12 +55,12 @@ var getCmd = &cobra.Command{
 				fmt.Printf(general.InfoFormat, "Config file is missing 'genealogy' configuration item, using default value")
 				return defaultGenealogyCfg
 			}()
-			partsCfg = func() *toml.Tree {
-				if confTree.Has("parts") {
-					return confTree.Get("parts").(*toml.Tree)
+			mainCfg = func() *toml.Tree {
+				if confTree.Has("main") {
+					return confTree.Get("main").(*toml.Tree)
 				}
-				fmt.Printf(general.InfoFormat, "Config file is missing 'parts' configuration item, using default value")
-				return defaultPartsCfg
+				fmt.Printf(general.InfoFormat, "Config file is missing 'main' configuration item, using default value")
+				return defaultMainCfg
 			}()
 		} else {
 			fmt.Printf(general.InfoFormat, "Config file is empty, using default value")
@@ -102,8 +102,8 @@ var getCmd = &cobra.Command{
 		// 执行对应函数
 		if productFlag {
 			productPart := func() string {
-				if partsCfg.Has("Product") {
-					return partsCfg.Get("Product").(string)
+				if mainCfg.Has("parts.Product") {
+					return mainCfg.Get("parts.Product").(string)
 				}
 				return "Product"
 			}()
@@ -163,8 +163,8 @@ var getCmd = &cobra.Command{
 
 		if boardFlag {
 			boardPart := func() string {
-				if partsCfg.Has("Board") {
-					return partsCfg.Get("Board").(string)
+				if mainCfg.Has("parts.Board") {
+					return mainCfg.Get("parts.Board").(string)
 				}
 				return "Board"
 			}()
@@ -226,8 +226,8 @@ var getCmd = &cobra.Command{
 
 		if biosFlag {
 			biosPart := func() string {
-				if partsCfg.Has("BIOS") {
-					return partsCfg.Get("BIOS").(string)
+				if mainCfg.Has("parts.BIOS") {
+					return mainCfg.Get("parts.BIOS").(string)
 				}
 				return "BIOS"
 			}()
@@ -289,20 +289,18 @@ var getCmd = &cobra.Command{
 
 		if cpuFlag {
 			cpuPart := func() string {
-				if partsCfg.Has("CPU") {
-					return partsCfg.Get("CPU").(string)
+				if mainCfg.Has("parts.CPU") {
+					return mainCfg.Get("parts.CPU").(string)
 				}
 				return "CPU"
 			}()
 			fmt.Printf(general.LineShownFormat, "······ CPU ······")
 
 			// 获取CPU配置项
-			if confTree != nil {
-				if confTree.Has("cpu.cache_unit") {
-					cpuCacheUnit = confTree.Get("cpu.cache_unit").(string)
-				} else {
-					fmt.Printf(general.InfoFormat, "Config file is missing 'cpu.cache_unit' configuration item, using default value")
-				}
+			if genealogyCfg.Has("cpu.cache_unit") {
+				cpuCacheUnit = genealogyCfg.Get("cpu.cache_unit").(string)
+			} else {
+				fmt.Printf(general.InfoFormat, "Config file is missing 'cpu.cache_unit' configuration item, using default value")
 			}
 
 			// 获取数据
@@ -365,8 +363,8 @@ var getCmd = &cobra.Command{
 
 		if gpuFlag {
 			gpuPart := func() string {
-				if partsCfg.Has("GPU") {
-					return partsCfg.Get("GPU").(string)
+				if mainCfg.Has("parts.GPU") {
+					return mainCfg.Get("parts.GPU").(string)
 				}
 				return "GPU"
 			}()
@@ -430,25 +428,23 @@ var getCmd = &cobra.Command{
 
 		if memoryFlag {
 			memoryPart := func() string {
-				if partsCfg.Has("Memory") {
-					return partsCfg.Get("Memory").(string)
+				if mainCfg.Has("parts.Memory") {
+					return mainCfg.Get("parts.Memory").(string)
 				}
 				return "Memory"
 			}()
 			fmt.Printf(general.LineShownFormat, "······ Memory ······")
 
 			// 获取Memory配置项
-			if confTree != nil {
-				if confTree.Has("memory.data_unit") {
-					memoryDataUnit = confTree.Get("memory.data_unit").(string)
-				} else {
-					fmt.Printf(general.InfoFormat, "Config file is missing 'memory.data_unit' configuration item, using default value")
-				}
-				if confTree.Has("memory.percent_unit") {
-					memoryPercentUnit = confTree.Get("memory.percent_unit").(string)
-				} else {
-					fmt.Printf(general.InfoFormat, "Config file is missing 'memory.percent_unit' configuration item, using default value")
-				}
+			if genealogyCfg.Has("memory.data_unit") {
+				memoryDataUnit = genealogyCfg.Get("memory.data_unit").(string)
+			} else {
+				fmt.Printf(general.InfoFormat, "Config file is missing 'memory.data_unit' configuration item, using default value")
+			}
+			if genealogyCfg.Has("memory.percent_unit") {
+				memoryPercentUnit = genealogyCfg.Get("memory.percent_unit").(string)
+			} else {
+				fmt.Printf(general.InfoFormat, "Config file is missing 'memory.percent_unit' configuration item, using default value")
 			}
 
 			// 获取数据
@@ -515,20 +511,18 @@ var getCmd = &cobra.Command{
 
 		if swapFlag {
 			swapPart := func() string {
-				if partsCfg.Has("Swap") {
-					return partsCfg.Get("Swap").(string)
+				if mainCfg.Has("parts.Swap") {
+					return mainCfg.Get("parts.Swap").(string)
 				}
 				return "Swap"
 			}()
 			fmt.Printf(general.LineShownFormat, "······ Swap ······")
 
 			// 获取Memory配置项
-			if confTree != nil {
-				if confTree.Has("memory.data_unit") {
-					memoryDataUnit = confTree.Get("memory.data_unit").(string)
-				} else {
-					fmt.Printf(general.InfoFormat, "Config file is missing 'memory.data_unit' configuration item, using default value")
-				}
+			if genealogyCfg.Has("memory.data_unit") {
+				memoryDataUnit = genealogyCfg.Get("memory.data_unit").(string)
+			} else {
+				fmt.Printf(general.InfoFormat, "Config file is missing 'memory.data_unit' configuration item, using default value")
 			}
 
 			// 获取数据
@@ -622,8 +616,8 @@ var getCmd = &cobra.Command{
 			// 组装表数据
 			tableData := [][]string{}
 			diskPart := func() string {
-				if partsCfg.Has("Disk") {
-					return partsCfg.Get("Disk").(string)
+				if mainCfg.Has("parts.Disk") {
+					return mainCfg.Get("parts.Disk").(string)
 				}
 				return "Disk"
 			}()
@@ -680,8 +674,8 @@ var getCmd = &cobra.Command{
 
 		if nicFlag {
 			nicPart := func() string {
-				if partsCfg.Has("NIC") {
-					return partsCfg.Get("NIC").(string)
+				if mainCfg.Has("parts.NIC") {
+					return mainCfg.Get("parts.NIC").(string)
 				}
 				return "NIC"
 			}()
@@ -755,8 +749,8 @@ var getCmd = &cobra.Command{
 
 		if osFlag {
 			osPart := func() string {
-				if partsCfg.Has("OS") {
-					return partsCfg.Get("OS").(string)
+				if mainCfg.Has("parts.OS") {
+					return mainCfg.Get("parts.OS").(string)
 				}
 				return "OS"
 			}()
@@ -824,8 +818,8 @@ var getCmd = &cobra.Command{
 
 		if loadFlag {
 			loadPart := func() string {
-				if partsCfg.Has("Load") {
-					return partsCfg.Get("Load").(string)
+				if mainCfg.Has("parts.Load") {
+					return mainCfg.Get("parts.Load").(string)
 				}
 				return "Load"
 			}()
@@ -894,8 +888,8 @@ var getCmd = &cobra.Command{
 
 		if timeFlag {
 			timePart := func() string {
-				if partsCfg.Has("Time") {
-					return partsCfg.Get("Time").(string)
+				if mainCfg.Has("parts.Time") {
+					return mainCfg.Get("parts.Time").(string)
 				}
 				return "Time"
 			}()
@@ -957,8 +951,8 @@ var getCmd = &cobra.Command{
 
 		if userFlag {
 			userPart := func() string {
-				if partsCfg.Has("User") {
-					return partsCfg.Get("User").(string)
+				if mainCfg.Has("parts.User") {
+					return mainCfg.Get("parts.User").(string)
 				}
 				return "User"
 			}()
@@ -1036,12 +1030,10 @@ var getCmd = &cobra.Command{
 			} else {
 				fmt.Printf(general.LineShownFormat, "······ Update ······")
 				// 获取update配置项
-				if confTree != nil {
-					if confTree.Has("update.record_file") {
-						updateRecordFile = confTree.Get("update.record_file").(string)
-					} else {
-						fmt.Printf(general.InfoFormat, "Config file is missing 'update.record_file' configuration item, using default value")
-					}
+				if genealogyCfg.Has("update.record_file") {
+					updateRecordFile = genealogyCfg.Get("update.record_file").(string)
+				} else {
+					fmt.Printf(general.InfoFormat, "Config file is missing 'update.record_file' configuration item, using default value")
 				}
 				textFormat := "\x1b[30;1m%v:\x1b[0m \x1b[32;1m%v\x1b[0m\n"
 				listFormat := "%8v: \x1b[32m%v\x1b[0m\n"
