@@ -20,9 +20,12 @@ import (
 )
 
 // GetStorageInfo 获取存储设备信息
+//
+// 返回：
+//   - 存储设备信息
 func GetStorageInfo() map[string]interface{} {
 	storageInfo := make(map[string]interface{})
-	index := 1 // 排除虚拟设备影响的编号
+	index := 1 // 排除编号为0的虚拟设备
 	for _, disk := range blockData.Disks {
 		storageValue := make(map[string]interface{})
 		if disk.SizeBytes > 0 && disk.DriveType.String() != "virtual" {
@@ -30,7 +33,7 @@ func GetStorageInfo() map[string]interface{} {
 			storageValue["StorageDriver"] = disk.StorageController.String()
 			storageValue["StorageVendor"] = func() string {
 				if disk.Vendor == "unknown" {
-					// 检测是否符合PCI地址格式
+					// 检测是否符合 PCI 地址格式
 					pciPattern := "^[0-9A-Fa-f]{4}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}\\.[0-9A-Fa-f]$"
 					diskPciAddress := func() string {
 						if len(strings.Split(disk.BusPath, "-")) < 2 {
@@ -65,6 +68,9 @@ func GetStorageInfo() map[string]interface{} {
 }
 
 // GetGPUInfo 获取显卡信息
+//
+// 返回：
+//   - 显卡信息
 func GetGPUInfo() map[string]interface{} {
 	type GPUDataJ2S struct {
 		GPU struct {
@@ -104,10 +110,10 @@ func GetGPUInfo() map[string]interface{} {
 		} `json:"gpu"`
 	}
 
-	// 获取JSON类型的显卡信息
+	// 获取 JSON 类型的显卡信息
 	gpuDataJson := gpuData.JSONString(false)
 
-	// 解析JSON
+	// 解析 JSON
 	var gpuDataJ2S GPUDataJ2S
 	if err := json.Unmarshal([]byte(gpuDataJson), &gpuDataJ2S); err != nil {
 		fmt.Println("Error:", err)
@@ -123,6 +129,9 @@ func GetGPUInfo() map[string]interface{} {
 }
 
 // GetNicInfo 获取网卡信息
+//
+// 返回：
+//   - 网卡信息
 func GetNicInfo() map[string]interface{} {
 	type NICDataJ2S struct {
 		Name       string `json:"name"`
@@ -136,10 +145,10 @@ func GetNicInfo() map[string]interface{} {
 		Nics []NICDataJ2S `json:"nics"`
 	}
 
-	// 获取JSON类型的网络信息
+	// 获取 JSON 类型的网络信息
 	networkDataJson := networkData.JSONString(false)
 
-	// 解析JSON
+	// 解析 JSON
 	var networkDataJ2S map[string]NetworkDataJ2S
 	if err := json.Unmarshal([]byte(networkDataJson), &networkDataJ2S); err != nil {
 		fmt.Println("Error:", err)
@@ -148,7 +157,7 @@ func GetNicInfo() map[string]interface{} {
 	// 访问解析后的数据
 	networkInfo := make(map[string]interface{})
 	network := networkDataJ2S["network"]
-	index := 1 // 排除虚拟网卡影响的编号
+	index := 1 // 排除编号为0的虚拟网卡
 	for _, nic := range network.Nics {
 		networkValue := make(map[string]interface{})
 		if !nic.IsVirtual {

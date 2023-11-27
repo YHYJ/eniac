@@ -40,7 +40,10 @@ var availableColors = []int{
 	tablewriter.FgHiYellowColor,
 }
 
-// 获取一个随机颜色并从可选列表中移除
+// GetColor 取一个随机颜色并从可选列表中移除
+//
+// 返回：
+//   - 颜色
 func GetColor() int {
 	if len(availableColors) == 0 {
 		return tablewriter.FgWhiteColor

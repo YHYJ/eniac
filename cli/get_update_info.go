@@ -17,37 +17,53 @@ import (
 	"github.com/yhyj/eniac/general"
 )
 
-// GetUpdateInfo 读取更新信息文件，参数 line 为0时读取全部行
+// GetUpdateInfo 读取更新信息记录文件
+//
+//   - 参数 line=0 时读取全部行
+//
+// 参数：
+//   - filePath: 更新信息记录文件路径
+//   - line: 读取指定行
+//
+// 返回：
+//   - 更新信息
+//   - 错误信息
 func GetUpdateInfo(filePath string, line int) ([]string, error) {
-	var textSlice []string
-	if !general.FileExist(filePath) {
+	if filePath != "" && general.FileExist(filePath) {
+		var textSlice []string
+		// 打开文件
+		text, err := os.Open(filePath)
+		if err != nil {
+			return nil, err
+		}
+		defer text.Close()
+
+		// 创建一个扫描器对象按行遍历
+		scanner := bufio.NewScanner(text)
+		// 行计数
+		count := 1
+		// 逐行读取，输出指定行
+		for scanner.Scan() {
+			if line == count {
+				textSlice = append(textSlice, scanner.Text())
+				break
+			}
+			textSlice = append(textSlice, scanner.Text())
+			count++
+		}
+		return textSlice, nil
+	} else if filePath == "" {
+		return nil, nil
+	} else {
 		return nil, fmt.Errorf("open %s: no such file", filePath)
 	}
-	// 打开文件
-	text, err := os.Open(filePath)
-	// 相当于Python的with语句
-	defer text.Close()
-	// 处理错误
-	if err != nil {
-		return nil, err
-	}
-	// 行计数
-	count := 1
-	// 创建一个扫描器对象按行遍历
-	scanner := bufio.NewScanner(text)
-	// 逐行读取，输出指定行
-	for scanner.Scan() {
-		if line == count {
-			textSlice = append(textSlice, scanner.Text())
-			break
-		}
-		textSlice = append(textSlice, scanner.Text())
-		count++
-	}
-	return textSlice, nil
 }
 
-// GetUpdateDaemonInfo 获取更新检测服务信息
+// GetUpdateDaemonInfo 获取更新检测服务的信息
+//
+// 返回：
+//   - 更新检测服务的信息
+//   - 错误信息
 func GetUpdateDaemonInfo() (map[string]interface{}, error) {
 	daemonInfo := make(map[string]interface{})
 	daemonArgs := []string{"is-active", "system-checkupdates.timer"}

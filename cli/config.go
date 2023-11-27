@@ -18,7 +18,13 @@ import (
 	"github.com/yhyj/eniac/general"
 )
 
-// isTomlFile 判断文件是不是 toml 文件
+// isTomlFile 检测文件是不是 toml 文件
+//
+// 参数：
+//   - filePath: 待检测文件路径
+//
+// 返回：
+//   - 是 toml 文件返回 true，否则返回 false
 func isTomlFile(filePath string) bool {
 	if strings.HasSuffix(filePath, ".toml") {
 		return true
@@ -27,6 +33,13 @@ func isTomlFile(filePath string) bool {
 }
 
 // GetTomlConfig 读取 toml 配置文件
+//
+// 参数：
+//   - filePath: toml 配置文件路径
+//
+// 返回：
+//   - toml 配置树
+//   - 错误信息
 func GetTomlConfig(filePath string) (*toml.Tree, error) {
 	if !general.FileExist(filePath) {
 		return nil, fmt.Errorf("Open %s: no such file or directory", filePath)
@@ -42,7 +55,24 @@ func GetTomlConfig(filePath string) (*toml.Tree, error) {
 }
 
 // WriteTomlConfig 写入 toml 配置文件
+//
+// 参数：
+//   - filePath: toml 配置文件路径
+//
+// 返回：
+//   - 写入的字节数
+//   - 错误信息
 func WriteTomlConfig(filePath string) (int64, error) {
+	// 根据系统不同决定某些参数
+	var (
+		genealogyUpdateRecordFile = "" // 定义不同平台下的可更新安装包记录文件
+	)
+	if general.Platform == "linux" {
+		genealogyUpdateRecordFile = "/tmp/system-checkupdates.log"
+	} else if general.Platform == "darwin" {
+		genealogyUpdateRecordFile = "/tmp/system-checkupdates.log"
+	} else if general.Platform == "windows" {
+	}
 	// 定义一个map[string]interface{}类型的变量并赋值
 	exampleConf := map[string]interface{}{
 		"main": map[string]interface{}{
@@ -136,7 +166,7 @@ func WriteTomlConfig(filePath string) (int64, error) {
 				"percent_unit": "%",
 			},
 			"update": map[string]interface{}{
-				"record_file": "/tmp/system-checkupdates.log",
+				"record_file": genealogyUpdateRecordFile,
 			},
 		},
 	}

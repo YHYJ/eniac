@@ -16,6 +16,13 @@ import (
 )
 
 // GetMemoryInfo 获取内存信息
+//
+// 参数：
+//   - dataUnit: 存储数据单位
+//   - percentUnit: 百分比数据单位
+//
+// 返回：
+//   - 内存信息
 func GetMemoryInfo(dataUnit string, percentUnit string) map[string]interface{} {
 	// 内存数据
 	memTotal, memTotalUnit := general.Human(float64(memData.Total), "B")
@@ -44,6 +51,12 @@ func GetMemoryInfo(dataUnit string, percentUnit string) map[string]interface{} {
 }
 
 // GetSwapInfo 获取交换分区信息
+//
+// 参数：
+//   - dataUnit: 存储数据单位
+//
+// 返回：
+//   - 交换分区信息
 func GetSwapInfo(dataUnit string) map[string]interface{} {
 	swapTotal, swapTotalUnit := general.Human(float64(memData.SwapTotal), "B")
 	swapFree, swapFreeUnit := general.Human(float64(memData.SwapFree), "B")

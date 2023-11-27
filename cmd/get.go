@@ -4,7 +4,7 @@ Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2023-04-20 10:53:10
 
-Description: 程序子命令'get'时执行
+Description: 由程序子命令 get 执行
 */
 
 package cmd
@@ -314,7 +314,7 @@ var getCmd = &cobra.Command{
 			}()
 			fmt.Printf(general.LineShownFormat, "······ CPU ······")
 
-			// 获取CPU配置项
+			// 获取 CPU 配置项
 			if genealogyCfg.Has("cpu.cache_unit") {
 				cpuCacheUnit = genealogyCfg.Get("cpu.cache_unit").(string)
 			} else {
@@ -459,7 +459,7 @@ var getCmd = &cobra.Command{
 			}()
 			fmt.Printf(general.LineShownFormat, "······ Memory ······")
 
-			// 获取Memory配置项
+			// 获取 Memory 配置项
 			if genealogyCfg.Has("memory.data_unit") {
 				memoryDataUnit = genealogyCfg.Get("memory.data_unit").(string)
 			} else {
@@ -545,7 +545,7 @@ var getCmd = &cobra.Command{
 			}()
 			fmt.Printf(general.LineShownFormat, "······ Swap ······")
 
-			// 获取Memory配置项
+			// 获取 Memory 配置项
 			if genealogyCfg.Has("memory.data_unit") {
 				memoryDataUnit = genealogyCfg.Get("memory.data_unit").(string)
 			} else {
@@ -1077,7 +1077,7 @@ var getCmd = &cobra.Command{
 				}
 			} else {
 				fmt.Printf(general.LineShownFormat, "······ Update ······")
-				// 获取update配置项
+				// 获取 update 配置项
 				if genealogyCfg.Has("update.record_file") {
 					updateRecordFile = genealogyCfg.Get("update.record_file").(string)
 				} else {
