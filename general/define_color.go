@@ -30,7 +30,7 @@ var availableColors = []int{
 	tablewriter.FgMagentaColor,
 	tablewriter.FgHiMagentaColor,
 	// 红
-	tablewriter.FgRedColor,
+	// tablewriter.FgRedColor,
 	tablewriter.FgHiRedColor,
 	// 白
 	tablewriter.FgWhiteColor,
@@ -40,20 +40,31 @@ var availableColors = []int{
 	tablewriter.FgHiYellowColor,
 }
 
-// GetColor 取一个随机颜色并从可选列表中移除
+// 上一次随机颜色的索引
+var previousColor int
+
+// GetColor 随机获取一个颜色
 //
 // 返回：
-//   - 颜色
+//   - 颜色代码
 func GetColor() int {
 	if len(availableColors) == 0 {
 		return tablewriter.FgWhiteColor
 	}
 
-	index := rand.Intn(len(availableColors))
+	// 随机取一个颜色
+	index := rand.Intn(len(availableColors) - 1)
+	// 如果 index == previousColor，则在 availableColors 长度范围内使 index + 1，超出长度范围则使 index - 1
+	if index == previousColor {
+		if index <= len(availableColors)-1 {
+			index++
+		} else {
+			index--
+		}
+	} else {
+		previousColor = index
+	}
 	color := availableColors[index]
-
-	// 从可选列表中移除已选中的颜色
-	availableColors = append(availableColors[:index], availableColors[index+1:]...)
 
 	return color
 }
