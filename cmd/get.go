@@ -38,7 +38,7 @@ var getCmd = &cobra.Command{
 		defaultMainCfg, _ := toml.TreeFromMap(map[string]interface{}{"main": map[string]string{}})
 		defaultGenealogyCfg, _ := toml.TreeFromMap(map[string]interface{}{"genealogy": map[string]string{}})
 		var (
-			color             bool       = true
+			colorful          bool       = true
 			cpuCacheUnit      string     = "KB"
 			memoryDataUnit    string     = "GB"
 			memoryPercentUnit string     = "%"
@@ -63,9 +63,9 @@ var getCmd = &cobra.Command{
 				fmt.Printf(general.InfoFormat, "Config file is missing 'main' configuration item, using default value")
 				return defaultMainCfg
 			}()
-			color = func() bool {
-				if mainCfg.Has("color") {
-					return mainCfg.Get("color").(bool)
+			colorful = func() bool {
+				if mainCfg.Has("colorful") {
+					return mainCfg.Get("colorful").(bool)
 				}
 				fmt.Printf(general.InfoFormat, "Config file is missing 'main.color' configuration item, using default value")
 				return true
@@ -111,10 +111,7 @@ var getCmd = &cobra.Command{
 		// 执行对应函数
 		if productFlag {
 			productPart := func() string {
-				if mainCfg.Has("parts.Product") {
-					return mainCfg.Get("parts.Product").(string)
-				}
-				return "Product"
+				return general.PartName["Product"][general.Language]
 			}()
 			fmt.Printf(general.LineShownFormat, "······ Product ······")
 
@@ -125,9 +122,7 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				if genealogyCfg.Has(item) {
-					item = genealogyCfg.Get(item).(string)
-				}
+				item = general.GenealogyName[item][general.Language]
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -141,7 +136,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			// 获取随机颜色
-			if color {
+			if colorful {
 				columnColor = general.GetColor()
 				headerColor = tablewriter.FgCyanColor
 			}
@@ -175,10 +170,7 @@ var getCmd = &cobra.Command{
 
 		if boardFlag {
 			boardPart := func() string {
-				if mainCfg.Has("parts.Board") {
-					return mainCfg.Get("parts.Board").(string)
-				}
-				return "Board"
+				return general.PartName["Board"][general.Language]
 			}()
 			fmt.Printf(general.LineShownFormat, "······ Board ······")
 
@@ -189,9 +181,7 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				if genealogyCfg.Has(item) {
-					item = genealogyCfg.Get(item).(string)
-				}
+				item = general.GenealogyName[item][general.Language]
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -205,7 +195,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			// 获取随机颜色
-			if color {
+			if colorful {
 				columnColor = general.GetColor()
 				headerColor = tablewriter.FgCyanColor
 			}
@@ -241,10 +231,7 @@ var getCmd = &cobra.Command{
 
 		if biosFlag {
 			biosPart := func() string {
-				if mainCfg.Has("parts.BIOS") {
-					return mainCfg.Get("parts.BIOS").(string)
-				}
-				return "BIOS"
+				return general.PartName["BIOS"][general.Language]
 			}()
 			fmt.Printf(general.LineShownFormat, "····· BIOS ······")
 
@@ -255,9 +242,7 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				if genealogyCfg.Has(item) {
-					item = genealogyCfg.Get(item).(string)
-				}
+				item = general.GenealogyName[item][general.Language]
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -271,7 +256,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			// 获取随机颜色
-			if color {
+			if colorful {
 				columnColor = general.GetColor()
 				headerColor = tablewriter.FgCyanColor
 			}
@@ -307,10 +292,7 @@ var getCmd = &cobra.Command{
 
 		if cpuFlag {
 			cpuPart := func() string {
-				if mainCfg.Has("parts.CPU") {
-					return mainCfg.Get("parts.CPU").(string)
-				}
-				return "CPU"
+				return general.PartName["CPU"][general.Language]
 			}()
 			fmt.Printf(general.LineShownFormat, "······ CPU ······")
 
@@ -328,9 +310,7 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				if genealogyCfg.Has(item) {
-					item = genealogyCfg.Get(item).(string)
-				}
+				item = general.GenealogyName[item][general.Language]
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -344,7 +324,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			// 获取随机颜色
-			if color {
+			if colorful {
 				columnColor = general.GetColor()
 				headerColor = tablewriter.FgCyanColor
 			}
@@ -384,10 +364,7 @@ var getCmd = &cobra.Command{
 
 		if gpuFlag {
 			gpuPart := func() string {
-				if mainCfg.Has("parts.GPU") {
-					return mainCfg.Get("parts.GPU").(string)
-				}
-				return "GPU"
+				return general.PartName["GPU"][general.Language]
 			}()
 			fmt.Printf(general.LineShownFormat, "······ GPU ······")
 
@@ -398,9 +375,7 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				if genealogyCfg.Has(item) {
-					item = genealogyCfg.Get(item).(string)
-				}
+				item = general.GenealogyName[item][general.Language]
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -414,7 +389,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			// 获取随机颜色
-			if color {
+			if colorful {
 				columnColor = general.GetColor()
 				headerColor = tablewriter.FgCyanColor
 			}
@@ -452,10 +427,7 @@ var getCmd = &cobra.Command{
 
 		if memoryFlag {
 			memoryPart := func() string {
-				if mainCfg.Has("parts.Memory") {
-					return mainCfg.Get("parts.Memory").(string)
-				}
-				return "Memory"
+				return general.PartName["Memory"][general.Language]
 			}()
 			fmt.Printf(general.LineShownFormat, "······ Memory ······")
 
@@ -478,9 +450,7 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				if genealogyCfg.Has(item) {
-					item = genealogyCfg.Get(item).(string)
-				}
+				item = general.GenealogyName[item][general.Language]
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -494,7 +464,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			// 获取随机颜色
-			if color {
+			if colorful {
 				columnColor = general.GetColor()
 				headerColor = tablewriter.FgCyanColor
 			}
@@ -538,10 +508,7 @@ var getCmd = &cobra.Command{
 
 		if swapFlag {
 			swapPart := func() string {
-				if mainCfg.Has("parts.Swap") {
-					return mainCfg.Get("parts.Swap").(string)
-				}
-				return "Swap"
+				return general.PartName["Swap"][general.Language]
 			}()
 			fmt.Printf(general.LineShownFormat, "······ Swap ······")
 
@@ -558,7 +525,7 @@ var getCmd = &cobra.Command{
 			table := tablewriter.NewWriter(os.Stdout) // 初始化表格
 
 			// 获取随机颜色
-			if color {
+			if colorful {
 				columnColor = general.GetColor()
 				headerColor = tablewriter.FgCyanColor
 			}
@@ -568,9 +535,7 @@ var getCmd = &cobra.Command{
 			if swapInfo["SwapDisabled"] == true {
 				items = []string{"SwapDisabled"}
 				for _, item := range items {
-					if genealogyCfg.Has(item) {
-						item = genealogyCfg.Get(item).(string)
-					}
+					item = general.GenealogyName[item][general.Language]
 					tableHeader = append(tableHeader, item)
 				}
 				table.SetHeader(tableHeader) // 设置表头
@@ -585,9 +550,7 @@ var getCmd = &cobra.Command{
 			} else {
 				items = []string{"SwapTotal", "SwapFree"}
 				for _, item := range items {
-					if genealogyCfg.Has(item) {
-						item = genealogyCfg.Get(item).(string)
-					}
+					item = general.GenealogyName[item][general.Language]
 					tableHeader = append(tableHeader, item)
 				}
 				table.SetHeader(tableHeader) // 设置表头
@@ -637,19 +600,14 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				if genealogyCfg.Has(item) {
-					item = genealogyCfg.Get(item).(string)
-				}
+				item = general.GenealogyName[item][general.Language]
 				tableHeader = append(tableHeader, item)
 			}
 
 			// 组装表数据
 			tableData := [][]string{}
 			diskPart := func() string {
-				if mainCfg.Has("parts.Disk") {
-					return mainCfg.Get("parts.Disk").(string)
-				}
-				return "Disk"
+				return general.PartName["Disk"][general.Language]
 			}()
 			for index := 1; index <= len(storageInfo); index++ {
 				outputInfo := []string{diskPart + "." + strconv.Itoa(index)}
@@ -661,7 +619,7 @@ var getCmd = &cobra.Command{
 			}
 
 			// 获取随机颜色
-			if color {
+			if colorful {
 				columnColor = general.GetColor()
 				headerColor = tablewriter.FgCyanColor
 			}
@@ -707,10 +665,7 @@ var getCmd = &cobra.Command{
 
 		if nicFlag {
 			nicPart := func() string {
-				if mainCfg.Has("parts.NIC") {
-					return mainCfg.Get("parts.NIC").(string)
-				}
-				return "NIC"
+				return general.PartName["NIC"][general.Language]
 			}()
 			fmt.Printf(general.LineShownFormat, "······ Nic ······")
 
@@ -721,9 +676,7 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				if genealogyCfg.Has(item) {
-					item = genealogyCfg.Get(item).(string)
-				}
+				item = general.GenealogyName[item][general.Language]
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -739,7 +692,7 @@ var getCmd = &cobra.Command{
 			}
 
 			// 获取随机颜色
-			if color {
+			if colorful {
 				columnColor = general.GetColor()
 				headerColor = tablewriter.FgCyanColor
 			}
@@ -785,10 +738,7 @@ var getCmd = &cobra.Command{
 
 		if osFlag {
 			osPart := func() string {
-				if mainCfg.Has("parts.OS") {
-					return mainCfg.Get("parts.OS").(string)
-				}
-				return "OS"
+				return general.PartName["OS"][general.Language]
 			}()
 			fmt.Printf(general.LineShownFormat, "······ OS ······")
 
@@ -799,9 +749,7 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				if genealogyCfg.Has(item) {
-					item = genealogyCfg.Get(item).(string)
-				}
+				item = general.GenealogyName[item][general.Language]
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -815,7 +763,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			// 获取随机颜色
-			if color {
+			if colorful {
 				columnColor = general.GetColor()
 				headerColor = tablewriter.FgCyanColor
 			}
@@ -857,10 +805,7 @@ var getCmd = &cobra.Command{
 
 		if loadFlag {
 			loadPart := func() string {
-				if mainCfg.Has("parts.Load") {
-					return mainCfg.Get("parts.Load").(string)
-				}
-				return "Load"
+				return general.PartName["Load"][general.Language]
 			}()
 			fmt.Printf(general.LineShownFormat, "······ Load ······")
 
@@ -871,9 +816,7 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				if genealogyCfg.Has(item) {
-					item = genealogyCfg.Get(item).(string)
-				}
+				item = general.GenealogyName[item][general.Language]
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -892,7 +835,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			// 获取随机颜色
-			if color {
+			if colorful {
 				columnColor = general.GetColor()
 				headerColor = tablewriter.FgCyanColor
 			}
@@ -930,10 +873,7 @@ var getCmd = &cobra.Command{
 
 		if timeFlag {
 			timePart := func() string {
-				if mainCfg.Has("parts.Time") {
-					return mainCfg.Get("parts.Time").(string)
-				}
-				return "Time"
+				return general.PartName["Time"][general.Language]
 			}()
 			fmt.Printf(general.LineShownFormat, "······ Time ······")
 
@@ -944,9 +884,7 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				if genealogyCfg.Has(item) {
-					item = genealogyCfg.Get(item).(string)
-				}
+				item = general.GenealogyName[item][general.Language]
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -960,7 +898,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			// 获取随机颜色
-			if color {
+			if colorful {
 				columnColor = general.GetColor()
 				headerColor = tablewriter.FgCyanColor
 			}
@@ -996,10 +934,7 @@ var getCmd = &cobra.Command{
 
 		if userFlag {
 			userPart := func() string {
-				if mainCfg.Has("parts.User") {
-					return mainCfg.Get("parts.User").(string)
-				}
-				return "User"
+				return general.PartName["User"][general.Language]
 			}()
 			fmt.Printf(general.LineShownFormat, "······ User ······")
 
@@ -1010,9 +945,7 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				if genealogyCfg.Has(item) {
-					item = genealogyCfg.Get(item).(string)
-				}
+				item = general.GenealogyName[item][general.Language]
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -1026,7 +959,7 @@ var getCmd = &cobra.Command{
 			tableData = append(tableData, outputInfo)
 
 			// 获取随机颜色
-			if color {
+			if colorful {
 				columnColor = general.GetColor()
 				headerColor = tablewriter.FgCyanColor
 			}
@@ -1085,16 +1018,16 @@ var getCmd = &cobra.Command{
 				}
 				textFormat := "\x1b[37;1m%v:\x1b[0m \x1b[37;1m%v\x1b[0m\n"
 				listFormat := "%8v: \x1b[37m%v\x1b[0m\n"
-				if color {
+				if colorful {
 					textFormat = "\x1b[30;1m%v:\x1b[0m \x1b[32;1m%v\x1b[0m\n"
 					listFormat = "%8v: \x1b[32m%v\x1b[0m\n"
 				}
 				// 输出更新状态监测
 				daemonInfo, _ := cli.GetUpdateDaemonInfo()
-				items = []string{"DaemonStatus"}
+				items = []string{"UpdateDaemonStatus"}
 				for _, item := range items {
-					if genealogyCfg.Has(item) {
-						fmt.Printf(textFormat, genealogyCfg.Get(item).(string), daemonInfo[item])
+					if general.GenealogyName[item][general.Language] == "" {
+						fmt.Printf(textFormat, general.GenealogyName[item][general.Language], daemonInfo[item])
 					} else {
 						fmt.Printf(textFormat, item, daemonInfo[item])
 					}
@@ -1105,8 +1038,8 @@ var getCmd = &cobra.Command{
 					fmt.Printf(general.ErrorBaseFormat, err)
 				} else {
 					key := "UpdateList"
-					if genealogyCfg.Has(key) {
-						fmt.Printf(textFormat, genealogyCfg.Get(key).(string), len(updateInfo))
+					if general.GenealogyName[key][general.Language] == "" {
+						fmt.Printf(textFormat, general.GenealogyName[key][general.Language], len(updateInfo))
 					} else {
 						fmt.Printf(textFormat, key, len(updateInfo))
 					}

@@ -67,11 +67,11 @@ func GetUpdateInfo(filePath string, line int) ([]string, error) {
 func GetUpdateDaemonInfo() (map[string]interface{}, error) {
 	daemonInfo := make(map[string]interface{})
 	daemonArgs := []string{"is-active", "system-checkupdates.timer"}
-	daemonStatus, err := general.RunCommandGetResult("systemctl", daemonArgs)
+	updateDaemonStatus, err := general.RunCommandGetResult("systemctl", daemonArgs)
 	if err != nil {
 		return nil, err
 	}
-	daemonInfo["DaemonStatus"] = daemonStatus
+	daemonInfo["UpdateDaemonStatus"] = updateDaemonStatus
 
 	return daemonInfo, nil
 }
