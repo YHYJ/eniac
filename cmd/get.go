@@ -111,7 +111,11 @@ var getCmd = &cobra.Command{
 		// 执行对应函数
 		if productFlag {
 			productPart := func() string {
-				return general.PartName["Product"][general.Language]
+				partName := general.PartName["Product"][general.Language]
+				if partName == "" {
+					partName = "Product"
+				}
+				return partName
 			}()
 			fmt.Printf(general.LineShownFormat, "······ Product ······")
 
@@ -122,7 +126,13 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				item = general.GenealogyName[item][general.Language]
+				item = func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -148,6 +158,7 @@ var getCmd = &cobra.Command{
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
 			table.SetRowLine(false)                                                                // 设置是否显示行边框
 			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
 				tablewriter.Colors{tablewriter.Bold, headerColor},
@@ -170,7 +181,11 @@ var getCmd = &cobra.Command{
 
 		if boardFlag {
 			boardPart := func() string {
-				return general.PartName["Board"][general.Language]
+				partName := general.PartName["Board"][general.Language]
+				if partName == "" {
+					partName = "Board"
+				}
+				return partName
 			}()
 			fmt.Printf(general.LineShownFormat, "······ Board ······")
 
@@ -181,7 +196,13 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				item = general.GenealogyName[item][general.Language]
+				item = func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -207,6 +228,7 @@ var getCmd = &cobra.Command{
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
 			table.SetRowLine(false)                                                                // 设置是否显示行边框
 			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
 				tablewriter.Colors{tablewriter.Bold, headerColor},
@@ -231,7 +253,11 @@ var getCmd = &cobra.Command{
 
 		if biosFlag {
 			biosPart := func() string {
-				return general.PartName["BIOS"][general.Language]
+				partName := general.PartName["BIOS"][general.Language]
+				if partName == "" {
+					partName = "BIOS"
+				}
+				return partName
 			}()
 			fmt.Printf(general.LineShownFormat, "····· BIOS ······")
 
@@ -242,7 +268,13 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				item = general.GenealogyName[item][general.Language]
+				item = func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -268,6 +300,7 @@ var getCmd = &cobra.Command{
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
 			table.SetRowLine(false)                                                                // 设置是否显示行边框
 			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
 				tablewriter.Colors{tablewriter.Bold, headerColor},
@@ -292,7 +325,11 @@ var getCmd = &cobra.Command{
 
 		if cpuFlag {
 			cpuPart := func() string {
-				return general.PartName["CPU"][general.Language]
+				partName := general.PartName["CPU"][general.Language]
+				if partName == "" {
+					partName = "CPU"
+				}
+				return partName
 			}()
 			fmt.Printf(general.LineShownFormat, "······ CPU ······")
 
@@ -310,7 +347,13 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				item = general.GenealogyName[item][general.Language]
+				item = func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -336,6 +379,7 @@ var getCmd = &cobra.Command{
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
 			table.SetRowLine(false)                                                                // 设置是否显示行边框
 			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
 				tablewriter.Colors{tablewriter.Bold, headerColor},
@@ -364,7 +408,11 @@ var getCmd = &cobra.Command{
 
 		if gpuFlag {
 			gpuPart := func() string {
-				return general.PartName["GPU"][general.Language]
+				partName := general.PartName["GPU"][general.Language]
+				if partName == "" {
+					partName = "GPU"
+				}
+				return partName
 			}()
 			fmt.Printf(general.LineShownFormat, "······ GPU ······")
 
@@ -375,7 +423,13 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				item = general.GenealogyName[item][general.Language]
+				item = func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -401,6 +455,7 @@ var getCmd = &cobra.Command{
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
 			table.SetRowLine(false)                                                                // 设置是否显示行边框
 			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
 				tablewriter.Colors{tablewriter.Bold, headerColor},
@@ -427,7 +482,11 @@ var getCmd = &cobra.Command{
 
 		if memoryFlag {
 			memoryPart := func() string {
-				return general.PartName["Memory"][general.Language]
+				partName := general.PartName["Memory"][general.Language]
+				if partName == "" {
+					partName = "Memory"
+				}
+				return partName
 			}()
 			fmt.Printf(general.LineShownFormat, "······ Memory ······")
 
@@ -450,7 +509,13 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				item = general.GenealogyName[item][general.Language]
+				item = func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -476,6 +541,7 @@ var getCmd = &cobra.Command{
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
 			table.SetRowLine(false)                                                                // 设置是否显示行边框
 			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
 				tablewriter.Colors{tablewriter.Bold, headerColor},
@@ -508,7 +574,11 @@ var getCmd = &cobra.Command{
 
 		if swapFlag {
 			swapPart := func() string {
-				return general.PartName["Swap"][general.Language]
+				partName := general.PartName["Swap"][general.Language]
+				if partName == "" {
+					partName = "Swap"
+				}
+				return partName
 			}()
 			fmt.Printf(general.LineShownFormat, "······ Swap ······")
 
@@ -535,11 +605,18 @@ var getCmd = &cobra.Command{
 			if swapInfo["SwapDisabled"] == true {
 				items = []string{"SwapDisabled"}
 				for _, item := range items {
-					item = general.GenealogyName[item][general.Language]
+					item = func() string {
+						itemName := general.GenealogyName[item][general.Language]
+						if itemName == "" {
+							itemName = item
+						}
+						return itemName
+					}()
 					tableHeader = append(tableHeader, item)
 				}
-				table.SetHeader(tableHeader) // 设置表头
-				table.SetHeaderColor(        // 设置表头颜色
+				table.SetHeader(tableHeader)      // 设置表头
+				table.SetAutoFormatHeaders(false) // 设置是否自动格式化表头
+				table.SetHeaderColor(             // 设置表头颜色
 					tablewriter.Colors{tablewriter.BgHiBlackColor},
 					tablewriter.Colors{tablewriter.Bold, headerColor},
 				)
@@ -550,11 +627,18 @@ var getCmd = &cobra.Command{
 			} else {
 				items = []string{"SwapTotal", "SwapFree"}
 				for _, item := range items {
-					item = general.GenealogyName[item][general.Language]
+					item = func() string {
+						itemName := general.GenealogyName[item][general.Language]
+						if itemName == "" {
+							itemName = item
+						}
+						return itemName
+					}()
 					tableHeader = append(tableHeader, item)
 				}
-				table.SetHeader(tableHeader) // 设置表头
-				table.SetHeaderColor(        // 设置表头颜色
+				table.SetHeader(tableHeader)      // 设置表头
+				table.SetAutoFormatHeaders(false) // 设置是否自动格式化表头
+				table.SetHeaderColor(             // 设置表头颜色
 					tablewriter.Colors{tablewriter.BgHiBlackColor},
 					tablewriter.Colors{tablewriter.Bold, headerColor},
 					tablewriter.Colors{tablewriter.Bold, headerColor},
@@ -600,14 +684,24 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				item = general.GenealogyName[item][general.Language]
+				item = func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
 				tableHeader = append(tableHeader, item)
 			}
 
 			// 组装表数据
 			tableData := [][]string{}
 			diskPart := func() string {
-				return general.PartName["Disk"][general.Language]
+				partName := general.PartName["Disk"][general.Language]
+				if partName == "" {
+					partName = "Disk"
+				}
+				return partName
 			}()
 			for index := 1; index <= len(storageInfo); index++ {
 				outputInfo := []string{diskPart + "." + strconv.Itoa(index)}
@@ -631,6 +725,7 @@ var getCmd = &cobra.Command{
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
 			table.SetRowLine(false)                                                                // 设置是否显示行边框
 			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
 				tablewriter.Colors{tablewriter.Bold, headerColor},
@@ -665,7 +760,11 @@ var getCmd = &cobra.Command{
 
 		if nicFlag {
 			nicPart := func() string {
-				return general.PartName["NIC"][general.Language]
+				partName := general.PartName["NIC"][general.Language]
+				if partName == "" {
+					partName = "NIC"
+				}
+				return partName
 			}()
 			fmt.Printf(general.LineShownFormat, "······ Nic ······")
 
@@ -676,7 +775,13 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				item = general.GenealogyName[item][general.Language]
+				item = func() string {
+					itemNname := general.GenealogyName[item][general.Language]
+					if itemNname == "" {
+						itemNname = item
+					}
+					return itemNname
+				}()
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -704,6 +809,7 @@ var getCmd = &cobra.Command{
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
 			table.SetRowLine(false)                                                                // 设置是否显示行边框
 			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
 				tablewriter.Colors{tablewriter.Bold, headerColor},
@@ -738,7 +844,11 @@ var getCmd = &cobra.Command{
 
 		if osFlag {
 			osPart := func() string {
-				return general.PartName["OS"][general.Language]
+				partNname := general.PartName["OS"][general.Language]
+				if partNname == "" {
+					partNname = "OS"
+				}
+				return partNname
 			}()
 			fmt.Printf(general.LineShownFormat, "······ OS ······")
 
@@ -749,7 +859,13 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				item = general.GenealogyName[item][general.Language]
+				item = func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -775,6 +891,7 @@ var getCmd = &cobra.Command{
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
 			table.SetRowLine(false)                                                                // 设置是否显示行边框
 			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
 				tablewriter.Colors{tablewriter.Bold, headerColor},
@@ -805,7 +922,11 @@ var getCmd = &cobra.Command{
 
 		if loadFlag {
 			loadPart := func() string {
-				return general.PartName["Load"][general.Language]
+				partName := general.PartName["Load"][general.Language]
+				if partName == "" {
+					partName = "Load"
+				}
+				return partName
 			}()
 			fmt.Printf(general.LineShownFormat, "······ Load ······")
 
@@ -816,7 +937,13 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				item = general.GenealogyName[item][general.Language]
+				item = func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -847,6 +974,7 @@ var getCmd = &cobra.Command{
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
 			table.SetRowLine(false)                                                                // 设置是否显示行边框
 			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
 				tablewriter.Colors{tablewriter.Bold, headerColor},
@@ -873,7 +1001,11 @@ var getCmd = &cobra.Command{
 
 		if timeFlag {
 			timePart := func() string {
-				return general.PartName["Time"][general.Language]
+				partName := general.PartName["Time"][general.Language]
+				if partName == "" {
+					partName = "Time"
+				}
+				return partName
 			}()
 			fmt.Printf(general.LineShownFormat, "······ Time ······")
 
@@ -884,7 +1016,13 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				item = general.GenealogyName[item][general.Language]
+				item = func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -910,6 +1048,7 @@ var getCmd = &cobra.Command{
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
 			table.SetRowLine(false)                                                                // 设置是否显示行边框
 			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
 				tablewriter.Colors{tablewriter.Bold, headerColor},
@@ -934,7 +1073,11 @@ var getCmd = &cobra.Command{
 
 		if userFlag {
 			userPart := func() string {
-				return general.PartName["User"][general.Language]
+				partName := general.PartName["User"][general.Language]
+				if partName == "" {
+					partName = "User"
+				}
+				return partName
 			}()
 			fmt.Printf(general.LineShownFormat, "······ User ······")
 
@@ -945,7 +1088,13 @@ var getCmd = &cobra.Command{
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				item = general.GenealogyName[item][general.Language]
+				item = func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
 				tableHeader = append(tableHeader, item)
 			}
 
@@ -971,6 +1120,7 @@ var getCmd = &cobra.Command{
 			table.SetAutoWrapText(false)                                                           // 设置是否自动换行
 			table.SetRowLine(false)                                                                // 设置是否显示行边框
 			table.SetHeader(tableHeader)                                                           // 设置表头
+			table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
 			table.SetHeaderColor(                                                                  // 设置表头颜色
 				tablewriter.Colors{tablewriter.BgHiBlackColor},
 				tablewriter.Colors{tablewriter.Bold, headerColor},
@@ -1026,8 +1176,9 @@ var getCmd = &cobra.Command{
 				daemonInfo, _ := cli.GetUpdateDaemonInfo()
 				items = []string{"UpdateDaemonStatus"}
 				for _, item := range items {
-					if general.GenealogyName[item][general.Language] == "" {
-						fmt.Printf(textFormat, general.GenealogyName[item][general.Language], daemonInfo[item])
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName != "" {
+						fmt.Printf(textFormat, itemName, daemonInfo[item])
 					} else {
 						fmt.Printf(textFormat, item, daemonInfo[item])
 					}
@@ -1037,11 +1188,12 @@ var getCmd = &cobra.Command{
 				if err != nil {
 					fmt.Printf(general.ErrorBaseFormat, err)
 				} else {
-					key := "UpdateList"
-					if general.GenealogyName[key][general.Language] == "" {
-						fmt.Printf(textFormat, general.GenealogyName[key][general.Language], len(updateInfo))
+					item := "UpdateList"
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName != "" {
+						fmt.Printf(textFormat, itemName, len(updateInfo))
 					} else {
-						fmt.Printf(textFormat, key, len(updateInfo))
+						fmt.Printf(textFormat, item, len(updateInfo))
 					}
 					for num, info := range updateInfo {
 						fmt.Printf(listFormat, num+1, info)

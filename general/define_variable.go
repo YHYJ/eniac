@@ -101,10 +101,10 @@ var GenealogyName = map[string]map[string]string{
 	"Kernel":             {"zh": "内核版本", "en": "Kernel"},
 	"Platform":           {"zh": "系统类型", "en": "Platform"},
 	"Hostname":           {"zh": "主机名称", "en": "Hostname"},
-	"TimeZone":           {"zh": "时区", "en": "TimeZone"},
-	"Load1":              {"zh": "1分钟负载", "en": "Load average (1 min)"},
-	"Load5":              {"zh": "5分钟负载", "en": "Load average (5 min)"},
-	"Load15":             {"zh": "15分钟负载", "en": "Load average (15 min)"},
+	"TimeZone":           {"zh": "时区", "en": "Time zone"},
+	"Load1":              {"zh": "1分钟平均负载", "en": "Load average (1 min)"},
+	"Load5":              {"zh": "5分钟平均负载", "en": "Load average (5 min)"},
+	"Load15":             {"zh": "15分钟平均负载", "en": "Load average (15 min)"},
 	"NicName":            {"zh": "网卡名称", "en": "Name"},
 	"NicPCIAddress":      {"zh": "PCI 地址", "en": "PCI Address"},
 	"NicMacAddress":      {"zh": "MAC 地址", "en": "MAC Address"},
@@ -143,7 +143,7 @@ var GenealogyName = map[string]map[string]string{
 	"UserGid":            {"zh": "用户组标识", "en": "GID"},
 	"UserHomeDir":        {"zh": "用户主目录", "en": "Home Dir"},
 	"UpdateList":         {"zh": "更新列表", "en": "Update List"},
-	"UpdateDaemonStatus": {"zh": "更新服务状态", "en": "Update Daemon Status"},
+	"UpdateDaemonStatus": {"zh": "更新服务", "en": "Update Daemon"},
 }
 
 // ---------- 环境变量
