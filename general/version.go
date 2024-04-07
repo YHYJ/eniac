@@ -4,7 +4,7 @@ Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2023-04-20 09:50:55
 
-Description: 子命令`version`功能函数
+Description: 版本信息
 */
 
 package general

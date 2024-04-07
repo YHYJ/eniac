@@ -4,7 +4,7 @@ Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2023-11-20 10:22:15
 
-Description:
+Description: 关于输出的 Table 的颜色
 */
 
 package general

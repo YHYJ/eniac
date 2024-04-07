@@ -4,7 +4,7 @@ Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2023-04-20 12:45:37
 
-Description: 数据转换（包括单位和格式）
+Description: 单位和格式数据转换
 */
 
 package general

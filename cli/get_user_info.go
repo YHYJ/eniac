@@ -4,7 +4,7 @@ Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2023-04-20 10:37:57
 
-Description: 获取用户信息
+Description: 子命令 'get' 的实现，获取用户信息
 */
 
 package cli

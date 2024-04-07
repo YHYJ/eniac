@@ -4,7 +4,7 @@ Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2023-04-20 10:53:10
 
-Description: 由程序子命令 get 执行
+Description: 执行子命令 'get'
 */
 
 package cmd
@@ -22,6 +22,7 @@ import (
 	"github.com/zcalusic/sysinfo"
 )
 
+// getCmd represents the get command
 var getCmd = &cobra.Command{
 	Use:   "get",
 	Short: "Get system information",

@@ -4,7 +4,7 @@ Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2023-09-28 12:44:03
 
-Description:
+Description: 子命令 'git' 的实现（集合体）
 */
 
 package cli
