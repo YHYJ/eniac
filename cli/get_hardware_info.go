@@ -16,6 +16,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/gookit/color"
 	"github.com/yhyj/eniac/general"
 )
 
@@ -116,7 +117,7 @@ func GetGPUInfo() map[string]interface{} {
 	// 解析 JSON
 	var gpuDataJ2S GPUDataJ2S
 	if err := json.Unmarshal([]byte(gpuDataJson), &gpuDataJ2S); err != nil {
-		fmt.Println("Error:", err)
+		color.Error.Println(err)
 	}
 
 	gpuInfo := make(map[string]interface{})
@@ -151,7 +152,7 @@ func GetNicInfo() map[string]interface{} {
 	// 解析 JSON
 	var networkDataJ2S map[string]NetworkDataJ2S
 	if err := json.Unmarshal([]byte(networkDataJson), &networkDataJ2S); err != nil {
-		fmt.Println("Error:", err)
+		color.Error.Println(err)
 	}
 
 	// 访问解析后的数据

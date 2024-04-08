@@ -14,6 +14,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/gookit/color"
 	"github.com/olekukonko/tablewriter"
 	"github.com/pelletier/go-toml"
 	"github.com/spf13/cobra"
@@ -32,7 +33,7 @@ var getCmd = &cobra.Command{
 		cfgFile, _ := cmd.Flags().GetString("config")
 		confTree, err := cli.GetTomlConfig(cfgFile)
 		if err != nil {
-			fmt.Printf(general.Info2PFormat, err, ", use default configuration")
+			color.Error.Println(err, ", use default configuration")
 		}
 
 		// 设置配置项默认值
@@ -54,25 +55,25 @@ var getCmd = &cobra.Command{
 				if confTree.Has("genealogy") {
 					return confTree.Get("genealogy").(*toml.Tree)
 				}
-				fmt.Printf(general.InfoFormat, "Config file is missing 'genealogy' configuration item, using default value")
+				color.Error.Println("Config file is missing 'genealogy' item, using default value")
 				return defaultGenealogyCfg
 			}()
 			mainCfg = func() *toml.Tree {
 				if confTree.Has("main") {
 					return confTree.Get("main").(*toml.Tree)
 				}
-				fmt.Printf(general.InfoFormat, "Config file is missing 'main' configuration item, using default value")
+				color.Error.Println("Config file is missing 'main' item, using default value")
 				return defaultMainCfg
 			}()
 			colorful = func() bool {
 				if mainCfg.Has("colorful") {
 					return mainCfg.Get("colorful").(bool)
 				}
-				fmt.Printf(general.InfoFormat, "Config file is missing 'main.color' configuration item, using default value")
+				color.Error.Println("Config file is missing 'main.color' item, using default value")
 				return true
 			}()
 		} else {
-			fmt.Printf(general.InfoFormat, "Config file is empty, using default value")
+			color.Error.Println("Config file is empty, using default value")
 		}
 
 		// 采集系统信息（集中采集一次后分配到不同的参数）
@@ -118,7 +119,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			fmt.Printf(general.LineShownFormat, "······ Product ······")
+			color.Printf("%s\n", general.FgGray("······ Product ······"))
 
 			// 获取数据
 			productInfo := cli.GetProductInfo(sysInfo)
@@ -188,7 +189,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			fmt.Printf(general.LineShownFormat, "······ Board ······")
+			color.Printf("%s\n", general.FgGray("······ Board ······"))
 
 			// 获取数据
 			boardInfo := cli.GetBoardInfo(sysInfo)
@@ -260,7 +261,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			fmt.Printf(general.LineShownFormat, "····· BIOS ······")
+			color.Printf("%s\n", general.FgGray("······ BIOS ······"))
 
 			// 获取数据
 			biosInfo := cli.GetBIOSInfo(sysInfo)
@@ -332,13 +333,13 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			fmt.Printf(general.LineShownFormat, "······ CPU ······")
+			color.Printf("%s\n", general.FgGray("······ CPU ······"))
 
 			// 获取 CPU 配置项
 			if genealogyCfg.Has("cpu.cache_unit") {
 				cpuCacheUnit = genealogyCfg.Get("cpu.cache_unit").(string)
 			} else {
-				fmt.Printf(general.InfoFormat, "Config file is missing 'cpu.cache_unit' configuration item, using default value")
+				color.Error.Println("Config file is missing 'cpu.cache_unit' item, using default value")
 			}
 
 			// 获取数据
@@ -415,7 +416,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			fmt.Printf(general.LineShownFormat, "······ GPU ······")
+			color.Printf("%s\n", general.FgGray("······ GPU ······"))
 
 			// 获取数据
 			gpuInfo := cli.GetGPUInfo()
@@ -489,18 +490,18 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			fmt.Printf(general.LineShownFormat, "······ Memory ······")
+			color.Printf("%s\n", general.FgGray("······ Memory ······"))
 
 			// 获取 Memory 配置项
 			if genealogyCfg.Has("memory.data_unit") {
 				memoryDataUnit = genealogyCfg.Get("memory.data_unit").(string)
 			} else {
-				fmt.Printf(general.InfoFormat, "Config file is missing 'memory.data_unit' configuration item, using default value")
+				color.Error.Println("Config file is missing 'memory.data_unit' item, using default value")
 			}
 			if genealogyCfg.Has("memory.percent_unit") {
 				memoryPercentUnit = genealogyCfg.Get("memory.percent_unit").(string)
 			} else {
-				fmt.Printf(general.InfoFormat, "Config file is missing 'memory.percent_unit' configuration item, using default value")
+				color.Error.Println("Config file is missing 'memory.percent_unit' item, using default value")
 			}
 
 			// 获取数据
@@ -581,13 +582,13 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			fmt.Printf(general.LineShownFormat, "······ Swap ······")
+			color.Printf("%s\n", general.FgGray("······ Swap ······"))
 
 			// 获取 Memory 配置项
 			if genealogyCfg.Has("memory.data_unit") {
 				memoryDataUnit = genealogyCfg.Get("memory.data_unit").(string)
 			} else {
-				fmt.Printf(general.InfoFormat, "Config file is missing 'memory.data_unit' configuration item, using default value")
+				color.Error.Println("Config file is missing 'memory.data_unit' item, using default value")
 			}
 
 			// 获取数据
@@ -676,7 +677,7 @@ var getCmd = &cobra.Command{
 		}
 
 		if storageFlag {
-			fmt.Printf(general.LineShownFormat, "······ Storage ······")
+			color.Printf("%s\n", general.FgGray("······ Storage ······"))
 
 			// 获取数据
 			storageInfo := cli.GetStorageInfo()
@@ -767,7 +768,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			fmt.Printf(general.LineShownFormat, "······ Nic ······")
+			color.Printf("%s\n", general.FgGray("······ Nic ······"))
 
 			// 获取数据
 			nicInfo := cli.GetNicInfo()
@@ -851,7 +852,7 @@ var getCmd = &cobra.Command{
 				}
 				return partNname
 			}()
-			fmt.Printf(general.LineShownFormat, "······ OS ······")
+			color.Printf("%s\n", general.FgGray("······ OS ······"))
 
 			// 获取数据
 			osInfo := cli.GetOSInfo(sysInfo)
@@ -929,7 +930,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			fmt.Printf(general.LineShownFormat, "······ Load ······")
+			color.Printf("%s\n", general.FgGray("······ Load ······"))
 
 			// 获取数据
 			loadInfo := cli.GetLoadInfo()
@@ -1008,7 +1009,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			fmt.Printf(general.LineShownFormat, "······ Time ······")
+			color.Printf("%s\n", general.FgGray("······ Time ······"))
 
 			// 获取数据
 			timeInfo, _ := cli.GetTimeInfo()
@@ -1080,7 +1081,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			fmt.Printf(general.LineShownFormat, "······ User ······")
+			color.Printf("%s\n", general.FgGray("······ User ······"))
 
 			// 获取数据
 			userInfo := cli.GetUserInfo()
@@ -1149,56 +1150,51 @@ var getCmd = &cobra.Command{
 		}
 
 		if updateFlag {
+			updateInfo, err := cli.GetUpdateInfo(updateRecordFile, 0)
+			if err != nil {
+				color.Error.Println(err)
+			}
 			if onlyFlag {
-				// 仅输出可更新包信息，专为系统更新检测插件服务
-				updateInfo, err := cli.GetUpdateInfo(updateRecordFile, 0)
-				if err != nil {
-					fmt.Printf(general.ErrorBaseFormat, err)
-				} else {
-					for num, info := range updateInfo {
-						fmt.Printf("%v: %v\n", num+1, info)
-					}
+				// 仅输出可更新包信息，专为第三方系统更新检测插件服务
+				for num, info := range updateInfo {
+					color.Println("%v: %v\n", num+1, info)
 				}
 			} else {
-				fmt.Printf(general.LineShownFormat, "······ Update ······")
+				color.Printf("%s\n", general.FgGray("······ Update ······"))
 				// 获取 update 配置项
 				if genealogyCfg.Has("update.record_file") {
 					updateRecordFile = genealogyCfg.Get("update.record_file").(string)
 				} else {
-					fmt.Printf(general.InfoFormat, "Config file is missing 'update.record_file' configuration item, using default value")
+					color.Error.Println("Config file is missing 'update.record_file' item, using default value")
 				}
-				textFormat := "\x1b[37;1m%v:\x1b[0m \x1b[37;1m%v\x1b[0m\n"
-				listFormat := "%8v: \x1b[37m%v\x1b[0m\n"
+				itemColor := general.LightText
+				itemInfoColor := general.FgWhite
+				listColor := general.FgWhite
 				if colorful {
-					textFormat = "\x1b[30;1m%v:\x1b[0m \x1b[32;1m%v\x1b[0m\n"
-					listFormat = "%8v: \x1b[32m%v\x1b[0m\n"
+					itemColor = general.PrimaryText
+					itemInfoColor = general.FgGreen
+					listColor = general.FgGreen
 				}
-				// 输出更新状态监测
+				// 更新服务状态监测
 				daemonInfo, _ := cli.GetUpdateDaemonInfo()
-				items = []string{"UpdateDaemonStatus"}
-				for _, item := range items {
-					itemName := general.GenealogyName[item][general.Language]
-					if itemName != "" {
-						fmt.Printf(textFormat, itemName, daemonInfo[item])
-					} else {
-						fmt.Printf(textFormat, item, daemonInfo[item])
-					}
-				}
-				// 输出具体更新信息
-				updateInfo, err := cli.GetUpdateInfo(updateRecordFile, 0)
-				if err != nil {
-					fmt.Printf(general.ErrorBaseFormat, err)
+				daemonItem := "UpdateDaemonStatus"
+				daemonItemName := general.GenealogyName[daemonItem][general.Language]
+				if daemonItemName != "" {
+					color.Printf("%v: %v\n", itemColor(daemonItemName), itemInfoColor(daemonInfo[daemonItem]))
 				} else {
-					item := "UpdateList"
-					itemName := general.GenealogyName[item][general.Language]
-					if itemName != "" {
-						fmt.Printf(textFormat, itemName, len(updateInfo))
-					} else {
-						fmt.Printf(textFormat, item, len(updateInfo))
-					}
-					for num, info := range updateInfo {
-						fmt.Printf(listFormat, num+1, info)
-					}
+					color.Printf("%v: %v\n", itemColor(daemonItem), itemInfoColor(daemonInfo[daemonItem]))
+				}
+				// 更新列表计数
+				packageItem := "UpdateList"
+				packageItemName := general.GenealogyName[packageItem][general.Language]
+				if packageItemName != "" {
+					color.Printf("%v: %v\n", itemColor(packageItemName), itemInfoColor(len(updateInfo)))
+				} else {
+					color.Printf("%v: %v\n", itemColor(packageItem), itemInfoColor(len(updateInfo)))
+				}
+				// 输出可更新包信息
+				for num, info := range updateInfo {
+					color.Printf("%8v: %v\n", num+1, listColor(info))
 				}
 			}
 		}
