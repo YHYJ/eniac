@@ -13,6 +13,7 @@ import (
 	"github.com/gookit/color"
 	"github.com/spf13/cobra"
 	"github.com/yhyj/eniac/cli"
+	"github.com/yhyj/eniac/general"
 )
 
 // getCmd represents the get command
@@ -61,7 +62,7 @@ var getCmd = &cobra.Command{
 		}
 
 		// 读取配置文件
-		confTree, err := cli.GetTomlConfig(cfgFile)
+		confTree, err := general.GetTomlConfig(cfgFile)
 		if err != nil {
 			color.Error.Println(err, ", use default configuration")
 		}

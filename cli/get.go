@@ -26,7 +26,7 @@ import (
 //   - flags: 系统信息各部分的开关
 func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 	// 获取配置项
-	config, err := LoadConfigToStruct(configTree)
+	config, err := general.LoadConfigToStruct(configTree)
 	if err != nil {
 		color.Error.Println(err)
 		return
