@@ -64,7 +64,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		color.Printf("%s\n", general.FgGrayText("······ Product ······"))
 
 		// 获取数据
-		productInfo := GetProductInfo(sysInfo)
+		productInfo := general.GetProductInfo(sysInfo)
 		items = []string{"ProductVendor", "ProductName"}
 
 		// 组装表头
@@ -134,7 +134,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		color.Printf("%s\n", general.FgGrayText("······ Board ······"))
 
 		// 获取数据
-		boardInfo := GetBoardInfo(sysInfo)
+		boardInfo := general.GetBoardInfo(sysInfo)
 		items = []string{"BoardVendor", "BoardName", "BoardVersion"}
 
 		// 组装表头
@@ -206,7 +206,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		color.Printf("%s\n", general.FgGrayText("······ BIOS ······"))
 
 		// 获取数据
-		biosInfo := GetBIOSInfo(sysInfo)
+		biosInfo := general.GetBIOSInfo(sysInfo)
 		items = []string{"BIOSVendor", "BIOSVersion", "BIOSDate"}
 
 		// 组装表头
@@ -285,7 +285,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		}
 
 		// 获取数据
-		cpuInfo := GetCPUInfo(sysInfo, cpuCacheUnit)
+		cpuInfo := general.GetCPUInfo(sysInfo, cpuCacheUnit)
 		items = []string{"CPUModel", "CPUNumber", "CPUCores", "CPUThreads", "CPUCache"}
 
 		// 组装表头
@@ -361,7 +361,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		color.Printf("%s\n", general.FgGrayText("······ GPU ······"))
 
 		// 获取数据
-		gpuInfo := GetGPUInfo()
+		gpuInfo := general.GetGPUInfo()
 		items = []string{"GPUAddress", "GPUDriver", "GPUProduct", "GPUVendor"}
 
 		// 组装表头
@@ -447,7 +447,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		}
 
 		// 获取数据
-		memoryInfo := GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
+		memoryInfo := general.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
 		items = []string{"MemoryUsedPercent", "MemoryTotal", "MemoryUsed", "MemoryAvail", "MemoryFree", "MemoryBuffCache", "MemoryShared"}
 
 		// 组装表头
@@ -534,7 +534,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		}
 
 		// 获取数据
-		swapInfo := GetSwapInfo(memoryDataUnit)
+		swapInfo := general.GetSwapInfo(memoryDataUnit)
 
 		table := tablewriter.NewWriter(os.Stdout) // 初始化表格
 
@@ -622,7 +622,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		color.Printf("%s\n", general.FgGrayText("······ Storage ······"))
 
 		// 获取数据
-		storageInfo := GetStorageInfo()
+		storageInfo := general.GetStorageInfo()
 		items = []string{"StorageName", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
 
 		// 组装表头
@@ -713,7 +713,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		color.Printf("%s\n", general.FgGrayText("······ Nic ······"))
 
 		// 获取数据
-		nicInfo := GetNicInfo()
+		nicInfo := general.GetNicInfo()
 		items = []string{"NicName", "NicMacAddress", "NicDriver", "NicVendor", "NicProduct", "NicPCIAddress", "NicSpeed", "NicDuplex"}
 
 		// 组装表头
@@ -797,7 +797,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		color.Printf("%s\n", general.FgGrayText("······ OS ······"))
 
 		// 获取数据
-		osInfo := GetOSInfo(sysInfo)
+		osInfo := general.GetOSInfo(sysInfo)
 		items = []string{"OS", "Kernel", "Platform", "Arch", "TimeZone", "Hostname"}
 
 		// 组装表头
@@ -875,7 +875,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		color.Printf("%s\n", general.FgGrayText("······ Load ······"))
 
 		// 获取数据
-		loadInfo := GetLoadInfo()
+		loadInfo := general.GetLoadInfo()
 		items = []string{"Load1", "Load5", "Load15", "Process"}
 
 		// 组装表头
@@ -954,7 +954,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		color.Printf("%s\n", general.FgGrayText("······ Time ······"))
 
 		// 获取数据
-		timeInfo, _ := GetTimeInfo()
+		timeInfo, _ := general.GetTimeInfo()
 		items = []string{"StartTime", "Uptime", "BootTime"}
 
 		// 组装表头
@@ -1026,7 +1026,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		color.Printf("%s\n", general.FgGrayText("······ User ······"))
 
 		// 获取数据
-		userInfo := GetUserInfo()
+		userInfo := general.GetUserInfo()
 		items = []string{"UserName", "User", "UserUid", "UserGid", "UserHomeDir"}
 
 		// 组装表头
@@ -1092,7 +1092,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 	}
 
 	if flags["updateFlag"] {
-		updateInfo, err := GetUpdateInfo(updateRecordFile, 0)
+		updateInfo, err := general.GetUpdateInfo(updateRecordFile, 0)
 		if err != nil {
 			color.Error.Println(err)
 		}
@@ -1118,7 +1118,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 				listColor = general.FgGreenText
 			}
 			// 更新服务状态监测
-			daemonInfo, _ := GetUpdateDaemonInfo()
+			daemonInfo, _ := general.GetUpdateDaemonInfo()
 			daemonItem := "UpdateDaemonStatus"
 			daemonItemName := general.GenealogyName[daemonItem][general.Language]
 			if daemonItemName != "" {
