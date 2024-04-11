@@ -119,7 +119,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			color.Printf("%s\n", general.FgGray("······ Product ······"))
+			color.Printf("%s\n", general.FgGrayText("······ Product ······"))
 
 			// 获取数据
 			productInfo := cli.GetProductInfo(sysInfo)
@@ -189,7 +189,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			color.Printf("%s\n", general.FgGray("······ Board ······"))
+			color.Printf("%s\n", general.FgGrayText("······ Board ······"))
 
 			// 获取数据
 			boardInfo := cli.GetBoardInfo(sysInfo)
@@ -261,7 +261,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			color.Printf("%s\n", general.FgGray("······ BIOS ······"))
+			color.Printf("%s\n", general.FgGrayText("······ BIOS ······"))
 
 			// 获取数据
 			biosInfo := cli.GetBIOSInfo(sysInfo)
@@ -333,7 +333,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			color.Printf("%s\n", general.FgGray("······ CPU ······"))
+			color.Printf("%s\n", general.FgGrayText("······ CPU ······"))
 
 			// 获取 CPU 配置项
 			if genealogyCfg.Has("cpu.cache_unit") {
@@ -416,7 +416,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			color.Printf("%s\n", general.FgGray("······ GPU ······"))
+			color.Printf("%s\n", general.FgGrayText("······ GPU ······"))
 
 			// 获取数据
 			gpuInfo := cli.GetGPUInfo()
@@ -490,7 +490,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			color.Printf("%s\n", general.FgGray("······ Memory ······"))
+			color.Printf("%s\n", general.FgGrayText("······ Memory ······"))
 
 			// 获取 Memory 配置项
 			if genealogyCfg.Has("memory.data_unit") {
@@ -582,7 +582,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			color.Printf("%s\n", general.FgGray("······ Swap ······"))
+			color.Printf("%s\n", general.FgGrayText("······ Swap ······"))
 
 			// 获取 Memory 配置项
 			if genealogyCfg.Has("memory.data_unit") {
@@ -677,7 +677,7 @@ var getCmd = &cobra.Command{
 		}
 
 		if storageFlag {
-			color.Printf("%s\n", general.FgGray("······ Storage ······"))
+			color.Printf("%s\n", general.FgGrayText("······ Storage ······"))
 
 			// 获取数据
 			storageInfo := cli.GetStorageInfo()
@@ -768,7 +768,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			color.Printf("%s\n", general.FgGray("······ Nic ······"))
+			color.Printf("%s\n", general.FgGrayText("······ Nic ······"))
 
 			// 获取数据
 			nicInfo := cli.GetNicInfo()
@@ -852,7 +852,7 @@ var getCmd = &cobra.Command{
 				}
 				return partNname
 			}()
-			color.Printf("%s\n", general.FgGray("······ OS ······"))
+			color.Printf("%s\n", general.FgGrayText("······ OS ······"))
 
 			// 获取数据
 			osInfo := cli.GetOSInfo(sysInfo)
@@ -930,7 +930,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			color.Printf("%s\n", general.FgGray("······ Load ······"))
+			color.Printf("%s\n", general.FgGrayText("······ Load ······"))
 
 			// 获取数据
 			loadInfo := cli.GetLoadInfo()
@@ -1009,7 +1009,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			color.Printf("%s\n", general.FgGray("······ Time ······"))
+			color.Printf("%s\n", general.FgGrayText("······ Time ······"))
 
 			// 获取数据
 			timeInfo, _ := cli.GetTimeInfo()
@@ -1081,7 +1081,7 @@ var getCmd = &cobra.Command{
 				}
 				return partName
 			}()
-			color.Printf("%s\n", general.FgGray("······ User ······"))
+			color.Printf("%s\n", general.FgGrayText("······ User ······"))
 
 			// 获取数据
 			userInfo := cli.GetUserInfo()
@@ -1160,7 +1160,7 @@ var getCmd = &cobra.Command{
 					color.Println("%v: %v\n", num+1, info)
 				}
 			} else {
-				color.Printf("%s\n", general.FgGray("······ Update ······"))
+				color.Printf("%s\n", general.FgGrayText("······ Update ······"))
 				// 获取 update 配置项
 				if genealogyCfg.Has("update.record_file") {
 					updateRecordFile = genealogyCfg.Get("update.record_file").(string)
@@ -1168,12 +1168,12 @@ var getCmd = &cobra.Command{
 					color.Error.Println("Config file is missing 'update.record_file' item, using default value")
 				}
 				itemColor := general.LightText
-				itemInfoColor := general.FgWhite
-				listColor := general.FgWhite
+				itemInfoColor := general.FgWhiteText
+				listColor := general.FgWhiteText
 				if colorful {
 					itemColor = general.PrimaryText
-					itemInfoColor = general.FgGreen
-					listColor = general.FgGreen
+					itemInfoColor = general.FgGreenText
+					listColor = general.FgGreenText
 				}
 				// 更新服务状态监测
 				daemonInfo, _ := cli.GetUpdateDaemonInfo()
