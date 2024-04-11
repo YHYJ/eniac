@@ -10,9 +10,11 @@ Description: 单位和格式数据转换
 package general
 
 import (
-	"fmt"
+	"strconv"
 	"strings"
 	"time"
+
+	"github.com/gookit/color"
 )
 
 // BubbleSort 冒泡排序
@@ -41,8 +43,8 @@ func BubbleSort(arr []float64) {
 // 返回：
 //   - 格式化后的字符串
 func FormatFloat(value float64, precision int) string {
-	digits := len(fmt.Sprint(int(value))) + 1 + precision // 整数部分长度 + 小数点 + 小数部分长度
-	formatString := "%" + fmt.Sprintf("%d.1f ", digits) + "%s"
+	digits := len(strconv.Itoa(int(value))) + 1 + precision // 整数部分长度 + 小数点 + 小数部分长度
+	formatString := "%" + color.Sprintf("%d.1f ", digits) + "%s"
 	return formatString
 }
 

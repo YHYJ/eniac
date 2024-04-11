@@ -10,7 +10,6 @@ Description: 子命令 'get' 的实现
 package cli
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 
@@ -306,7 +305,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		tableData := [][]string{}
 		outputInfo := []string{cpuPart}
 		for _, item := range items {
-			outputValue := fmt.Sprintf("%v", cpuInfo[item])
+			outputValue := color.Sprintf("%v", cpuInfo[item])
 			outputInfo = append(outputInfo, outputValue)
 		}
 		tableData = append(tableData, outputInfo)
@@ -599,7 +598,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		tableData := [][]string{}
 		outputInfo := []string{swapPart}
 		for _, item := range items {
-			outputValue := fmt.Sprintf("%v", swapInfo[item])
+			outputValue := color.Sprintf("%v", swapInfo[item])
 			outputInfo = append(outputInfo, outputValue)
 		}
 		tableData = append(tableData, outputInfo)
@@ -898,9 +897,9 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		outputValue := ""
 		for _, item := range items {
 			if item == "Process" {
-				outputValue = fmt.Sprintf("%d", loadInfo[item].(uint64))
+				outputValue = color.Sprintf("%d", loadInfo[item].(uint64))
 			} else {
-				outputValue = fmt.Sprintf("%.2f", loadInfo[item].(float64))
+				outputValue = color.Sprintf("%.2f", loadInfo[item].(float64))
 			}
 			outputInfo = append(outputInfo, outputValue)
 		}

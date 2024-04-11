@@ -10,9 +10,9 @@ Description: 子命令 'get' 的实现，获取系统信息
 package cli
 
 import (
-	"fmt"
 	"strings"
 
+	"github.com/gookit/color"
 	"github.com/yhyj/eniac/general"
 	"github.com/zcalusic/sysinfo"
 )
@@ -64,7 +64,7 @@ func GetCPUInfo(sysInfo sysinfo.SysInfo, dataUnit string) map[string]interface{}
 	cpuInfo["CPUCores"] = sysInfo.CPU.Cores                                    // CPU 核心数
 	cpuInfo["CPUThreads"] = sysInfo.CPU.Threads                                // CPU 线程数
 	cpuCache, cpuCacheUnit := general.Human(float64(sysInfo.CPU.Cache), "KiB") // CPU 缓存
-	cpuInfo["CPUCache"] = fmt.Sprintf("%.0f %s", cpuCache, cpuCacheUnit)
+	cpuInfo["CPUCache"] = color.Sprintf("%.0f %s", cpuCache, cpuCacheUnit)
 
 	return cpuInfo
 }
@@ -112,7 +112,7 @@ func GetTimeInfo() (map[string]interface{}, error) {
 	timeInfo := make(map[string]interface{})
 	timeInfo["BootTime"] = general.UnixTime2TimeString(hostData.BootTime) // 系统启动时间
 	day, hour, minute, second := general.UnixTime2DayHourMinuteSecond(hostData.Uptime)
-	result := fmt.Sprintf("%vd %vh %vm %vs", day, hour, minute, second)
+	result := color.Sprintf("%vd %vh %vm %vs", day, hour, minute, second)
 	timeInfo["Uptime"] = result // 系统运行时间
 	starttimeArgs := []string{"time"}
 	StartTime, err := general.RunCommandGetResult("systemd-analyze", starttimeArgs)

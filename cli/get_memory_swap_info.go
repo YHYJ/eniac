@@ -10,8 +10,7 @@ Description: 子命令 'get' 的实现，获取内存和交换分区信息
 package cli
 
 import (
-	"fmt"
-
+	"github.com/gookit/color"
 	"github.com/yhyj/eniac/general"
 )
 
@@ -39,13 +38,13 @@ func GetMemoryInfo(dataUnit string, percentUnit string) map[string]interface{} {
 	formatString := "%.2f %s"
 
 	memoryInfo := make(map[string]interface{})
-	memoryInfo["MemoryTotal"] = fmt.Sprintf(formatString, memTotal, memTotalUnit)             // 内存总量
-	memoryInfo["MemoryUsed"] = fmt.Sprintf(formatString, memUsed, memUsedUnit)                // 已用内存
-	memoryInfo["MemoryUsedPercent"] = fmt.Sprintf("%.1f%s", memUsedPercent, percentUnit)      // 内存使用率
-	memoryInfo["MemoryFree"] = fmt.Sprintf(formatString, memFree, memFreeUnit)                // 空闲内存
-	memoryInfo["MemoryShared"] = fmt.Sprintf(formatString, memShared, memSharedUnit)          // 共享内存
-	memoryInfo["MemoryBuffCache"] = fmt.Sprintf(formatString, memBuffCache, memBuffCacheUnit) // 缓存内存
-	memoryInfo["MemoryAvail"] = fmt.Sprintf(formatString, memAvail, memAvailUnit)             // 可用内存
+	memoryInfo["MemoryTotal"] = color.Sprintf(formatString, memTotal, memTotalUnit)             // 内存总量
+	memoryInfo["MemoryUsed"] = color.Sprintf(formatString, memUsed, memUsedUnit)                // 已用内存
+	memoryInfo["MemoryUsedPercent"] = color.Sprintf("%.1f%s", memUsedPercent, percentUnit)      // 内存使用率
+	memoryInfo["MemoryFree"] = color.Sprintf(formatString, memFree, memFreeUnit)                // 空闲内存
+	memoryInfo["MemoryShared"] = color.Sprintf(formatString, memShared, memSharedUnit)          // 共享内存
+	memoryInfo["MemoryBuffCache"] = color.Sprintf(formatString, memBuffCache, memBuffCacheUnit) // 缓存内存
+	memoryInfo["MemoryAvail"] = color.Sprintf(formatString, memAvail, memAvailUnit)             // 可用内存
 
 	return memoryInfo
 }
@@ -71,8 +70,8 @@ func GetSwapInfo(dataUnit string) map[string]interface{} {
 	if swapTotal == 0 {
 		swapInfo["SwapDisabled"] = true
 	}
-	swapInfo["SwapTotal"] = fmt.Sprintf(formatString, swapTotal, swapTotalUnit) // 交换分区总量
-	swapInfo["SwapFree"] = fmt.Sprintf(formatString, swapFree, swapFreeUnit)    // 交换分区空闲量
+	swapInfo["SwapTotal"] = color.Sprintf(formatString, swapTotal, swapTotalUnit) // 交换分区总量
+	swapInfo["SwapFree"] = color.Sprintf(formatString, swapFree, swapFreeUnit)    // 交换分区空闲量
 
 	return swapInfo
 }

@@ -11,7 +11,6 @@ package cli
 
 import (
 	"encoding/json"
-	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -59,8 +58,8 @@ func GetStorageInfo() map[string]interface{} {
 			storageValue["StorageRemovable"] = strconv.FormatBool(disk.IsRemovable)
 			storageValue["StorageSerial"] = disk.SerialNumber
 			storageSize, storageSizeUnit := general.Human(float64(disk.SizeBytes), "B")
-			storageValue["StorageSize"] = fmt.Sprintf("%.2f %s", storageSize, storageSizeUnit)
-			storageInfo[fmt.Sprintf("%d", index)] = storageValue
+			storageValue["StorageSize"] = color.Sprintf("%.2f %s", storageSize, storageSizeUnit)
+			storageInfo[color.Sprintf("%d", index)] = storageValue
 			index += 1
 		}
 	}
@@ -192,7 +191,7 @@ func GetNicInfo() map[string]interface{} {
 				}
 				return nic.Duplex
 			}()
-			networkInfo[fmt.Sprintf("%d", index)] = networkValue
+			networkInfo[color.Sprintf("%d", index)] = networkValue
 			index += 1
 		}
 	}
