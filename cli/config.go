@@ -18,6 +18,30 @@ import (
 	"github.com/yhyj/eniac/general"
 )
 
+// 用于转换 Toml 配置树的结构体
+type Config struct {
+	Genealogy GenealogyConfig `toml:"genealogy"`
+	Main      MainConfig      `toml:"main"`
+}
+type GenealogyConfig struct {
+	Cpu    CpuConfig    `toml:"cpu"`
+	Memory MemoryConfig `toml:"memory"`
+	Update UpdateConfig `toml:"update"`
+}
+type MainConfig struct {
+	Colorful bool `toml:"colorful"`
+}
+type CpuConfig struct {
+	CacheUnit string `toml:"cache_unit"`
+}
+type MemoryConfig struct {
+	DataUnit    string `toml:"data_unit"`
+	PercentUnit string `toml:"percent_unit"`
+}
+type UpdateConfig struct {
+	RecordFile string `toml:"record_file"`
+}
+
 // isTomlFile 检测文件是不是 toml 文件
 //
 // 参数：
@@ -52,6 +76,22 @@ func GetTomlConfig(filePath string) (*toml.Tree, error) {
 		return nil, err
 	}
 	return tree, nil
+}
+
+// LoadConfigToStruct 将 Toml 配置树加载到结构体
+//
+// 参数：
+//   - configTree: 解析 toml 配置文件得到的配置树
+//
+// 返回：
+//   - 结构体
+//   - 错误信息
+func LoadConfigToStruct(configTree *toml.Tree) (*Config, error) {
+	var config Config
+	if err := configTree.Unmarshal(&config); err != nil {
+		return nil, err
+	}
+	return &config, nil
 }
 
 // WriteTomlConfig 写入 toml 配置文件
