@@ -10,144 +10,73 @@ Description: 子命令 'config' 的实现
 package cli
 
 import (
-	"fmt"
-	"os"
-	"strings"
-
-	"github.com/pelletier/go-toml"
+	"github.com/gookit/color"
 	"github.com/yhyj/eniac/general"
 )
 
-// 用于转换 Toml 配置树的结构体
-type Config struct {
-	Genealogy GenealogyConfig `toml:"genealogy"`
-	Main      MainConfig      `toml:"main"`
-}
-type GenealogyConfig struct {
-	Cpu    CpuConfig    `toml:"cpu"`
-	Memory MemoryConfig `toml:"memory"`
-	Update UpdateConfig `toml:"update"`
-}
-type MainConfig struct {
-	Colorful bool `toml:"colorful"`
-}
-type CpuConfig struct {
-	CacheUnit string `toml:"cache_unit"`
-}
-type MemoryConfig struct {
-	DataUnit    string `toml:"data_unit"`
-	PercentUnit string `toml:"percent_unit"`
-}
-type UpdateConfig struct {
-	RecordFile string `toml:"record_file"`
-}
-
-// isTomlFile 检测文件是不是 toml 文件
+// CreateConfigFile 创建配置文件
 //
 // 参数：
-//   - filePath: 待检测文件路径
-//
-// 返回：
-//   - 是 toml 文件返回 true，否则返回 false
-func isTomlFile(filePath string) bool {
-	if strings.HasSuffix(filePath, ".toml") {
-		return true
+//   - configFile: 配置文件路径
+//   - reWrite: 是否覆写
+func CreateConfigFile(configFile string, reWrite bool) {
+	// 检查配置文件是否存在
+	fileExist := general.FileExist(configFile)
+
+	// 检测并创建配置文件
+	if fileExist {
+		if reWrite {
+			if err := general.DeleteFile(configFile); err != nil {
+				color.Error.Println(err)
+				return
+			}
+			if err := general.CreateFile(configFile); err != nil {
+				color.Error.Println(err)
+				return
+			}
+			_, err := general.WriteTomlConfig(configFile)
+			if err != nil {
+				color.Error.Println(err)
+				return
+			}
+			color.Printf("%s %s: %s\n", general.FgWhiteText("Create"), general.PrimaryText(configFile), general.SuccessText("file overwritten"))
+		} else {
+			color.Printf("%s %s: %s %s\n", general.FgWhiteText("Create"), general.PrimaryText(configFile), general.WarnText("file exists"), general.SecondaryText("(use --force to overwrite)"))
+		}
+	} else {
+		if err := general.CreateFile(configFile); err != nil {
+			color.Error.Println(err)
+			return
+		}
+		_, err := general.WriteTomlConfig(configFile)
+		if err != nil {
+			color.Error.Println(err)
+			return
+		}
+		color.Printf("%s %s: %s\n", general.FgWhiteText("Create"), general.PrimaryText(configFile), general.SuccessText("file created"))
 	}
-	return false
 }
 
-// GetTomlConfig 读取 toml 配置文件
+// PrintConfigFile 打印配置文件内容
 //
 // 参数：
-//   - filePath: toml 配置文件路径
-//
-// 返回：
-//   - toml 配置树
-//   - 错误信息
-func GetTomlConfig(filePath string) (*toml.Tree, error) {
-	if !general.FileExist(filePath) {
-		return nil, fmt.Errorf("Open %s: no such file or directory", filePath)
-	}
-	if !isTomlFile(filePath) {
-		return nil, fmt.Errorf("Open %s: is not a toml file", filePath)
-	}
-	tree, err := toml.LoadFile(filePath)
-	if err != nil {
-		return nil, err
-	}
-	return tree, nil
-}
+//   - configFile: 配置文件路径
+func PrintConfigFile(configFile string) {
+	// 检查配置文件是否存在
+	fileExist := general.FileExist(configFile)
 
-// LoadConfigToStruct 将 Toml 配置树加载到结构体
-//
-// 参数：
-//   - configTree: 解析 toml 配置文件得到的配置树
-//
-// 返回：
-//   - 结构体
-//   - 错误信息
-func LoadConfigToStruct(configTree *toml.Tree) (*Config, error) {
-	var config Config
-	if err := configTree.Unmarshal(&config); err != nil {
-		return nil, err
-	}
-	return &config, nil
-}
-
-// WriteTomlConfig 写入 toml 配置文件
-//
-// 参数：
-//   - filePath: toml 配置文件路径
-//
-// 返回：
-//   - 写入的字节数
-//   - 错误信息
-func WriteTomlConfig(filePath string) (int64, error) {
-	// 根据系统不同决定某些参数
 	var (
-		genealogyUpdateRecordFile = "" // 定义不同平台下的可更新安装包记录文件
+		cfgFileNotFoundMessage = "Configuration file not found (use --create to create a configuration file)" // 配置文件不存在
 	)
-	if general.Platform == "linux" {
-		genealogyUpdateRecordFile = "/tmp/system-checkupdates.log"
-	} else if general.Platform == "darwin" {
-		genealogyUpdateRecordFile = "/tmp/system-checkupdates.log"
-	} else if general.Platform == "windows" {
+
+	if fileExist {
+		configTree, err := general.GetTomlConfig(configFile)
+		if err != nil {
+			color.Error.Println(err)
+		} else {
+			color.Println(general.NoteText(configTree))
+		}
+	} else {
+		color.Error.Println(cfgFileNotFoundMessage)
 	}
-	// 定义一个map[string]interface{}类型的变量并赋值
-	exampleConf := map[string]interface{}{
-		"main": map[string]interface{}{
-			"colorful": true,
-		},
-		"genealogy": map[string]interface{}{
-			"cpu": map[string]interface{}{
-				"cache_unit": "KB",
-			},
-			"memory": map[string]interface{}{
-				"data_unit":    "GB",
-				"percent_unit": "%",
-			},
-			"update": map[string]interface{}{
-				"record_file": genealogyUpdateRecordFile,
-			},
-		},
-	}
-	// 检测配置文件是否存在
-	if !general.FileExist(filePath) {
-		return 0, fmt.Errorf("Open %s: no such file or directory", filePath)
-	}
-	// 检测配置文件是否是 toml 文件
-	if !isTomlFile(filePath) {
-		return 0, fmt.Errorf("Open %s: is not a toml file", filePath)
-	}
-	// 把 exampleConf 转换为 *toml.Tree 类型
-	tree, err := toml.TreeFromMap(exampleConf)
-	if err != nil {
-		return 0, err
-	}
-	// 打开一个文件并获取 io.Writer 接口
-	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, 0644)
-	if err != nil {
-		return 0, err
-	}
-	return tree.WriteTo(file)
 }
