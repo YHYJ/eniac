@@ -61,6 +61,22 @@ var getCmd = &cobra.Command{
 			allFlags["onlyFlag"], _ = cmd.Flags().GetBool("only")
 		}
 
+		var (
+			noticeSlogan []string // 提示标语
+		)
+		// 检查 allFlags 中的所有值是否都为 false
+		allFalse := true
+		for _, value := range allFlags {
+			if value {
+				allFalse = false
+				break
+			}
+		}
+		if allFalse {
+			cmd.Help()
+			noticeSlogan = append(noticeSlogan, "Please refer to the above help information")
+		}
+
 		// 读取配置文件
 		confTree, err := general.GetTomlConfig(cfgFile)
 		if err != nil {
@@ -69,6 +85,14 @@ var getCmd = &cobra.Command{
 
 		// 抓取系统信息
 		cli.GrabSystemInformation(confTree, allFlags)
+
+		// 输出标语
+		if len(noticeSlogan) > 0 {
+			color.Println()
+			for _, slogan := range noticeSlogan {
+				color.Notice.Tips(general.PrimaryText(slogan))
+			}
+		}
 	},
 }
 
