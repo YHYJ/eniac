@@ -1092,14 +1092,15 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 	}
 
 	if flags["updateFlag"] {
-		updateInfo, err := general.GetUpdateInfo(updateRecordFile, 0)
-		if err != nil {
-			color.Error.Println(err)
-		}
 		if flags["onlyFlag"] {
 			// 仅输出可更新包信息，专为第三方系统更新检测插件服务
-			for num, info := range updateInfo {
-				color.Println("%v: %v\n", num+1, info)
+			updateInfo, err := general.GetUpdateInfo(updateRecordFile, 0)
+			if err != nil {
+				color.Error.Println(err)
+			} else {
+				for num, info := range updateInfo {
+					color.Println("%v: %v\n", num+1, info)
+				}
 			}
 		} else {
 			color.Printf("%s\n", general.FgGrayText("······ Update ······"))
@@ -1127,16 +1128,21 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 				color.Printf("%v: %v\n", itemColor(daemonItem), itemInfoColor(daemonInfo[daemonItem]))
 			}
 			// 更新列表计数
-			packageItem := "UpdateList"
-			packageItemName := general.GenealogyName[packageItem][general.Language]
-			if packageItemName != "" {
-				color.Printf("%v: %v\n", itemColor(packageItemName), itemInfoColor(len(updateInfo)))
+			updateInfo, err := general.GetUpdateInfo(updateRecordFile, 0)
+			if err != nil {
+				color.Error.Println(err)
 			} else {
-				color.Printf("%v: %v\n", itemColor(packageItem), itemInfoColor(len(updateInfo)))
-			}
-			// 输出可更新包信息
-			for num, info := range updateInfo {
-				color.Printf("%8v: %v\n", num+1, listColor(info))
+				packageItem := "UpdateList"
+				packageItemName := general.GenealogyName[packageItem][general.Language]
+				if packageItemName != "" {
+					color.Printf("%v: %v\n", itemColor(packageItemName), itemInfoColor(len(updateInfo)))
+				} else {
+					color.Printf("%v: %v\n", itemColor(packageItem), itemInfoColor(len(updateInfo)))
+				}
+				// 输出可更新包信息
+				for num, info := range updateInfo {
+					color.Printf("%8v: %v\n", num+1, listColor(info))
+				}
 			}
 		}
 	}
