@@ -546,8 +546,8 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 组装表头
 		tableHeader := []string{""}
-		if swapInfo["SwapDisabled"] == true {
-			items = []string{"SwapDisabled"}
+		if swapInfo["SwapStatus"] == "Disabled" {
+			items = []string{"SwapStatus"}
 			for _, item := range items {
 				item = func() string {
 					itemName := general.GenealogyName[item][general.Language]

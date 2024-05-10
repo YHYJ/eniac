@@ -286,10 +286,12 @@ func GetSwapInfo(dataUnit string) map[string]interface{} {
 	formatString := "%.2f %s"
 
 	swapInfo := make(map[string]interface{})
-	swapInfo["SwapDisabled"] = false
-	if swapTotal == 0 {
-		swapInfo["SwapDisabled"] = true
-	}
+	swapInfo["SwapStatus"] = func() string {
+		if swapTotal == 0 {
+			return "Disabled"
+		}
+		return "Enabled"
+	}()
 	swapInfo["SwapTotal"] = color.Sprintf(formatString, swapTotal, swapTotalUnit) // 交换分区总量
 	swapInfo["SwapFree"] = color.Sprintf(formatString, swapFree, swapFreeUnit)    // 交换分区空闲量
 
