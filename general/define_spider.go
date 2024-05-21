@@ -407,11 +407,9 @@ func GetTimeInfo() (map[string]interface{}, error) {
 
 // GetUpdateInfo 读取更新信息记录文件
 //
-//   - 参数 line=0 时读取全部行
-//
 // 参数：
 //   - filePath: 更新信息记录文件路径
-//   - line: 读取指定行
+//   - line: 读取指定行，等于 0 时读取全部行
 //
 // 返回：
 //   - 更新信息
