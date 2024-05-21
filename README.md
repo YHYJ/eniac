@@ -25,8 +25,6 @@
   * [当前平台](#当前平台)
   * [交叉编译](#交叉编译)
     * [Linux](#linux)
-    * [macOS](#macos)
-    * [Windows](#windows)
 
 <!-- vim-markdown-toc -->
 
@@ -115,28 +113,6 @@ CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -gcflags="-trimpath" -ldflags="-s
 ```
 
 > 使用`uname -m`确定硬件架构
->
-> - 结果是 x86_64 则 GOARCH=amd64
-> - 结果是 aarch64 则 GOARCH=arm64
-
-#### macOS
-
-```bash
-CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build -gcflags="-trimpath" -ldflags="-s -w -X github.com/yhyj/eniac/general.GitCommitHash=`git rev-parse HEAD` -X github.com/yhyj/eniac/general.BuildTime=`date +%s` -X github.com/yhyj/eniac/general.BuildBy=$USER" -o build/eniac main.go
-```
-
-> 使用`uname -m`确定硬件架构
->
-> - 结果是 x86_64 则 GOARCH=amd64
-> - 结果是 aarch64 则 GOARCH=arm64
-
-#### Windows
-
-```powershell
-CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -gcflags="-trimpath" -ldflags="-s -w -H windowsgui -X github.com/yhyj/eniac/general.GitCommitHash=`git rev-parse HEAD` -X github.com/yhyj/eniac/general.BuildTime=`date +%s` -X github.com/yhyj/eniac/general.BuildBy=$USER" -o build/eniac.exe main.go
-```
-
-> 使用`echo %PROCESSOR_ARCHITECTURE%`确定硬件架构
 >
 > - 结果是 x86_64 则 GOARCH=amd64
 > - 结果是 aarch64 则 GOARCH=arm64
