@@ -1096,7 +1096,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			// 仅输出可更新包信息，专为第三方系统更新检测插件服务
 			updateInfo, _ := general.GetUpdateInfo(updateRecordFile, 0)
 			for num, info := range updateInfo {
-				color.Println("%v: %v\n", num+1, info)
+				color.Printf("%v: %v\n", num+1, info)
 			}
 		} else {
 			color.Printf("%s\n", general.FgGrayText("······ Update ······"))
