@@ -1130,14 +1130,19 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			} else {
 				packageItem := "UpdateList"
 				packageItemName := general.GenealogyName[packageItem][general.Language]
+				numLength := 0                                // 用于格式化输出可更新包列表
+				packageItemLength := len(packageItem)         // 用于格式化输出可更新包列表
+				packageItemNameLength := len(packageItemName) // 用于格式化输出可更新包列表
 				if packageItemName != "" {
 					color.Printf("%v: %v\n", itemColor(packageItemName), itemInfoColor(len(updateInfo)))
+					numLength = packageItemNameLength - packageItemNameLength/3*1
 				} else {
 					color.Printf("%v: %v\n", itemColor(packageItem), itemInfoColor(len(updateInfo)))
+					numLength = packageItemLength
 				}
 				// 输出可更新包信息
 				for num, info := range updateInfo {
-					color.Printf("%8v: %v\n", num+1, listColor(info))
+					color.Printf("%*v: %v\n", numLength, num+1, listColor(info))
 				}
 			}
 		}
