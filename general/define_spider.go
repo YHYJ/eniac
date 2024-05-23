@@ -11,7 +11,6 @@ package general
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"os/user"
 
@@ -441,7 +440,7 @@ func GetUpdateInfo(filePath string, line int) ([]string, error) {
 	} else if filePath == "" {
 		return nil, nil
 	} else {
-		return nil, fmt.Errorf("open %s: no such file", filePath)
+		return nil, nil
 	}
 }
 
