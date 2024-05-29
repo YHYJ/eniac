@@ -80,7 +80,7 @@ var getCmd = &cobra.Command{
 		// 读取配置文件
 		confTree, err := general.GetTomlConfig(cfgFile)
 		if err != nil {
-			color.Error.Println(err, ", use default configuration")
+			color.Danger.Printf("%s, use default configuration\n", err)
 		}
 
 		// 抓取系统信息

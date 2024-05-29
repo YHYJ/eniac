@@ -28,7 +28,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 	// 获取配置项
 	config, err := general.LoadConfigToStruct(configTree)
 	if err != nil {
-		color.Error.Println(err)
+		color.Danger.Println(err)
 		return
 	}
 
@@ -281,7 +281,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		if config.Genealogy.Cpu.CacheUnit != "" {
 			cpuCacheUnit = config.Genealogy.Cpu.CacheUnit
 		} else {
-			color.Error.Println("Config file is missing 'cpu.cache_unit' item, using default value")
+			color.Danger.Println("Config file is missing 'cpu.cache_unit' item, using default value")
 		}
 
 		// 获取数据
@@ -438,12 +438,12 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		if config.Genealogy.Memory.DataUnit != "" {
 			memoryDataUnit = config.Genealogy.Memory.DataUnit
 		} else {
-			color.Error.Println("Config file is missing 'memory.data_unit' item, using default value")
+			color.Danger.Println("Config file is missing 'memory.data_unit' item, using default value")
 		}
 		if config.Genealogy.Memory.PercentUnit != "" {
 			memoryPercentUnit = config.Genealogy.Memory.PercentUnit
 		} else {
-			color.Error.Println("Config file is missing 'memory.percent_unit' item, using default value")
+			color.Danger.Println("Config file is missing 'memory.percent_unit' item, using default value")
 		}
 
 		// 获取数据
@@ -530,7 +530,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		if config.Genealogy.Memory.DataUnit != "" {
 			memoryDataUnit = config.Genealogy.Memory.DataUnit
 		} else {
-			color.Error.Println("Config file is missing 'memory.data_unit' item, using default value")
+			color.Danger.Println("Config file is missing 'memory.data_unit' item, using default value")
 		}
 
 		// 获取数据
@@ -1104,7 +1104,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			if config.Genealogy.Update.RecordFile != "" {
 				updateRecordFile = config.Genealogy.Update.RecordFile
 			} else {
-				color.Error.Println("Config file is missing 'update.record_file' item, using default value")
+				color.Danger.Println("Config file is missing 'update.record_file' item, using default value")
 			}
 			itemColor := general.LightText
 			itemInfoColor := general.FgWhiteText
@@ -1126,7 +1126,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			// 更新列表计数
 			updateInfo, err := general.GetUpdateInfo(updateRecordFile, 0)
 			if err != nil {
-				color.Error.Println(err)
+				color.Danger.Println(err)
 			} else {
 				packageItem := "UpdateList"
 				packageItemName := general.GenealogyName[packageItem][general.Language]
