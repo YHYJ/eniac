@@ -4,7 +4,7 @@ Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2024-05-29 16:21:23
 
-Description: 国际化（考虑使用专门的 i18n 包）
+Description: 国际化
 */
 
 package general
