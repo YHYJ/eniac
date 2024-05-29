@@ -23,7 +23,7 @@ var getCmd = &cobra.Command{
 	Long:  `Get system information.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// 获取配置文件路径
-		cfgFile, _ := cmd.Flags().GetString("config")
+		configFile, _ := cmd.Flags().GetString("config")
 		// 解析参数
 		allFlags := make(map[string]bool)
 		allFlag, _ := cmd.Flags().GetBool("all")
@@ -78,7 +78,7 @@ var getCmd = &cobra.Command{
 		}
 
 		// 读取配置文件
-		confTree, err := general.GetTomlConfig(cfgFile)
+		confTree, err := general.GetTomlConfig(configFile)
 		if err != nil {
 			color.Danger.Printf("%s, use default configuration\n", err)
 		}
