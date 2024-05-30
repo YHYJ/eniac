@@ -1,3 +1,5 @@
+  - [ ] 先更新样式：使用 github.com/charmbracelet/lipgloss 替换 github.com/olekukonko/tablewriter 输出信息 (2024-05-30 14:49)
+  - [ ] 在更新布局，现在是所有信息一次输出，改成 Tab 样式的，参考 https://github.com/charmbracelet/bubbletea/tree/master/examples/tabs (2024-05-30 14:51)
   - [ ] 考虑使用专门的 i18n 包代替 general/define_i18n.go (2024-05-29 16:24)
     - [ ] 需要将 i18n 文件打到包内，参考 skynet (2024-05-29 16:25)
   - [X] 完善输出格式 (2023-04-21 16:26)
