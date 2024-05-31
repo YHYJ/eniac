@@ -90,6 +90,7 @@ var GenealogyName = map[string]map[string]string{
 	"UserUid":            {"zh": "用户标识", "en": "UID"},
 	"UserGid":            {"zh": "用户组标识", "en": "GID"},
 	"UserHomeDir":        {"zh": "用户主目录", "en": "Home Dir"},
-	"UpdateList":         {"zh": "更新列表", "en": "Update List"},
 	"UpdateDaemonStatus": {"zh": "更新服务", "en": "Update Daemon"},
+	"PackageList":        {"zh": "可更新包列表", "en": "Package List"},
+	"PackageQuantity":    {"zh": "可更新包数量", "en": "Package Quantity"},
 }

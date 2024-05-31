@@ -12,8 +12,8 @@ package general
 import (
 	"math/rand"
 
+	"github.com/charmbracelet/lipgloss"
 	"github.com/gookit/color"
-	"github.com/olekukonko/tablewriter"
 )
 
 var (
@@ -65,41 +65,56 @@ var (
 	SecondaryText = color.Secondary.Render // Secondary 文本
 )
 
-// 可选的颜色列表 - Table 专用
-var availableColors = []int{
-	// 蓝
-	tablewriter.FgBlueColor,
-	tablewriter.FgHiBlueColor,
-	// 青
-	tablewriter.FgCyanColor,
-	tablewriter.FgHiCyanColor,
-	// 绿
-	tablewriter.FgGreenColor,
-	tablewriter.FgHiGreenColor,
-	// 品红
-	tablewriter.FgMagentaColor,
-	tablewriter.FgHiMagentaColor,
+//  Table 专用
+
+// Notice: NEW
+const (
+	HeaderColor    = lipgloss.Color("#CCCCCC") // 表头颜色
+	BorderColor    = lipgloss.Color("#6C757D") // 边框颜色
+	ColumnOneColor = lipgloss.Color("#555555") // 第一列颜色
+
+	DefaultColor = lipgloss.Color("#FFFFFF") // 默认颜色
+)
+
+var availableColors = []lipgloss.Color{
 	// 红
-	// tablewriter.FgRedColor,
-	tablewriter.FgHiRedColor,
-	// 白
-	tablewriter.FgWhiteColor,
-	tablewriter.FgHiWhiteColor,
+	lipgloss.Color("#DC143C"),
+	lipgloss.Color("#E74C3C"),
+	// 橙
+	lipgloss.Color("#FF8C00"),
+	lipgloss.Color("#F39C76"),
 	// 黄
-	tablewriter.FgYellowColor,
-	tablewriter.FgHiYellowColor,
+	lipgloss.Color("#F5B041"),
+	lipgloss.Color("#FFA500"),
+	// 绿
+	lipgloss.Color("#70AD47"),
+	lipgloss.Color("#2ECC71"),
+	// 青
+	lipgloss.Color("#00CED1"),
+	lipgloss.Color("#20B2AA"),
+	// 蓝
+	lipgloss.Color("#1E90FF"),
+	lipgloss.Color("#87CEEB"),
+	lipgloss.Color("#5499C7"),
+	// 紫
+	lipgloss.Color("#855EFC"),
+	lipgloss.Color("#6A5ACD"),
+	lipgloss.Color("#8E44AD"),
+	// 品红
+	lipgloss.Color("#FF69B4"),
+	lipgloss.Color("#DB7093"),
 }
 
-// 上一次随机颜色的索引 - Table 专用
-var previousColor int
-
-// GetColor 随机获取一个颜色 - Table 专用
+// GetColor 随机获取一个颜色
 //
 // 返回：
 //   - 颜色代码
-func GetColor() int {
+func GetColor() lipgloss.Color {
+	var previousColor int // 上一次随机颜色的索引
+
+	// 没有可用的颜色，则返回默认颜色
 	if len(availableColors) == 0 {
-		return tablewriter.FgWhiteColor
+		return DefaultColor
 	}
 
 	// 随机取一个颜色

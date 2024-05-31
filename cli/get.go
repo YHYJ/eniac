@@ -10,11 +10,12 @@ Description: 子命令 'get' 的实现
 package cli
 
 import (
-	"os"
 	"strconv"
+	"strings"
 
+	"github.com/charmbracelet/lipgloss"
+	"github.com/charmbracelet/lipgloss/table"
 	"github.com/gookit/color"
-	"github.com/olekukonko/tablewriter"
 	"github.com/pelletier/go-toml"
 	"github.com/yhyj/eniac/general"
 	"github.com/zcalusic/sysinfo"
@@ -34,7 +35,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 	// 设置配置项默认值
 	var (
-		colorful          bool   = true
+		colorful          bool   = true // TODO: 未读取配置项
 		cpuCacheUnit      string = "KB"
 		memoryDataUnit    string = "GB"
 		memoryPercentUnit string = "%"
@@ -47,9 +48,9 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 	// 表格参数
 	var (
-		items       []string                   // 输出项名称参数
-		columnColor = tablewriter.FgWhiteColor // 默认列颜色
-		headerColor = tablewriter.FgWhiteColor // 默认表头颜色
+		items        []string               // 输出项名称参数
+		oddRowColor  = general.DefaultColor // 奇数行颜色
+		evenRowColor = general.DefaultColor // 偶数行颜色
 	)
 
 	// 执行对应函数
@@ -61,7 +62,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		color.Printf("%s\n", general.FgGrayText("······ Product ······"))
+		// TODO: 是否删除：color.Printf("%s\n", general.FgGrayText("······ Product ······"))
 
 		// 获取数据
 		productInfo := general.GetProductInfo(sysInfo)
@@ -91,36 +92,42 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取随机颜色
 		if colorful {
-			columnColor = general.GetColor()
-			headerColor = tablewriter.FgCyanColor
+			oddRowColor = general.GetColor()
+			evenRowColor = general.GetColor()
 		}
 
-		table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-		table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
-		table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
-		table.SetCenterSeparator("·")                                                          // 设置中间分隔符
-		table.SetAutoWrapText(false)                                                           // 设置是否自动换行
-		table.SetRowLine(false)                                                                // 设置是否显示行边框
-		table.SetHeader(tableHeader)                                                           // 设置表头
-		table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
-		table.SetHeaderColor(                                                                  // 设置表头颜色
-			tablewriter.Colors{tablewriter.BgHiBlackColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-		)
-		table.SetColumnColor( // 设置列颜色
-			tablewriter.Colors{tablewriter.FgHiBlackColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
+		var (
+			OddRowStyle  = general.CellStyle.Foreground(oddRowColor)  // 奇数行样式
+			EvenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 		)
 
-		// 填充表格
-		for _, data := range tableData {
-			table.Append(data)
-		}
+		table := table.New()                                // 创建一个表格
+		table.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		table.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		table.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
 
-		// 渲染表格
-		table.Render()
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = EvenRowStyle // 偶数行
+			default:
+				style = OddRowStyle // 奇数行
+			}
+
+			// 设置第一列格式
+			if col == 0 {
+				style = style.Foreground(general.ColumnOneColor)
+			}
+
+			return style
+		})
+
+		table.Headers(tableHeader...) // 设置表头
+		table.Rows(tableData...)      // 设置单元格
+
+		color.Println(table)
 	}
 
 	if flags["boardFlag"] {
@@ -131,7 +138,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		color.Printf("%s\n", general.FgGrayText("······ Board ······"))
+		// color.Printf("%s\n", general.FgGrayText("······ Board ······"))
 
 		// 获取数据
 		boardInfo := general.GetBoardInfo(sysInfo)
@@ -161,38 +168,42 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取随机颜色
 		if colorful {
-			columnColor = general.GetColor()
-			headerColor = tablewriter.FgCyanColor
+			oddRowColor = general.GetColor()
+			evenRowColor = general.GetColor()
 		}
 
-		table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-		table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
-		table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
-		table.SetCenterSeparator("·")                                                          // 设置中间分隔符
-		table.SetAutoWrapText(false)                                                           // 设置是否自动换行
-		table.SetRowLine(false)                                                                // 设置是否显示行边框
-		table.SetHeader(tableHeader)                                                           // 设置表头
-		table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
-		table.SetHeaderColor(                                                                  // 设置表头颜色
-			tablewriter.Colors{tablewriter.BgHiBlackColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-		)
-		table.SetColumnColor( // 设置列颜色
-			tablewriter.Colors{tablewriter.FgHiBlackColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
+		var (
+			OddRowStyle  = general.CellStyle.Foreground(oddRowColor)  // 奇数行样式
+			EvenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 		)
 
-		// 填充表格
-		for _, data := range tableData {
-			table.Append(data)
-		}
+		table := table.New()                                // 创建一个表格
+		table.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		table.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		table.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
 
-		// 渲染表格
-		table.Render()
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = EvenRowStyle // 偶数行
+			default:
+				style = OddRowStyle // 奇数行
+			}
+
+			// 设置第一列格式
+			if col == 0 {
+				style = style.Foreground(general.ColumnOneColor)
+			}
+
+			return style
+		})
+
+		table.Headers(tableHeader...) // 设置表头
+		table.Rows(tableData...)      // 设置单元格
+
+		color.Println(table)
 	}
 
 	if flags["biosFlag"] {
@@ -203,7 +214,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		color.Printf("%s\n", general.FgGrayText("······ BIOS ······"))
+		// color.Printf("%s\n", general.FgGrayText("······ BIOS ······"))
 
 		// 获取数据
 		biosInfo := general.GetBIOSInfo(sysInfo)
@@ -233,38 +244,42 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取随机颜色
 		if colorful {
-			columnColor = general.GetColor()
-			headerColor = tablewriter.FgCyanColor
+			oddRowColor = general.GetColor()
+			evenRowColor = general.GetColor()
 		}
 
-		table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-		table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
-		table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
-		table.SetCenterSeparator("·")                                                          // 设置中间分隔符
-		table.SetAutoWrapText(false)                                                           // 设置是否自动换行
-		table.SetRowLine(false)                                                                // 设置是否显示行边框
-		table.SetHeader(tableHeader)                                                           // 设置表头
-		table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
-		table.SetHeaderColor(                                                                  // 设置表头颜色
-			tablewriter.Colors{tablewriter.BgHiBlackColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-		)
-		table.SetColumnColor( // 设置列颜色
-			tablewriter.Colors{tablewriter.FgHiBlackColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
+		var (
+			OddRowStyle  = general.CellStyle.Foreground(oddRowColor)  // 奇数行样式
+			EvenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 		)
 
-		// 填充表格
-		for _, data := range tableData {
-			table.Append(data)
-		}
+		table := table.New()                                // 创建一个表格
+		table.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		table.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		table.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
 
-		// 渲染表格
-		table.Render()
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = EvenRowStyle // 偶数行
+			default:
+				style = OddRowStyle // 奇数行
+			}
+
+			// 设置第一列格式
+			if col == 0 {
+				style = style.Foreground(general.ColumnOneColor)
+			}
+
+			return style
+		})
+
+		table.Headers(tableHeader...) // 设置表头
+		table.Rows(tableData...)      // 设置单元格
+
+		color.Println(table)
 	}
 
 	if flags["cpuFlag"] {
@@ -275,7 +290,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		color.Printf("%s\n", general.FgGrayText("······ CPU ······"))
+		// color.Printf("%s\n", general.FgGrayText("······ CPU ······"))
 
 		// 获取 CPU 配置项
 		if config.Genealogy.Cpu.CacheUnit != "" {
@@ -312,42 +327,42 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取随机颜色
 		if colorful {
-			columnColor = general.GetColor()
-			headerColor = tablewriter.FgCyanColor
+			oddRowColor = general.GetColor()
+			evenRowColor = general.GetColor()
 		}
 
-		table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-		table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
-		table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
-		table.SetCenterSeparator("·")                                                          // 设置中间分隔符
-		table.SetAutoWrapText(false)                                                           // 设置是否自动换行
-		table.SetRowLine(false)                                                                // 设置是否显示行边框
-		table.SetHeader(tableHeader)                                                           // 设置表头
-		table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
-		table.SetHeaderColor(                                                                  // 设置表头颜色
-			tablewriter.Colors{tablewriter.BgHiBlackColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-		)
-		table.SetColumnColor( // 设置列颜色
-			tablewriter.Colors{tablewriter.FgHiBlackColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
+		var (
+			OddRowStyle  = general.CellStyle.Foreground(oddRowColor)  // 奇数行样式
+			EvenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 		)
 
-		// 填充表格
-		for _, data := range tableData {
-			table.Append(data)
-		}
+		table := table.New()                                // 创建一个表格
+		table.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		table.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		table.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
 
-		// 渲染表格
-		table.Render()
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = EvenRowStyle // 偶数行
+			default:
+				style = OddRowStyle // 奇数行
+			}
+
+			// 设置第一列格式
+			if col == 0 {
+				style = style.Foreground(general.ColumnOneColor)
+			}
+
+			return style
+		})
+
+		table.Headers(tableHeader...) // 设置表头
+		table.Rows(tableData...)      // 设置单元格
+
+		color.Println(table)
 	}
 
 	if flags["gpuFlag"] {
@@ -358,7 +373,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		color.Printf("%s\n", general.FgGrayText("······ GPU ······"))
+		// color.Printf("%s\n", general.FgGrayText("······ GPU ······"))
 
 		// 获取数据
 		gpuInfo := general.GetGPUInfo()
@@ -388,40 +403,42 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取随机颜色
 		if colorful {
-			columnColor = general.GetColor()
-			headerColor = tablewriter.FgCyanColor
+			oddRowColor = general.GetColor()
+			evenRowColor = general.GetColor()
 		}
 
-		table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-		table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
-		table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
-		table.SetCenterSeparator("·")                                                          // 设置中间分隔符
-		table.SetAutoWrapText(false)                                                           // 设置是否自动换行
-		table.SetRowLine(false)                                                                // 设置是否显示行边框
-		table.SetHeader(tableHeader)                                                           // 设置表头
-		table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
-		table.SetHeaderColor(                                                                  // 设置表头颜色
-			tablewriter.Colors{tablewriter.BgHiBlackColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-		)
-		table.SetColumnColor( // 设置列颜色
-			tablewriter.Colors{tablewriter.FgHiBlackColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
+		var (
+			OddRowStyle  = general.CellStyle.Foreground(oddRowColor)  // 奇数行样式
+			EvenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 		)
 
-		// 填充表格
-		for _, data := range tableData {
-			table.Append(data)
-		}
+		table := table.New()                                // 创建一个表格
+		table.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		table.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		table.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
 
-		// 渲染表格
-		table.Render()
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = EvenRowStyle // 偶数行
+			default:
+				style = OddRowStyle // 奇数行
+			}
+
+			// 设置第一列格式
+			if col == 0 {
+				style = style.Foreground(general.ColumnOneColor)
+			}
+
+			return style
+		})
+
+		table.Headers(tableHeader...) // 设置表头
+		table.Rows(tableData...)      // 设置单元格
+
+		color.Println(table)
 	}
 
 	if flags["memoryFlag"] {
@@ -432,7 +449,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		color.Printf("%s\n", general.FgGrayText("······ Memory ······"))
+		// color.Printf("%s\n", general.FgGrayText("······ Memory ······"))
 
 		// 获取 Memory 配置项
 		if config.Genealogy.Memory.DataUnit != "" {
@@ -474,46 +491,42 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取随机颜色
 		if colorful {
-			columnColor = general.GetColor()
-			headerColor = tablewriter.FgCyanColor
+			oddRowColor = general.GetColor()
+			evenRowColor = general.GetColor()
 		}
 
-		table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-		table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
-		table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
-		table.SetCenterSeparator("·")                                                          // 设置中间分隔符
-		table.SetAutoWrapText(false)                                                           // 设置是否自动换行
-		table.SetRowLine(false)                                                                // 设置是否显示行边框
-		table.SetHeader(tableHeader)                                                           // 设置表头
-		table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
-		table.SetHeaderColor(                                                                  // 设置表头颜色
-			tablewriter.Colors{tablewriter.BgHiBlackColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-		)
-		table.SetColumnColor( // 设置列颜色
-			tablewriter.Colors{tablewriter.FgHiBlackColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
+		var (
+			OddRowStyle  = general.CellStyle.Foreground(oddRowColor)  // 奇数行样式
+			EvenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 		)
 
-		// 填充表格
-		for _, data := range tableData {
-			table.Append(data)
-		}
+		table := table.New()                                // 创建一个表格
+		table.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		table.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		table.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
 
-		// 渲染表格
-		table.Render()
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = EvenRowStyle // 偶数行
+			default:
+				style = OddRowStyle // 奇数行
+			}
+
+			// 设置第一列格式
+			if col == 0 {
+				style = style.Foreground(general.ColumnOneColor)
+			}
+
+			return style
+		})
+
+		table.Headers(tableHeader...) // 设置表头
+		table.Rows(tableData...)      // 设置单元格
+
+		color.Println(table)
 	}
 
 	if flags["swapFlag"] {
@@ -524,7 +537,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		color.Printf("%s\n", general.FgGrayText("······ Swap ······"))
+		// color.Printf("%s\n", general.FgGrayText("······ Swap ······"))
 
 		// 获取 Memory 配置项
 		if config.Genealogy.Memory.DataUnit != "" {
@@ -535,14 +548,6 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取数据
 		swapInfo := general.GetSwapInfo(memoryDataUnit)
-
-		table := tablewriter.NewWriter(os.Stdout) // 初始化表格
-
-		// 获取随机颜色
-		if colorful {
-			columnColor = general.GetColor()
-			headerColor = tablewriter.FgCyanColor
-		}
 
 		// 组装表头
 		tableHeader := []string{""}
@@ -558,16 +563,6 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 				}()
 				tableHeader = append(tableHeader, item)
 			}
-			table.SetHeader(tableHeader)      // 设置表头
-			table.SetAutoFormatHeaders(false) // 设置是否自动格式化表头
-			table.SetHeaderColor(             // 设置表头颜色
-				tablewriter.Colors{tablewriter.BgHiBlackColor},
-				tablewriter.Colors{tablewriter.Bold, headerColor},
-			)
-			table.SetColumnColor( // 设置列颜色
-				tablewriter.Colors{tablewriter.FgHiBlackColor},
-				tablewriter.Colors{columnColor},
-			)
 		} else {
 			items = []string{"SwapTotal", "SwapFree"}
 			for _, item := range items {
@@ -580,18 +575,6 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 				}()
 				tableHeader = append(tableHeader, item)
 			}
-			table.SetHeader(tableHeader)      // 设置表头
-			table.SetAutoFormatHeaders(false) // 设置是否自动格式化表头
-			table.SetHeaderColor(             // 设置表头颜色
-				tablewriter.Colors{tablewriter.BgHiBlackColor},
-				tablewriter.Colors{tablewriter.Bold, headerColor},
-				tablewriter.Colors{tablewriter.Bold, headerColor},
-			)
-			table.SetColumnColor( // 设置列颜色
-				tablewriter.Colors{tablewriter.FgHiBlackColor},
-				tablewriter.Colors{columnColor},
-				tablewriter.Colors{columnColor},
-			)
 		}
 
 		// 组装表数据
@@ -603,23 +586,55 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		}
 		tableData = append(tableData, outputInfo)
 
-		table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
-		table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
-		table.SetCenterSeparator("·")                                                          // 设置中间分隔符
-		table.SetAutoWrapText(false)                                                           // 设置是否自动换行
-		table.SetRowLine(false)                                                                // 设置是否显示行边框
-
-		// 填充表格
-		for _, data := range tableData {
-			table.Append(data)
+		// 获取随机颜色
+		if colorful {
+			oddRowColor = general.GetColor()
+			evenRowColor = general.GetColor()
 		}
 
-		// 渲染表格
-		table.Render()
+		var (
+			OddRowStyle  = general.CellStyle.Foreground(oddRowColor)  // 奇数行样式
+			EvenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
+		)
+
+		table := table.New()                                // 创建一个表格
+		table.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		table.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		table.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
+
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = EvenRowStyle // 偶数行
+			default:
+				style = OddRowStyle // 奇数行
+			}
+
+			// 设置第一列格式
+			if col == 0 {
+				style = style.Foreground(general.ColumnOneColor)
+			}
+
+			return style
+		})
+
+		table.Headers(tableHeader...) // 设置表头
+		table.Rows(tableData...)      // 设置单元格
+
+		color.Println(table)
 	}
 
 	if flags["storageFlag"] {
-		color.Printf("%s\n", general.FgGrayText("······ Storage ······"))
+		diskPart := func() string {
+			partName := general.PartName["Disk"][general.Language]
+			if partName == "" {
+				partName = "Disk"
+			}
+			return partName
+		}()
+		// color.Printf("%s\n", general.FgGrayText("······ Storage ······"))
 
 		// 获取数据
 		storageInfo := general.GetStorageInfo()
@@ -640,15 +655,8 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 组装表数据
 		tableData := [][]string{}
-		diskPart := func() string {
-			partName := general.PartName["Disk"][general.Language]
-			if partName == "" {
-				partName = "Disk"
-			}
-			return partName
-		}()
 		for index := 1; index <= len(storageInfo); index++ {
-			outputInfo := []string{diskPart + "." + strconv.Itoa(index)}
+			outputInfo := []string{diskPart + strconv.Itoa(index)}
 			for _, item := range items {
 				outputValue := storageInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string)
 				outputInfo = append(outputInfo, outputValue)
@@ -658,48 +666,42 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取随机颜色
 		if colorful {
-			columnColor = general.GetColor()
-			headerColor = tablewriter.FgCyanColor
+			oddRowColor = general.GetColor()
+			evenRowColor = general.GetColor()
 		}
 
-		table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-		table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
-		table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
-		table.SetCenterSeparator("·")                                                          // 设置中间分隔符
-		table.SetAutoWrapText(false)                                                           // 设置是否自动换行
-		table.SetRowLine(false)                                                                // 设置是否显示行边框
-		table.SetHeader(tableHeader)                                                           // 设置表头
-		table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
-		table.SetHeaderColor(                                                                  // 设置表头颜色
-			tablewriter.Colors{tablewriter.BgHiBlackColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-		)
-		table.SetColumnColor( // 设置列颜色
-			tablewriter.Colors{tablewriter.FgHiBlackColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
+		var (
+			OddRowStyle  = general.CellStyle.Foreground(oddRowColor)  // 奇数行样式
+			EvenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 		)
 
-		// 填充表格
-		for _, data := range tableData {
-			table.Append(data)
-		}
+		table := table.New()                                // 创建一个表格
+		table.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		table.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		table.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
 
-		// 渲染表格
-		table.Render()
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = EvenRowStyle // 偶数行
+			default:
+				style = OddRowStyle // 奇数行
+			}
+
+			// 设置第一列格式
+			if col == 0 {
+				style = style.Foreground(general.ColumnOneColor)
+			}
+
+			return style
+		})
+
+		table.Headers(tableHeader...) // 设置表头
+		table.Rows(tableData...)      // 设置单元格
+
+		color.Println(table)
 	}
 
 	if flags["nicFlag"] {
@@ -710,7 +712,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		color.Printf("%s\n", general.FgGrayText("······ Nic ······"))
+		// color.Printf("%s\n", general.FgGrayText("······ Nic ······"))
 
 		// 获取数据
 		nicInfo := general.GetNicInfo()
@@ -732,7 +734,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		// 组装表数据
 		tableData := [][]string{}
 		for index := 1; index <= len(nicInfo); index++ {
-			outputInfo := []string{nicPart + "." + strconv.Itoa(index)}
+			outputInfo := []string{nicPart + strconv.Itoa(index)}
 			for _, item := range items {
 				outputValue := nicInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string)
 				outputInfo = append(outputInfo, outputValue)
@@ -742,48 +744,42 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取随机颜色
 		if colorful {
-			columnColor = general.GetColor()
-			headerColor = tablewriter.FgCyanColor
+			oddRowColor = general.GetColor()
+			evenRowColor = general.GetColor()
 		}
 
-		table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-		table.SetAlignment(tablewriter.ALIGN_LEFT)                                             // 设置对齐方式
-		table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
-		table.SetCenterSeparator("·")                                                          // 设置中间分隔符
-		table.SetAutoWrapText(false)                                                           // 设置是否自动换行
-		table.SetRowLine(false)                                                                // 设置是否显示行边框
-		table.SetHeader(tableHeader)                                                           // 设置表头
-		table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
-		table.SetHeaderColor(                                                                  // 设置表头颜色
-			tablewriter.Colors{tablewriter.BgHiBlackColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-		)
-		table.SetColumnColor( // 设置列颜色
-			tablewriter.Colors{tablewriter.FgHiBlackColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
+		var (
+			OddRowStyle  = general.CellStyle.Foreground(oddRowColor)  // 奇数行样式
+			EvenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 		)
 
-		// 填充表格
-		for _, data := range tableData {
-			table.Append(data)
-		}
+		table := table.New()                                // 创建一个表格
+		table.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		table.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		table.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
 
-		// 渲染表格
-		table.Render()
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = EvenRowStyle // 偶数行
+			default:
+				style = OddRowStyle // 奇数行
+			}
+
+			// 设置第一列格式
+			if col == 0 {
+				style = style.Foreground(general.ColumnOneColor)
+			}
+
+			return style
+		})
+
+		table.Headers(tableHeader...) // 设置表头
+		table.Rows(tableData...)      // 设置单元格
+
+		color.Println(table)
 	}
 
 	if flags["osFlag"] {
@@ -794,7 +790,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partNname
 		}()
-		color.Printf("%s\n", general.FgGrayText("······ OS ······"))
+		// color.Printf("%s\n", general.FgGrayText("······ OS ······"))
 
 		// 获取数据
 		osInfo := general.GetOSInfo(sysInfo)
@@ -824,44 +820,42 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取随机颜色
 		if colorful {
-			columnColor = general.GetColor()
-			headerColor = tablewriter.FgCyanColor
+			oddRowColor = general.GetColor()
+			evenRowColor = general.GetColor()
 		}
 
-		table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-		table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
-		table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
-		table.SetCenterSeparator("·")                                                          // 设置中间分隔符
-		table.SetAutoWrapText(false)                                                           // 设置是否自动换行
-		table.SetRowLine(false)                                                                // 设置是否显示行边框
-		table.SetHeader(tableHeader)                                                           // 设置表头
-		table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
-		table.SetHeaderColor(                                                                  // 设置表头颜色
-			tablewriter.Colors{tablewriter.BgHiBlackColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-		)
-		table.SetColumnColor( // 设置列颜色
-			tablewriter.Colors{tablewriter.FgHiBlackColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
+		var (
+			OddRowStyle  = general.CellStyle.Foreground(oddRowColor)  // 奇数行样式
+			EvenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 		)
 
-		// 填充表格
-		for _, data := range tableData {
-			table.Append(data)
-		}
+		table := table.New()                                // 创建一个表格
+		table.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		table.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		table.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
 
-		// 渲染表格
-		table.Render()
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = EvenRowStyle // 偶数行
+			default:
+				style = OddRowStyle // 奇数行
+			}
+
+			// 设置第一列格式
+			if col == 0 {
+				style = style.Foreground(general.ColumnOneColor)
+			}
+
+			return style
+		})
+
+		table.Headers(tableHeader...) // 设置表头
+		table.Rows(tableData...)      // 设置单元格
+
+		color.Println(table)
 	}
 
 	if flags["loadFlag"] {
@@ -872,7 +866,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		color.Printf("%s\n", general.FgGrayText("······ Load ······"))
+		// color.Printf("%s\n", general.FgGrayText("······ Load ······"))
 
 		// 获取数据
 		loadInfo := general.GetLoadInfo()
@@ -907,40 +901,42 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取随机颜色
 		if colorful {
-			columnColor = general.GetColor()
-			headerColor = tablewriter.FgCyanColor
+			oddRowColor = general.GetColor()
+			evenRowColor = general.GetColor()
 		}
 
-		table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-		table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
-		table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
-		table.SetCenterSeparator("·")                                                          // 设置中间分隔符
-		table.SetAutoWrapText(false)                                                           // 设置是否自动换行
-		table.SetRowLine(false)                                                                // 设置是否显示行边框
-		table.SetHeader(tableHeader)                                                           // 设置表头
-		table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
-		table.SetHeaderColor(                                                                  // 设置表头颜色
-			tablewriter.Colors{tablewriter.BgHiBlackColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-		)
-		table.SetColumnColor( // 设置列颜色
-			tablewriter.Colors{tablewriter.FgHiBlackColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
+		var (
+			OddRowStyle  = general.CellStyle.Foreground(oddRowColor)  // 奇数行样式
+			EvenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 		)
 
-		// 填充表格
-		for _, data := range tableData {
-			table.Append(data)
-		}
+		table := table.New()                                // 创建一个表格
+		table.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		table.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		table.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
 
-		// 渲染表格
-		table.Render()
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = EvenRowStyle // 偶数行
+			default:
+				style = OddRowStyle // 奇数行
+			}
+
+			// 设置第一列格式
+			if col == 0 {
+				style = style.Foreground(general.ColumnOneColor)
+			}
+
+			return style
+		})
+
+		table.Headers(tableHeader...) // 设置表头
+		table.Rows(tableData...)      // 设置单元格
+
+		color.Println(table)
 	}
 
 	if flags["timeFlag"] {
@@ -951,7 +947,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		color.Printf("%s\n", general.FgGrayText("······ Time ······"))
+		// color.Printf("%s\n", general.FgGrayText("······ Time ······"))
 
 		// 获取数据
 		timeInfo, _ := general.GetTimeInfo()
@@ -981,38 +977,42 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取随机颜色
 		if colorful {
-			columnColor = general.GetColor()
-			headerColor = tablewriter.FgCyanColor
+			oddRowColor = general.GetColor()
+			evenRowColor = general.GetColor()
 		}
 
-		table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-		table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
-		table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
-		table.SetCenterSeparator("·")                                                          // 设置中间分隔符
-		table.SetAutoWrapText(false)                                                           // 设置是否自动换行
-		table.SetRowLine(false)                                                                // 设置是否显示行边框
-		table.SetHeader(tableHeader)                                                           // 设置表头
-		table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
-		table.SetHeaderColor(                                                                  // 设置表头颜色
-			tablewriter.Colors{tablewriter.BgHiBlackColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-		)
-		table.SetColumnColor( // 设置列颜色
-			tablewriter.Colors{tablewriter.FgHiBlackColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
+		var (
+			OddRowStyle  = general.CellStyle.Foreground(oddRowColor)  // 奇数行样式
+			EvenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 		)
 
-		// 填充表格
-		for _, data := range tableData {
-			table.Append(data)
-		}
+		table := table.New()                                // 创建一个表格
+		table.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		table.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		table.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
 
-		// 渲染表格
-		table.Render()
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = EvenRowStyle // 偶数行
+			default:
+				style = OddRowStyle // 奇数行
+			}
+
+			// 设置第一列格式
+			if col == 0 {
+				style = style.Foreground(general.ColumnOneColor)
+			}
+
+			return style
+		})
+
+		table.Headers(tableHeader...) // 设置表头
+		table.Rows(tableData...)      // 设置单元格
+
+		color.Println(table)
 	}
 
 	if flags["userFlag"] {
@@ -1023,7 +1023,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		color.Printf("%s\n", general.FgGrayText("······ User ······"))
+		// color.Printf("%s\n", general.FgGrayText("······ User ······"))
 
 		// 获取数据
 		userInfo := general.GetUserInfo()
@@ -1053,98 +1053,147 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取随机颜色
 		if colorful {
-			columnColor = general.GetColor()
-			headerColor = tablewriter.FgCyanColor
+			oddRowColor = general.GetColor()
+			evenRowColor = general.GetColor()
 		}
 
-		table := tablewriter.NewWriter(os.Stdout)                                              // 初始化表格
-		table.SetAlignment(tablewriter.ALIGN_CENTER)                                           // 设置对齐方式
-		table.SetBorders(tablewriter.Border{Top: true, Bottom: true, Left: true, Right: true}) // 设置表格边框
-		table.SetCenterSeparator("·")                                                          // 设置中间分隔符
-		table.SetAutoWrapText(false)                                                           // 设置是否自动换行
-		table.SetRowLine(false)                                                                // 设置是否显示行边框
-		table.SetHeader(tableHeader)                                                           // 设置表头
-		table.SetAutoFormatHeaders(false)                                                      // 设置是否自动格式化表头
-		table.SetHeaderColor(                                                                  // 设置表头颜色
-			tablewriter.Colors{tablewriter.BgHiBlackColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-			tablewriter.Colors{tablewriter.Bold, headerColor},
-		)
-		table.SetColumnColor( // 设置列颜色
-			tablewriter.Colors{tablewriter.FgHiBlackColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
-			tablewriter.Colors{columnColor},
+		var (
+			OddRowStyle  = general.CellStyle.Foreground(oddRowColor)  // 奇数行样式
+			EvenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 		)
 
-		// 填充表格
-		for _, data := range tableData {
-			table.Append(data)
-		}
+		table := table.New()                                // 创建一个表格
+		table.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		table.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		table.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
 
-		// 渲染表格
-		table.Render()
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = EvenRowStyle // 偶数行
+			default:
+				style = OddRowStyle // 奇数行
+			}
+
+			// 设置第一列格式
+			if col == 0 {
+				style = style.Foreground(general.ColumnOneColor)
+			}
+
+			return style
+		})
+
+		table.Headers(tableHeader...) // 设置表头
+		table.Rows(tableData...)      // 设置单元格
+
+		color.Println(table)
 	}
 
 	if flags["updateFlag"] {
 		if flags["onlyFlag"] {
-			// 仅输出可更新包信息，专为第三方系统更新检测插件服务
-			updateInfo, _ := general.GetUpdateInfo(updateRecordFile, 0)
-			for num, info := range updateInfo {
+			// 仅输出不带额外格式的可更新包信息，专为第三方更新检测插件服务
+			packageInfo, _ := general.GetPackageInfo(updateRecordFile, 0)
+			for num, info := range packageInfo["PackageList"].([]string) {
 				color.Printf("%v: %v\n", num+1, info)
 			}
 		} else {
-			color.Printf("%s\n", general.FgGrayText("······ Update ······"))
+			updatePart := func() string {
+				partName := general.PartName["Update"][general.Language]
+				if partName == "" {
+					partName = "Update"
+				}
+				return partName
+			}()
+			// color.Printf("%s\n", general.FgGrayText("······ Update ······"))
+
 			// 获取 update 配置项
 			if config.Genealogy.Update.RecordFile != "" {
 				updateRecordFile = config.Genealogy.Update.RecordFile
 			} else {
 				color.Danger.Println("Config file is missing 'update.record_file' item, using default value")
 			}
-			itemColor := general.LightText
-			itemInfoColor := general.FgWhiteText
-			listColor := general.FgWhiteText
-			if colorful {
-				itemColor = general.PrimaryText
-				itemInfoColor = general.FgGreenText
-				listColor = general.FgGreenText
-			}
-			// 更新服务状态监测
+
+			// 获取数据
 			daemonInfo, _ := general.GetUpdateDaemonInfo()
-			daemonItem := "UpdateDaemonStatus"
-			daemonItemName := general.GenealogyName[daemonItem][general.Language]
-			if daemonItemName != "" {
-				color.Printf("%v: %v\n", itemColor(daemonItemName), itemInfoColor(daemonInfo[daemonItem]))
-			} else {
-				color.Printf("%v: %v\n", itemColor(daemonItem), itemInfoColor(daemonInfo[daemonItem]))
+			packageInfo, _ := general.GetPackageInfo(updateRecordFile, 0)
+			updateInfo := make(map[string]interface{})
+			// 合并两部分数据
+			for key, value := range daemonInfo {
+				updateInfo[key] = value
 			}
-			// 更新列表计数
-			updateInfo, err := general.GetUpdateInfo(updateRecordFile, 0)
-			if err != nil {
-				color.Danger.Println(err)
-			} else {
-				packageItem := "UpdateList"
-				packageItemName := general.GenealogyName[packageItem][general.Language]
-				numLength := 0                                // 用于格式化输出可更新包列表
-				packageItemLength := len(packageItem)         // 用于格式化输出可更新包列表
-				packageItemNameLength := len(packageItemName) // 用于格式化输出可更新包列表
-				if packageItemName != "" {
-					color.Printf("%v: %v\n", itemColor(packageItemName), itemInfoColor(len(updateInfo)))
-					numLength = packageItemNameLength - packageItemNameLength/3*1
+			for key, value := range packageInfo {
+				updateInfo[key] = value
+			}
+			items = []string{"UpdateDaemonStatus", "PackageQuantity", "PackageList"}
+
+			// 组装表头
+			tableHeader := []string{""}
+			for _, item := range items {
+				item = func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
+				tableHeader = append(tableHeader, item)
+			}
+
+			// 组装表数据
+			tableData := [][]string{}
+			outputInfo := []string{updatePart}
+			var outputValue string
+			for _, item := range items {
+				if item == "PackageList" {
+					packageList := updateInfo[item].([]string)
+					outputValue = strings.Join(packageList, "\n")
 				} else {
-					color.Printf("%v: %v\n", itemColor(packageItem), itemInfoColor(len(updateInfo)))
-					numLength = packageItemLength
+					outputValue = updateInfo[item].(string)
 				}
-				// 输出可更新包信息
-				for num, info := range updateInfo {
-					color.Printf("%*v: %v\n", numLength, num+1, listColor(info))
-				}
+				outputInfo = append(outputInfo, outputValue)
 			}
+			tableData = append(tableData, outputInfo)
+
+			// 获取随机颜色
+			if colorful {
+				oddRowColor = general.GetColor()
+				evenRowColor = general.GetColor()
+			}
+
+			var (
+				OddRowStyle  = general.CellStyle.Foreground(oddRowColor)  // 奇数行样式
+				EvenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
+			)
+
+			table := table.New()                                // 创建一个表格
+			table.Border(lipgloss.RoundedBorder())              // 设置表格边框
+			table.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+			table.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+				var style lipgloss.Style
+
+				switch {
+				case row == 0:
+					return general.HeaderStyle // 第一行为表头
+				case row%2 == 0:
+					style = EvenRowStyle // 偶数行
+				default:
+					style = OddRowStyle // 奇数行
+				}
+
+				// 设置第一列格式
+				if col == 0 {
+					style = style.Foreground(general.ColumnOneColor)
+				}
+
+				return style
+			})
+
+			table.Headers(tableHeader...) // 设置表头
+			table.Rows(tableData...)      // 设置单元格
+
+			color.Println(table)
 		}
 	}
 }

@@ -404,18 +404,18 @@ func GetTimeInfo() (map[string]interface{}, error) {
 	return timeInfo, nil
 }
 
-// GetUpdateInfo 读取更新信息记录文件
+// GetPackageInfo 读取可更新包信息
 //
 // 参数：
 //   - filePath: 更新信息记录文件路径
 //   - line: 读取指定行，等于 0 时读取全部行
 //
 // 返回：
-//   - 更新信息
+//   - 可更新包信息
 //   - 错误信息
-func GetUpdateInfo(filePath string, line int) ([]string, error) {
+func GetPackageInfo(filePath string, line int) (map[string]interface{}, error) {
+	var packageSlice []string
 	if filePath != "" && FileExist(filePath) {
-		var textSlice []string
 		// 打开文件
 		text, err := os.Open(filePath)
 		if err != nil {
@@ -430,18 +430,18 @@ func GetUpdateInfo(filePath string, line int) ([]string, error) {
 		// 逐行读取，输出指定行
 		for scanner.Scan() {
 			if line == count {
-				textSlice = append(textSlice, scanner.Text())
+				packageSlice = append(packageSlice, scanner.Text())
 				break
 			}
-			textSlice = append(textSlice, scanner.Text())
+			packageSlice = append(packageSlice, scanner.Text())
 			count++
 		}
-		return textSlice, nil
-	} else if filePath == "" {
-		return nil, nil
-	} else {
-		return nil, nil
 	}
+	updateInfo := make(map[string]interface{})
+	updateInfo["PackageList"] = packageSlice
+	updateInfo["PackageQuantity"] = strconv.Itoa(len(packageSlice))
+
+	return updateInfo, nil
 }
 
 // GetUpdateDaemonInfo 获取更新检测服务的信息
