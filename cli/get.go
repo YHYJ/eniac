@@ -35,23 +35,23 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 	// 设置配置项默认值
 	var (
-		colorful          bool   = true // TODO: 未读取配置项
+		colorful          bool   = config.Main.Colorful
 		cpuCacheUnit      string = "KB"
 		memoryDataUnit    string = "GB"
 		memoryPercentUnit string = "%"
 		updateRecordFile  string = "/tmp/system-checkupdates.log"
 	)
 
-	// 采集系统信息（集中采集一次后分配到不同的参数）
-	var sysInfo sysinfo.SysInfo
-	sysInfo.GetSysInfo()
-
 	// 表格参数
 	var (
-		items        []string               // 输出项名称参数
+		items        []string               // 输出项名称
 		oddRowColor  = general.DefaultColor // 奇数行颜色
 		evenRowColor = general.DefaultColor // 偶数行颜色
 	)
+
+	// 采集系统信息（集中采集一次后分配到不同的参数）
+	var sysInfo sysinfo.SysInfo
+	sysInfo.GetSysInfo()
 
 	// 执行对应函数
 	if flags["productFlag"] {
@@ -1079,6 +1079,13 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 	}
 
 	if flags["updateFlag"] {
+		// 获取 update 配置项
+		if config.Genealogy.Update.RecordFile != "" {
+			updateRecordFile = config.Genealogy.Update.RecordFile
+		} else {
+			color.Danger.Println("Config file is missing 'update.record_file' item, using default value")
+		}
+
 		if flags["onlyFlag"] {
 			// 仅输出不带额外格式的可更新包信息，专为第三方更新检测插件服务
 			packageInfo, _ := general.GetPackageInfo(updateRecordFile, 0)
@@ -1093,13 +1100,6 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 				}
 				return partName
 			}()
-
-			// 获取 update 配置项
-			if config.Genealogy.Update.RecordFile != "" {
-				updateRecordFile = config.Genealogy.Update.RecordFile
-			} else {
-				color.Danger.Println("Config file is missing 'update.record_file' item, using default value")
-			}
 
 			// 获取数据
 			daemonInfo, _ := general.GetUpdateDaemonInfo()
