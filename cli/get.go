@@ -1182,9 +1182,12 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 					style = OddRowStyle // 奇数行
 				}
 
-				// 设置第一列格式
-				if col == 0 {
+				// 设置特定列格式
+				switch col {
+				case 0:
 					style = style.Foreground(general.ColumnOneColor)
+				case 3:
+					style = style.Align(lipgloss.Left)
 				}
 
 				return style
