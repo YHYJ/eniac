@@ -105,13 +105,13 @@ var availableColors = []lipgloss.Color{
 	lipgloss.Color("#DB7093"),
 }
 
+var previousColor int // 上一次随机颜色的索引
+
 // GetColor 随机获取一个颜色
 //
 // 返回：
 //   - 颜色代码
 func GetColor() lipgloss.Color {
-	var previousColor int // 上一次随机颜色的索引
-
 	// 没有可用的颜色，则返回默认颜色
 	if len(availableColors) == 0 {
 		return DefaultColor
