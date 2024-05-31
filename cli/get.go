@@ -62,7 +62,6 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		// TODO: 是否删除：color.Printf("%s\n", general.FgGrayText("······ Product ······"))
 
 		// 获取数据
 		productInfo := general.GetProductInfo(sysInfo)
@@ -138,7 +137,6 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		// color.Printf("%s\n", general.FgGrayText("······ Board ······"))
 
 		// 获取数据
 		boardInfo := general.GetBoardInfo(sysInfo)
@@ -214,7 +212,6 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		// color.Printf("%s\n", general.FgGrayText("······ BIOS ······"))
 
 		// 获取数据
 		biosInfo := general.GetBIOSInfo(sysInfo)
@@ -290,7 +287,6 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		// color.Printf("%s\n", general.FgGrayText("······ CPU ······"))
 
 		// 获取 CPU 配置项
 		if config.Genealogy.Cpu.CacheUnit != "" {
@@ -373,7 +369,6 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		// color.Printf("%s\n", general.FgGrayText("······ GPU ······"))
 
 		// 获取数据
 		gpuInfo := general.GetGPUInfo()
@@ -449,7 +444,6 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		// color.Printf("%s\n", general.FgGrayText("······ Memory ······"))
 
 		// 获取 Memory 配置项
 		if config.Genealogy.Memory.DataUnit != "" {
@@ -537,7 +531,6 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		// color.Printf("%s\n", general.FgGrayText("······ Swap ······"))
 
 		// 获取 Memory 配置项
 		if config.Genealogy.Memory.DataUnit != "" {
@@ -634,7 +627,6 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		// color.Printf("%s\n", general.FgGrayText("······ Storage ······"))
 
 		// 获取数据
 		storageInfo := general.GetStorageInfo()
@@ -712,7 +704,6 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		// color.Printf("%s\n", general.FgGrayText("······ Nic ······"))
 
 		// 获取数据
 		nicInfo := general.GetNicInfo()
@@ -790,7 +781,6 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partNname
 		}()
-		// color.Printf("%s\n", general.FgGrayText("······ OS ······"))
 
 		// 获取数据
 		osInfo := general.GetOSInfo(sysInfo)
@@ -866,7 +856,6 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		// color.Printf("%s\n", general.FgGrayText("······ Load ······"))
 
 		// 获取数据
 		loadInfo := general.GetLoadInfo()
@@ -947,7 +936,6 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		// color.Printf("%s\n", general.FgGrayText("······ Time ······"))
 
 		// 获取数据
 		timeInfo, _ := general.GetTimeInfo()
@@ -1023,7 +1011,6 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			return partName
 		}()
-		// color.Printf("%s\n", general.FgGrayText("······ User ······"))
 
 		// 获取数据
 		userInfo := general.GetUserInfo()
@@ -1106,7 +1093,6 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 				}
 				return partName
 			}()
-			// color.Printf("%s\n", general.FgGrayText("······ Update ······"))
 
 			// 获取 update 配置项
 			if config.Genealogy.Update.RecordFile != "" {
