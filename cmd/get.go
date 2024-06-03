@@ -20,7 +20,7 @@ import (
 var getCmd = &cobra.Command{
 	Use:   "get",
 	Short: "Get system information",
-	Long:  `Get system information.`,
+	Long:  `Get system information, no flag entry alternate mode.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// 获取配置文件路径
 		configFile, _ := cmd.Flags().GetString("config")
