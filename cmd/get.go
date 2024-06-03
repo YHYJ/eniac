@@ -24,58 +24,6 @@ var getCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		// 获取配置文件路径
 		configFile, _ := cmd.Flags().GetString("config")
-		// 解析参数
-		allFlags := make(map[string]bool)
-		allFlag, _ := cmd.Flags().GetBool("all")
-		if allFlag {
-			allFlags["biosFlag"] = true
-			allFlags["boardFlag"] = true
-			allFlags["gpuFlag"] = true
-			allFlags["cpuFlag"] = true
-			allFlags["loadFlag"] = true
-			allFlags["memoryFlag"] = true
-			allFlags["osFlag"] = true
-			allFlags["productFlag"] = true
-			allFlags["storageFlag"] = true
-			allFlags["swapFlag"] = true
-			allFlags["nicFlag"] = true
-			allFlags["timeFlag"] = true
-			allFlags["userFlag"] = true
-			allFlags["updateFlag"] = true
-			allFlags["onlyFlag"] = false
-		} else {
-			allFlags["biosFlag"], _ = cmd.Flags().GetBool("bios")
-			allFlags["boardFlag"], _ = cmd.Flags().GetBool("board")
-			allFlags["gpuFlag"], _ = cmd.Flags().GetBool("gpu")
-			allFlags["cpuFlag"], _ = cmd.Flags().GetBool("cpu")
-			allFlags["loadFlag"], _ = cmd.Flags().GetBool("load")
-			allFlags["memoryFlag"], _ = cmd.Flags().GetBool("memory")
-			allFlags["osFlag"], _ = cmd.Flags().GetBool("os")
-			allFlags["productFlag"], _ = cmd.Flags().GetBool("product")
-			allFlags["storageFlag"], _ = cmd.Flags().GetBool("storage")
-			allFlags["swapFlag"], _ = cmd.Flags().GetBool("swap")
-			allFlags["nicFlag"], _ = cmd.Flags().GetBool("nic")
-			allFlags["timeFlag"], _ = cmd.Flags().GetBool("time")
-			allFlags["userFlag"], _ = cmd.Flags().GetBool("user")
-			allFlags["updateFlag"], _ = cmd.Flags().GetBool("update")
-			allFlags["onlyFlag"], _ = cmd.Flags().GetBool("only")
-		}
-
-		var (
-			noticeSlogan []string // 提示标语
-		)
-		// 检查 allFlags 中的所有值是否都为 false
-		allFalse := true
-		for _, value := range allFlags {
-			if value {
-				allFalse = false
-				break
-			}
-		}
-		if allFalse {
-			cmd.Help()
-			noticeSlogan = append(noticeSlogan, "Please refer to the above help information")
-		}
 
 		// 读取配置文件
 		confTree, err := general.GetTomlConfig(configFile)
@@ -83,14 +31,60 @@ var getCmd = &cobra.Command{
 			color.Danger.Printf("%s, use default configuration\n", err)
 		}
 
-		// 抓取系统信息
-		cli.GrabSystemInformation(confTree, allFlags)
+		if cmd.Flags().NFlag() == 0 {
+			// 抓取系统信息
+			cli.GrabInformationToTab(confTree)
+		} else {
+			// 解析参数
+			allFlag, _ := cmd.Flags().GetBool("all")
+			allFlags := make(map[string]bool)
+			if allFlag {
+				allFlags["biosFlag"] = true
+				allFlags["boardFlag"] = true
+				allFlags["gpuFlag"] = true
+				allFlags["cpuFlag"] = true
+				allFlags["loadFlag"] = true
+				allFlags["memoryFlag"] = true
+				allFlags["osFlag"] = true
+				allFlags["productFlag"] = true
+				allFlags["storageFlag"] = true
+				allFlags["swapFlag"] = true
+				allFlags["nicFlag"] = true
+				allFlags["timeFlag"] = true
+				allFlags["userFlag"] = true
+				allFlags["updateFlag"] = true
+				allFlags["onlyFlag"] = false
+			} else {
+				allFlags["biosFlag"], _ = cmd.Flags().GetBool("bios")
+				allFlags["boardFlag"], _ = cmd.Flags().GetBool("board")
+				allFlags["gpuFlag"], _ = cmd.Flags().GetBool("gpu")
+				allFlags["cpuFlag"], _ = cmd.Flags().GetBool("cpu")
+				allFlags["loadFlag"], _ = cmd.Flags().GetBool("load")
+				allFlags["memoryFlag"], _ = cmd.Flags().GetBool("memory")
+				allFlags["osFlag"], _ = cmd.Flags().GetBool("os")
+				allFlags["productFlag"], _ = cmd.Flags().GetBool("product")
+				allFlags["storageFlag"], _ = cmd.Flags().GetBool("storage")
+				allFlags["swapFlag"], _ = cmd.Flags().GetBool("swap")
+				allFlags["nicFlag"], _ = cmd.Flags().GetBool("nic")
+				allFlags["timeFlag"], _ = cmd.Flags().GetBool("time")
+				allFlags["userFlag"], _ = cmd.Flags().GetBool("user")
+				allFlags["updateFlag"], _ = cmd.Flags().GetBool("update")
+				allFlags["onlyFlag"], _ = cmd.Flags().GetBool("only")
+			}
 
-		// 输出标语
-		if len(noticeSlogan) > 0 {
-			color.Println()
-			for _, slogan := range noticeSlogan {
-				color.Notice.Tips(general.PrimaryText(slogan))
+			var (
+				noticeSlogan []string // 提示标语
+			)
+
+			// 抓取系统信息
+			cli.GrabInformationToTable(confTree, allFlags)
+
+			// 输出标语
+			if len(noticeSlogan) > 0 {
+				color.Println()
+				for _, slogan := range noticeSlogan {
+					color.Notice.Tips(general.PrimaryText(slogan))
+				}
 			}
 		}
 	},
