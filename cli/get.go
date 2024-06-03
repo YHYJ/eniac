@@ -83,12 +83,12 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 组装表数据
 		tableData := [][]string{}
-		outputInfo := []string{productPart}
+		rowData := []string{productPart}
 		for _, item := range items {
-			outputValue := productInfo[item].(string)
-			outputInfo = append(outputInfo, outputValue)
+			cellData := productInfo[item].(string)
+			rowData = append(rowData, cellData)
 		}
-		tableData = append(tableData, outputInfo)
+		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
 		if colorful {
@@ -158,12 +158,12 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 组装表数据
 		tableData := [][]string{}
-		outputInfo := []string{boardPart}
+		rowData := []string{boardPart}
 		for _, item := range items {
-			outputValue := boardInfo[item].(string)
-			outputInfo = append(outputInfo, outputValue)
+			cellData := boardInfo[item].(string)
+			rowData = append(rowData, cellData)
 		}
-		tableData = append(tableData, outputInfo)
+		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
 		if colorful {
@@ -233,12 +233,12 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 组装表数据
 		tableData := [][]string{}
-		outputInfo := []string{biosPart}
+		rowData := []string{biosPart}
 		for _, item := range items {
-			outputValue := biosInfo[item].(string)
-			outputInfo = append(outputInfo, outputValue)
+			cellData := biosInfo[item].(string)
+			rowData = append(rowData, cellData)
 		}
-		tableData = append(tableData, outputInfo)
+		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
 		if colorful {
@@ -315,12 +315,12 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 组装表数据
 		tableData := [][]string{}
-		outputInfo := []string{cpuPart}
+		rowData := []string{cpuPart}
 		for _, item := range items {
-			outputValue := color.Sprintf("%v", cpuInfo[item])
-			outputInfo = append(outputInfo, outputValue)
+			cellData := color.Sprintf("%v", cpuInfo[item])
+			rowData = append(rowData, cellData)
 		}
-		tableData = append(tableData, outputInfo)
+		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
 		if colorful {
@@ -390,12 +390,12 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 组装表数据
 		tableData := [][]string{}
-		outputInfo := []string{gpuPart}
+		rowData := []string{gpuPart}
 		for _, item := range items {
-			outputValue := gpuInfo[item].(string)
-			outputInfo = append(outputInfo, outputValue)
+			cellData := gpuInfo[item].(string)
+			rowData = append(rowData, cellData)
 		}
-		tableData = append(tableData, outputInfo)
+		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
 		if colorful {
@@ -477,12 +477,12 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 组装表数据
 		tableData := [][]string{}
-		outputInfo := []string{memoryPart}
+		rowData := []string{memoryPart}
 		for _, item := range items {
-			outputValue := memoryInfo[item].(string)
-			outputInfo = append(outputInfo, outputValue)
+			cellData := memoryInfo[item].(string)
+			rowData = append(rowData, cellData)
 		}
-		tableData = append(tableData, outputInfo)
+		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
 		if colorful {
@@ -573,12 +573,12 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 组装表数据
 		tableData := [][]string{}
-		outputInfo := []string{swapPart}
+		rowData := []string{swapPart}
 		for _, item := range items {
-			outputValue := color.Sprintf("%v", swapInfo[item])
-			outputInfo = append(outputInfo, outputValue)
+			cellData := color.Sprintf("%v", swapInfo[item])
+			rowData = append(rowData, cellData)
 		}
-		tableData = append(tableData, outputInfo)
+		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
 		if colorful {
@@ -649,12 +649,12 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		// 组装表数据
 		tableData := [][]string{}
 		for index := 1; index <= len(storageInfo); index++ {
-			outputInfo := []string{diskPart + strconv.Itoa(index)}
+			rowData := []string{diskPart + strconv.Itoa(index)}
 			for _, item := range items {
-				outputValue := storageInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string)
-				outputInfo = append(outputInfo, outputValue)
+				cellData := storageInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string)
+				rowData = append(rowData, cellData)
 			}
-			tableData = append(tableData, outputInfo)
+			tableData = append(tableData, rowData)
 		}
 
 		// 获取随机颜色
@@ -726,12 +726,12 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		// 组装表数据
 		tableData := [][]string{}
 		for index := 1; index <= len(nicInfo); index++ {
-			outputInfo := []string{nicPart + strconv.Itoa(index)}
+			rowData := []string{nicPart + strconv.Itoa(index)}
 			for _, item := range items {
-				outputValue := nicInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string)
-				outputInfo = append(outputInfo, outputValue)
+				cellData := nicInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string)
+				rowData = append(rowData, cellData)
 			}
-			tableData = append(tableData, outputInfo)
+			tableData = append(tableData, rowData)
 		}
 
 		// 获取随机颜色
@@ -802,12 +802,12 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 组装表数据
 		tableData := [][]string{}
-		outputInfo := []string{osPart}
+		rowData := []string{osPart}
 		for _, item := range items {
-			outputValue := osInfo[item].(string)
-			outputInfo = append(outputInfo, outputValue)
+			cellData := osInfo[item].(string)
+			rowData = append(rowData, cellData)
 		}
-		tableData = append(tableData, outputInfo)
+		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
 		if colorful {
@@ -877,17 +877,17 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 组装表数据
 		tableData := [][]string{}
-		outputInfo := []string{loadPart}
-		outputValue := ""
+		rowData := []string{loadPart}
+		cellData := ""
 		for _, item := range items {
 			if item == "Process" {
-				outputValue = color.Sprintf("%d", loadInfo[item].(uint64))
+				cellData = color.Sprintf("%d", loadInfo[item].(uint64))
 			} else {
-				outputValue = color.Sprintf("%.2f", loadInfo[item].(float64))
+				cellData = color.Sprintf("%.2f", loadInfo[item].(float64))
 			}
-			outputInfo = append(outputInfo, outputValue)
+			rowData = append(rowData, cellData)
 		}
-		tableData = append(tableData, outputInfo)
+		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
 		if colorful {
@@ -957,12 +957,12 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 组装表数据
 		tableData := [][]string{}
-		outputInfo := []string{timePart}
+		rowData := []string{timePart}
 		for _, item := range items {
-			outputValue := timeInfo[item].(string)
-			outputInfo = append(outputInfo, outputValue)
+			cellData := timeInfo[item].(string)
+			rowData = append(rowData, cellData)
 		}
-		tableData = append(tableData, outputInfo)
+		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
 		if colorful {
@@ -1032,12 +1032,12 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 组装表数据
 		tableData := [][]string{}
-		outputInfo := []string{userPart}
+		rowData := []string{userPart}
 		for _, item := range items {
-			outputValue := userInfo[item].(string)
-			outputInfo = append(outputInfo, outputValue)
+			cellData := userInfo[item].(string)
+			rowData = append(rowData, cellData)
 		}
-		tableData = append(tableData, outputInfo)
+		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
 		if colorful {
@@ -1130,18 +1130,18 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 			// 组装表数据
 			tableData := [][]string{}
-			outputInfo := []string{updatePart}
-			var outputValue string
+			rowData := []string{updatePart}
 			for _, item := range items {
+				cellData := ""
 				if item == "PackageList" {
 					packageList := updateInfo[item].([]string)
-					outputValue = strings.Join(packageList, "\n")
+					cellData = strings.Join(packageList, "\n")
 				} else {
-					outputValue = updateInfo[item].(string)
+					cellData = updateInfo[item].(string)
 				}
-				outputInfo = append(outputInfo, outputValue)
+				rowData = append(rowData, cellData)
 			}
-			tableData = append(tableData, outputInfo)
+			tableData = append(tableData, rowData)
 
 			// 获取随机颜色
 			if colorful {
