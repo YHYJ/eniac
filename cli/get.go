@@ -71,14 +71,14 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		// 组装表头
 		tableHeader := []string{""}
 		for _, item := range items {
-			item = func() string {
+			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
 				if itemName == "" {
 					itemName = item
 				}
 				return itemName
 			}()
-			tableHeader = append(tableHeader, item)
+			tableHeader = append(tableHeader, itemI18n)
 		}
 
 		// 组装表数据
@@ -146,14 +146,14 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		// 组装表头
 		tableHeader := []string{""}
 		for _, item := range items {
-			item = func() string {
+			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
 				if itemName == "" {
 					itemName = item
 				}
 				return itemName
 			}()
-			tableHeader = append(tableHeader, item)
+			tableHeader = append(tableHeader, itemI18n)
 		}
 
 		// 组装表数据
@@ -221,14 +221,14 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		// 组装表头
 		tableHeader := []string{""}
 		for _, item := range items {
-			item = func() string {
+			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
 				if itemName == "" {
 					itemName = item
 				}
 				return itemName
 			}()
-			tableHeader = append(tableHeader, item)
+			tableHeader = append(tableHeader, itemI18n)
 		}
 
 		// 组装表数据
@@ -303,14 +303,14 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		// 组装表头
 		tableHeader := []string{""}
 		for _, item := range items {
-			item = func() string {
+			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
 				if itemName == "" {
 					itemName = item
 				}
 				return itemName
 			}()
-			tableHeader = append(tableHeader, item)
+			tableHeader = append(tableHeader, itemI18n)
 		}
 
 		// 组装表数据
@@ -378,14 +378,14 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		// 组装表头
 		tableHeader := []string{""}
 		for _, item := range items {
-			item = func() string {
+			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
 				if itemName == "" {
 					itemName = item
 				}
 				return itemName
 			}()
-			tableHeader = append(tableHeader, item)
+			tableHeader = append(tableHeader, itemI18n)
 		}
 
 		// 组装表数据
@@ -465,14 +465,14 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		// 组装表头
 		tableHeader := []string{""}
 		for _, item := range items {
-			item = func() string {
+			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
 				if itemName == "" {
 					itemName = item
 				}
 				return itemName
 			}()
-			tableHeader = append(tableHeader, item)
+			tableHeader = append(tableHeader, itemI18n)
 		}
 
 		// 组装表数据
@@ -548,26 +548,26 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		if swapInfo["SwapStatus"] == "Unavailable" {
 			items = config.Genealogy.Swap.Items.Unavailable
 			for _, item := range items {
-				item = func() string {
+				itemI18n := func() string {
 					itemName := general.GenealogyName[item][general.Language]
 					if itemName == "" {
 						itemName = item
 					}
 					return itemName
 				}()
-				tableHeader = append(tableHeader, item)
+				tableHeader = append(tableHeader, itemI18n)
 			}
 		} else {
 			items = config.Genealogy.Swap.Items.Available
 			for _, item := range items {
-				item = func() string {
+				itemI18n := func() string {
 					itemName := general.GenealogyName[item][general.Language]
 					if itemName == "" {
 						itemName = item
 					}
 					return itemName
 				}()
-				tableHeader = append(tableHeader, item)
+				tableHeader = append(tableHeader, itemI18n)
 			}
 		}
 
@@ -636,14 +636,14 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		// 组装表头
 		tableHeader := []string{""}
 		for _, item := range items {
-			item = func() string {
+			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
 				if itemName == "" {
 					itemName = item
 				}
 				return itemName
 			}()
-			tableHeader = append(tableHeader, item)
+			tableHeader = append(tableHeader, itemI18n)
 		}
 
 		// 组装表数据
@@ -713,14 +713,14 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		// 组装表头
 		tableHeader := []string{""}
 		for _, item := range items {
-			item = func() string {
+			itemI18n := func() string {
 				itemNname := general.GenealogyName[item][general.Language]
 				if itemNname == "" {
 					itemNname = item
 				}
 				return itemNname
 			}()
-			tableHeader = append(tableHeader, item)
+			tableHeader = append(tableHeader, itemI18n)
 		}
 
 		// 组装表数据
@@ -790,14 +790,14 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		// 组装表头
 		tableHeader := []string{""}
 		for _, item := range items {
-			item = func() string {
+			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
 				if itemName == "" {
 					itemName = item
 				}
 				return itemName
 			}()
-			tableHeader = append(tableHeader, item)
+			tableHeader = append(tableHeader, itemI18n)
 		}
 
 		// 组装表数据
@@ -865,14 +865,14 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		// 组装表头
 		tableHeader := []string{""}
 		for _, item := range items {
-			item = func() string {
+			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
 				if itemName == "" {
 					itemName = item
 				}
 				return itemName
 			}()
-			tableHeader = append(tableHeader, item)
+			tableHeader = append(tableHeader, itemI18n)
 		}
 
 		// 组装表数据
@@ -945,14 +945,14 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		// 组装表头
 		tableHeader := []string{""}
 		for _, item := range items {
-			item = func() string {
+			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
 				if itemName == "" {
 					itemName = item
 				}
 				return itemName
 			}()
-			tableHeader = append(tableHeader, item)
+			tableHeader = append(tableHeader, itemI18n)
 		}
 
 		// 组装表数据
@@ -1020,14 +1020,14 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		// 组装表头
 		tableHeader := []string{""}
 		for _, item := range items {
-			item = func() string {
+			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
 				if itemName == "" {
 					itemName = item
 				}
 				return itemName
 			}()
-			tableHeader = append(tableHeader, item)
+			tableHeader = append(tableHeader, itemI18n)
 		}
 
 		// 组装表数据
@@ -1118,14 +1118,14 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			// 组装表头
 			tableHeader := []string{""}
 			for _, item := range items {
-				item = func() string {
+				itemI18n := func() string {
 					itemName := general.GenealogyName[item][general.Language]
 					if itemName == "" {
 						itemName = item
 					}
 					return itemName
 				}()
-				tableHeader = append(tableHeader, item)
+				tableHeader = append(tableHeader, itemI18n)
 			}
 
 			// 组装表数据
