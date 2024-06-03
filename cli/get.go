@@ -68,8 +68,10 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		productInfo := general.GetProductInfo(sysInfo)
 		items = config.Genealogy.Product.Items
 
-		// 组装表头
-		tableHeader := []string{""}
+		// 组装表
+		tableHeader := []string{""}      // 表头
+		tableData := [][]string{}        // 表数据
+		rowData := []string{productPart} // 行数据
 		for _, item := range items {
 			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
@@ -79,14 +81,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 				return itemName
 			}()
 			tableHeader = append(tableHeader, itemI18n)
-		}
-
-		// 组装表数据
-		tableData := [][]string{}
-		rowData := []string{productPart}
-		for _, item := range items {
-			cellData := productInfo[item].(string)
-			rowData = append(rowData, cellData)
+			rowData = append(rowData, productInfo[item].(string))
 		}
 		tableData = append(tableData, rowData)
 
@@ -143,8 +138,10 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		boardInfo := general.GetBoardInfo(sysInfo)
 		items = config.Genealogy.Board.Items
 
-		// 组装表头
-		tableHeader := []string{""}
+		// 组装表
+		tableHeader := []string{""}    // 表头
+		tableData := [][]string{}      // 表数据
+		rowData := []string{boardPart} // 行数据
 		for _, item := range items {
 			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
@@ -154,14 +151,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 				return itemName
 			}()
 			tableHeader = append(tableHeader, itemI18n)
-		}
-
-		// 组装表数据
-		tableData := [][]string{}
-		rowData := []string{boardPart}
-		for _, item := range items {
-			cellData := boardInfo[item].(string)
-			rowData = append(rowData, cellData)
+			rowData = append(rowData, boardInfo[item].(string))
 		}
 		tableData = append(tableData, rowData)
 
@@ -218,8 +208,10 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		biosInfo := general.GetBIOSInfo(sysInfo)
 		items = config.Genealogy.Bios.Items
 
-		// 组装表头
-		tableHeader := []string{""}
+		// 组装表
+		tableHeader := []string{""}   // 表头
+		tableData := [][]string{}     // 表数据
+		rowData := []string{biosPart} // 行数据
 		for _, item := range items {
 			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
@@ -229,14 +221,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 				return itemName
 			}()
 			tableHeader = append(tableHeader, itemI18n)
-		}
-
-		// 组装表数据
-		tableData := [][]string{}
-		rowData := []string{biosPart}
-		for _, item := range items {
-			cellData := biosInfo[item].(string)
-			rowData = append(rowData, cellData)
+			rowData = append(rowData, biosInfo[item].(string))
 		}
 		tableData = append(tableData, rowData)
 
@@ -300,8 +285,10 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		cpuInfo := general.GetCPUInfo(sysInfo, cpuCacheUnit)
 		items = config.Genealogy.CPU.Items
 
-		// 组装表头
-		tableHeader := []string{""}
+		// 组装表
+		tableHeader := []string{""}  // 表头
+		tableData := [][]string{}    // 表数据
+		rowData := []string{cpuPart} // 行数据
 		for _, item := range items {
 			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
@@ -311,14 +298,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 				return itemName
 			}()
 			tableHeader = append(tableHeader, itemI18n)
-		}
-
-		// 组装表数据
-		tableData := [][]string{}
-		rowData := []string{cpuPart}
-		for _, item := range items {
-			cellData := color.Sprintf("%v", cpuInfo[item])
-			rowData = append(rowData, cellData)
+			rowData = append(rowData, color.Sprintf("%v", cpuInfo[item]))
 		}
 		tableData = append(tableData, rowData)
 
@@ -375,8 +355,10 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		gpuInfo := general.GetGPUInfo()
 		items = config.Genealogy.GPU.Items
 
-		// 组装表头
-		tableHeader := []string{""}
+		// 组装表
+		tableHeader := []string{""}  // 表头
+		tableData := [][]string{}    // 表数据
+		rowData := []string{gpuPart} // 行数据
 		for _, item := range items {
 			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
@@ -386,14 +368,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 				return itemName
 			}()
 			tableHeader = append(tableHeader, itemI18n)
-		}
-
-		// 组装表数据
-		tableData := [][]string{}
-		rowData := []string{gpuPart}
-		for _, item := range items {
-			cellData := gpuInfo[item].(string)
-			rowData = append(rowData, cellData)
+			rowData = append(rowData, gpuInfo[item].(string))
 		}
 		tableData = append(tableData, rowData)
 
@@ -462,8 +437,10 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		memoryInfo := general.GetMemoryInfo(MemoryDataUnit, memoryPercentUnit)
 		items = config.Genealogy.Memory.Items
 
-		// 组装表头
-		tableHeader := []string{""}
+		// 组装表
+		tableHeader := []string{""}     // 表头
+		tableData := [][]string{}       // 表数据
+		rowData := []string{memoryPart} // 行数据
 		for _, item := range items {
 			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
@@ -473,14 +450,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 				return itemName
 			}()
 			tableHeader = append(tableHeader, itemI18n)
-		}
-
-		// 组装表数据
-		tableData := [][]string{}
-		rowData := []string{memoryPart}
-		for _, item := range items {
-			cellData := memoryInfo[item].(string)
-			rowData = append(rowData, cellData)
+			rowData = append(rowData, memoryInfo[item].(string))
 		}
 		tableData = append(tableData, rowData)
 
@@ -542,41 +512,26 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取数据
 		swapInfo := general.GetSwapInfo(SwapDataUnit)
-
-		// 组装表头
-		tableHeader := []string{""}
 		if swapInfo["SwapStatus"] == "Unavailable" {
 			items = config.Genealogy.Swap.Items.Unavailable
-			for _, item := range items {
-				itemI18n := func() string {
-					itemName := general.GenealogyName[item][general.Language]
-					if itemName == "" {
-						itemName = item
-					}
-					return itemName
-				}()
-				tableHeader = append(tableHeader, itemI18n)
-			}
 		} else {
 			items = config.Genealogy.Swap.Items.Available
-			for _, item := range items {
-				itemI18n := func() string {
-					itemName := general.GenealogyName[item][general.Language]
-					if itemName == "" {
-						itemName = item
-					}
-					return itemName
-				}()
-				tableHeader = append(tableHeader, itemI18n)
-			}
 		}
 
-		// 组装表数据
-		tableData := [][]string{}
-		rowData := []string{swapPart}
+		// 组装表
+		tableHeader := []string{""}   // 表头
+		tableData := [][]string{}     // 表数据
+		rowData := []string{swapPart} // 行数据
 		for _, item := range items {
-			cellData := color.Sprintf("%v", swapInfo[item])
-			rowData = append(rowData, cellData)
+			itemI18n := func() string {
+				itemName := general.GenealogyName[item][general.Language]
+				if itemName == "" {
+					itemName = item
+				}
+				return itemName
+			}()
+			tableHeader = append(tableHeader, itemI18n)
+			rowData = append(rowData, color.Sprintf("%v", swapInfo[item]))
 		}
 		tableData = append(tableData, rowData)
 
@@ -633,8 +588,9 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		storageInfo := general.GetStorageInfo()
 		items = config.Genealogy.Storage.Items
 
-		// 组装表头
-		tableHeader := []string{""}
+		// 组装表
+		tableHeader := []string{""} // 表头
+		tableData := [][]string{}   // 表数据
 		for _, item := range items {
 			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
@@ -645,14 +601,10 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}()
 			tableHeader = append(tableHeader, itemI18n)
 		}
-
-		// 组装表数据
-		tableData := [][]string{}
 		for index := 1; index <= len(storageInfo); index++ {
-			rowData := []string{diskPart + strconv.Itoa(index)}
+			rowData := []string{diskPart + strconv.Itoa(index)} // 行数据
 			for _, item := range items {
-				cellData := storageInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string)
-				rowData = append(rowData, cellData)
+				rowData = append(rowData, storageInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string))
 			}
 			tableData = append(tableData, rowData)
 		}
@@ -710,8 +662,9 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		nicInfo := general.GetNicInfo()
 		items = config.Genealogy.Nic.Items
 
-		// 组装表头
-		tableHeader := []string{""}
+		// 组装表
+		tableHeader := []string{""} // 表头
+		tableData := [][]string{}   // 表数据
 		for _, item := range items {
 			itemI18n := func() string {
 				itemNname := general.GenealogyName[item][general.Language]
@@ -722,14 +675,10 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}()
 			tableHeader = append(tableHeader, itemI18n)
 		}
-
-		// 组装表数据
-		tableData := [][]string{}
 		for index := 1; index <= len(nicInfo); index++ {
-			rowData := []string{nicPart + strconv.Itoa(index)}
+			rowData := []string{nicPart + strconv.Itoa(index)} // 行数据
 			for _, item := range items {
-				cellData := nicInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string)
-				rowData = append(rowData, cellData)
+				rowData = append(rowData, nicInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string))
 			}
 			tableData = append(tableData, rowData)
 		}
@@ -787,8 +736,10 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		osInfo := general.GetOSInfo(sysInfo)
 		items = config.Genealogy.OS.Items
 
-		// 组装表头
-		tableHeader := []string{""}
+		// 组装表
+		tableHeader := []string{""} // 表头
+		tableData := [][]string{}   // 表数据
+		rowData := []string{osPart} // 行数据
 		for _, item := range items {
 			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
@@ -798,14 +749,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 				return itemName
 			}()
 			tableHeader = append(tableHeader, itemI18n)
-		}
-
-		// 组装表数据
-		tableData := [][]string{}
-		rowData := []string{osPart}
-		for _, item := range items {
-			cellData := osInfo[item].(string)
-			rowData = append(rowData, cellData)
+			rowData = append(rowData, osInfo[item].(string))
 		}
 		tableData = append(tableData, rowData)
 
@@ -862,8 +806,10 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		loadInfo := general.GetLoadInfo()
 		items = config.Genealogy.Load.Items
 
-		// 组装表头
-		tableHeader := []string{""}
+		// 组装表
+		tableHeader := []string{""}   // 表头
+		tableData := [][]string{}     // 表数据
+		rowData := []string{loadPart} // 行数据
 		for _, item := range items {
 			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
@@ -873,13 +819,8 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 				return itemName
 			}()
 			tableHeader = append(tableHeader, itemI18n)
-		}
 
-		// 组装表数据
-		tableData := [][]string{}
-		rowData := []string{loadPart}
-		cellData := ""
-		for _, item := range items {
+			var cellData string
 			if item == "Process" {
 				cellData = color.Sprintf("%d", loadInfo[item].(uint64))
 			} else {
@@ -942,8 +883,10 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		timeInfo, _ := general.GetTimeInfo()
 		items = config.Genealogy.Time.Items
 
-		// 组装表头
-		tableHeader := []string{""}
+		// 组装表
+		tableHeader := []string{""}   // 表头
+		tableData := [][]string{}     // 表数据
+		rowData := []string{timePart} // 行数据
 		for _, item := range items {
 			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
@@ -953,14 +896,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 				return itemName
 			}()
 			tableHeader = append(tableHeader, itemI18n)
-		}
-
-		// 组装表数据
-		tableData := [][]string{}
-		rowData := []string{timePart}
-		for _, item := range items {
-			cellData := timeInfo[item].(string)
-			rowData = append(rowData, cellData)
+			rowData = append(rowData, timeInfo[item].(string))
 		}
 		tableData = append(tableData, rowData)
 
@@ -1017,8 +953,10 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		userInfo := general.GetUserInfo()
 		items = config.Genealogy.User.Items
 
-		// 组装表头
-		tableHeader := []string{""}
+		// 组装表
+		tableHeader := []string{""}   // 表头
+		tableData := [][]string{}     // 表数据
+		rowData := []string{userPart} // 行数据
 		for _, item := range items {
 			itemI18n := func() string {
 				itemName := general.GenealogyName[item][general.Language]
@@ -1028,14 +966,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 				return itemName
 			}()
 			tableHeader = append(tableHeader, itemI18n)
-		}
-
-		// 组装表数据
-		tableData := [][]string{}
-		rowData := []string{userPart}
-		for _, item := range items {
-			cellData := userInfo[item].(string)
-			rowData = append(rowData, cellData)
+			rowData = append(rowData, userInfo[item].(string))
 		}
 		tableData = append(tableData, rowData)
 
@@ -1115,8 +1046,10 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			}
 			items = config.Genealogy.Update.Items
 
-			// 组装表头
-			tableHeader := []string{""}
+			// 组装表
+			tableHeader := []string{""}     // 表头
+			tableData := [][]string{}       // 表数据
+			rowData := []string{updatePart} // 行数据
 			for _, item := range items {
 				itemI18n := func() string {
 					itemName := general.GenealogyName[item][general.Language]
@@ -1126,16 +1059,10 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 					return itemName
 				}()
 				tableHeader = append(tableHeader, itemI18n)
-			}
 
-			// 组装表数据
-			tableData := [][]string{}
-			rowData := []string{updatePart}
-			for _, item := range items {
-				cellData := ""
+				var cellData string
 				if item == "PackageList" {
-					packageList := updateInfo[item].([]string)
-					cellData = strings.Join(packageList, "\n")
+					cellData = strings.Join(updateInfo[item].([]string), "\n")
 				} else {
 					cellData = updateInfo[item].(string)
 				}
