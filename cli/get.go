@@ -10,6 +10,7 @@ Description: 子命令 'get' 的实现
 package cli
 
 import (
+	"reflect"
 	"strconv"
 	"strings"
 
@@ -33,6 +34,8 @@ var (
 	tableHeader []string     // 表头
 	tableData   [][]string   // 表数据
 	rowData     []string     // 行数据
+
+	colors []lipgloss.Color // 随机颜色切片
 )
 
 // 采集系统信息
@@ -63,6 +66,14 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 
 	// 系统信息分配到不同的参数
 	sysInfo.GetSysInfo()
+
+	// 计算有多少个 Flag 要显示
+	viewQuantity := general.MapBoolCounter(flags, true)
+
+	// 获取随机颜色切片
+	if colorful {
+		colors = general.GetColor(viewQuantity * 2) //因为分奇数/偶数行，所以要乘2
+	}
 
 	// 执行对应函数
 	if flags["productFlag"] {
@@ -96,10 +107,9 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
-		if colorful {
-			oddRowColor = general.GetColor()
-			evenRowColor = general.GetColor()
-		}
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
 		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -164,10 +174,9 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
-		if colorful {
-			oddRowColor = general.GetColor()
-			evenRowColor = general.GetColor()
-		}
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
 		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -232,10 +241,9 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
-		if colorful {
-			oddRowColor = general.GetColor()
-			evenRowColor = general.GetColor()
-		}
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
 		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -307,10 +315,9 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
-		if colorful {
-			oddRowColor = general.GetColor()
-			evenRowColor = general.GetColor()
-		}
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
 		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -375,10 +382,9 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
-		if colorful {
-			oddRowColor = general.GetColor()
-			evenRowColor = general.GetColor()
-		}
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
 		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -455,10 +461,9 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
-		if colorful {
-			oddRowColor = general.GetColor()
-			evenRowColor = general.GetColor()
-		}
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
 		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -534,10 +539,9 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
-		if colorful {
-			oddRowColor = general.GetColor()
-			evenRowColor = general.GetColor()
-		}
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
 		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -606,10 +610,9 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		}
 
 		// 获取随机颜色
-		if colorful {
-			oddRowColor = general.GetColor()
-			evenRowColor = general.GetColor()
-		}
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
 		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -678,10 +681,9 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		}
 
 		// 获取随机颜色
-		if colorful {
-			oddRowColor = general.GetColor()
-			evenRowColor = general.GetColor()
-		}
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
 		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -746,10 +748,9 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
-		if colorful {
-			oddRowColor = general.GetColor()
-			evenRowColor = general.GetColor()
-		}
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
 		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -821,10 +822,9 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
-		if colorful {
-			oddRowColor = general.GetColor()
-			evenRowColor = general.GetColor()
-		}
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
 		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -889,10 +889,9 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
-		if colorful {
-			oddRowColor = general.GetColor()
-			evenRowColor = general.GetColor()
-		}
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
 		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -957,10 +956,9 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		tableData = append(tableData, rowData)
 
 		// 获取随机颜色
-		if colorful {
-			oddRowColor = general.GetColor()
-			evenRowColor = general.GetColor()
-		}
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
 		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -1055,10 +1053,9 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 			tableData = append(tableData, rowData)
 
 			// 获取随机颜色
-			if colorful {
-				oddRowColor = general.GetColor()
-				evenRowColor = general.GetColor()
-			}
+			oddRowColor = colors[0]
+			evenRowColor = colors[1]
+			colors = colors[2:]
 
 			oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 			evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -1128,6 +1125,14 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	// 系统信息分配到不同的参数
 	sysInfo.GetSysInfo()
 
+	// 计算有多少个 Flag 要显示
+	viewQuantity := reflect.TypeOf(config.Genealogy).NumField()
+
+	// 获取随机颜色切片
+	if colorful {
+		colors = general.GetColor(viewQuantity * 2) //因为分奇数/偶数行，所以要乘2
+	}
+
 	// ---------- Product
 	productPart := func() string {
 		partName := general.PartName["Product"][general.Language]
@@ -1159,10 +1164,9 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	tableData = append(tableData, rowData)
 
 	// 获取随机颜色
-	if colorful {
-		oddRowColor = general.GetColor()
-		evenRowColor = general.GetColor()
-	}
+	oddRowColor = colors[0]
+	evenRowColor = colors[1]
+	colors = colors[2:]
 
 	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -1222,10 +1226,9 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	tableData = append(tableData, rowData)
 
 	// 获取随机颜色
-	if colorful {
-		oddRowColor = general.GetColor()
-		evenRowColor = general.GetColor()
-	}
+	oddRowColor = colors[0]
+	evenRowColor = colors[1]
+	colors = colors[2:]
 
 	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -1285,10 +1288,9 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	tableData = append(tableData, rowData)
 
 	// 获取随机颜色
-	if colorful {
-		oddRowColor = general.GetColor()
-		evenRowColor = general.GetColor()
-	}
+	oddRowColor = colors[0]
+	evenRowColor = colors[1]
+	colors = colors[2:]
 
 	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -1355,10 +1357,9 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	tableData = append(tableData, rowData)
 
 	// 获取随机颜色
-	if colorful {
-		oddRowColor = general.GetColor()
-		evenRowColor = general.GetColor()
-	}
+	oddRowColor = colors[0]
+	evenRowColor = colors[1]
+	colors = colors[2:]
 
 	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -1418,10 +1419,9 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	tableData = append(tableData, rowData)
 
 	// 获取随机颜色
-	if colorful {
-		oddRowColor = general.GetColor()
-		evenRowColor = general.GetColor()
-	}
+	oddRowColor = colors[0]
+	evenRowColor = colors[1]
+	colors = colors[2:]
 
 	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -1493,10 +1493,9 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	tableData = append(tableData, rowData)
 
 	// 获取随机颜色
-	if colorful {
-		oddRowColor = general.GetColor()
-		evenRowColor = general.GetColor()
-	}
+	oddRowColor = colors[0]
+	evenRowColor = colors[1]
+	colors = colors[2:]
 
 	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -1567,10 +1566,9 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	tableData = append(tableData, rowData)
 
 	// 获取随机颜色
-	if colorful {
-		oddRowColor = general.GetColor()
-		evenRowColor = general.GetColor()
-	}
+	oddRowColor = colors[0]
+	evenRowColor = colors[1]
+	colors = colors[2:]
 
 	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -1634,10 +1632,9 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	}
 
 	// 获取随机颜色
-	if colorful {
-		oddRowColor = general.GetColor()
-		evenRowColor = general.GetColor()
-	}
+	oddRowColor = colors[0]
+	evenRowColor = colors[1]
+	colors = colors[2:]
 
 	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -1701,10 +1698,9 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	}
 
 	// 获取随机颜色
-	if colorful {
-		oddRowColor = general.GetColor()
-		evenRowColor = general.GetColor()
-	}
+	oddRowColor = colors[0]
+	evenRowColor = colors[1]
+	colors = colors[2:]
 
 	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -1764,10 +1760,9 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	tableData = append(tableData, rowData)
 
 	// 获取随机颜色
-	if colorful {
-		oddRowColor = general.GetColor()
-		evenRowColor = general.GetColor()
-	}
+	oddRowColor = colors[0]
+	evenRowColor = colors[1]
+	colors = colors[2:]
 
 	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -1834,10 +1829,9 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	tableData = append(tableData, rowData)
 
 	// 获取随机颜色
-	if colorful {
-		oddRowColor = general.GetColor()
-		evenRowColor = general.GetColor()
-	}
+	oddRowColor = colors[0]
+	evenRowColor = colors[1]
+	colors = colors[2:]
 
 	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -1897,10 +1891,9 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	tableData = append(tableData, rowData)
 
 	// 获取随机颜色
-	if colorful {
-		oddRowColor = general.GetColor()
-		evenRowColor = general.GetColor()
-	}
+	oddRowColor = colors[0]
+	evenRowColor = colors[1]
+	colors = colors[2:]
 
 	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -1960,10 +1953,9 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	tableData = append(tableData, rowData)
 
 	// 获取随机颜色
-	if colorful {
-		oddRowColor = general.GetColor()
-		evenRowColor = general.GetColor()
-	}
+	oddRowColor = colors[0]
+	evenRowColor = colors[1]
+	colors = colors[2:]
 
 	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
@@ -2046,10 +2038,9 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	tableData = append(tableData, rowData)
 
 	// 获取随机颜色
-	if colorful {
-		oddRowColor = general.GetColor()
-		evenRowColor = general.GetColor()
-	}
+	oddRowColor = colors[0]
+	evenRowColor = colors[1]
+	colors = colors[2:]
 
 	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
 	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式

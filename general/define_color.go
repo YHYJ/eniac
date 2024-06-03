@@ -65,6 +65,12 @@ var (
 	SecondaryText = color.Secondary.Render // Secondary 文本
 )
 
+// Tab 专用
+const (
+	TabLightColor = "#874BFD"
+	TabDarkColor  = "#7D56F4"
+)
+
 //  Table 专用
 
 // Notice: NEW
@@ -81,12 +87,15 @@ var availableColors = []lipgloss.Color{
 	lipgloss.Color("#DC143C"),
 	lipgloss.Color("#E74C3C"),
 	// 橙
+	lipgloss.Color("#FFA500"),
 	lipgloss.Color("#FF8C00"),
 	lipgloss.Color("#F39C76"),
 	// 黄
 	lipgloss.Color("#F5B041"),
 	lipgloss.Color("#FFA500"),
+	lipgloss.Color("#F9E79F"),
 	// 绿
+	lipgloss.Color("#008000"),
 	lipgloss.Color("#70AD47"),
 	lipgloss.Color("#2ECC71"),
 	// 青
@@ -100,6 +109,7 @@ var availableColors = []lipgloss.Color{
 	lipgloss.Color("#855EFC"),
 	lipgloss.Color("#6A5ACD"),
 	lipgloss.Color("#8E44AD"),
+	lipgloss.Color("#9B59B6"),
 	// 品红
 	lipgloss.Color("#FF69B4"),
 	lipgloss.Color("#DB7093"),
@@ -107,29 +117,38 @@ var availableColors = []lipgloss.Color{
 
 var previousColor int // 上一次随机颜色的索引
 
-// GetColor 随机获取一个颜色
+// GetColor 随机获取多个颜色
+//
+// 参数：
+//   - count: 颜色数量
 //
 // 返回：
 //   - 颜色代码
-func GetColor() lipgloss.Color {
-	// 没有可用的颜色，则返回默认颜色
-	if len(availableColors) == 0 {
-		return DefaultColor
-	}
+func GetColor(count int) []lipgloss.Color {
+	var colors []lipgloss.Color
 
-	// 随机取一个颜色
-	index := rand.Intn(len(availableColors) - 1)
-	// 如果 index == previousColor，则在 availableColors 长度范围内使 index + 1，超出长度范围则使 index - 1
-	if index == previousColor {
-		if index <= len(availableColors)-1 {
-			index++
-		} else {
-			index--
+	enabledColorLength := len(availableColors)
+
+	if enabledColorLength == 0 { // 没有可用的颜色，则返回默认颜色
+		for i := 0; i < count; i++ {
+			colors = append(colors, DefaultColor)
 		}
 	} else {
-		previousColor = index
+		for i := 0; i < count; i++ {
+			// 随机取一个颜色
+			index := rand.Intn(enabledColorLength - 1)
+			if index == previousColor { // 如果 index == previousColor
+				if index < enabledColorLength { // 且未到 availableColors 最后一个元素，则 index + 1
+					index++
+				} else { // 否则 index 等于 availableColors 最后一个元素的下标
+					index = enabledColorLength - 1
+				}
+			} else {
+				previousColor = index
+			}
+			colors = append(colors, availableColors[index])
+		}
 	}
-	color := availableColors[index]
 
-	return color
+	return colors
 }

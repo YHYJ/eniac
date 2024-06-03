@@ -52,10 +52,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case quietKey, "ctrl+c", "esc":
 			return m, tea.Quit
 		case "right", "l", "n", "tab":
-			m.activeTab = min(m.activeTab+1, len(m.Tabs)-1)
+			m.activeTab = Min(m.activeTab+1, len(m.Tabs)-1)
 			return m, nil
 		case "left", "h", "p", "shift+tab":
-			m.activeTab = max(m.activeTab-1, 0)
+			m.activeTab = Max(m.activeTab-1, 0)
 			return m, nil
 		}
 	}

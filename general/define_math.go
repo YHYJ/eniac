@@ -9,7 +9,7 @@ Description: 处理数学计算
 
 package general
 
-// max 返回两个数中的最大值
+// Max 返回两个数中的最大值
 //
 // 参数：
 //   - x: 第一个数
@@ -17,14 +17,14 @@ package general
 //
 // 返回：
 //   - 两个数中的最大值
-func max(x, y int) int {
+func Max(x, y int) int {
 	if x > y {
 		return x
 	}
 	return y
 }
 
-// min 返回两个数中的最小值
+// Min 返回两个数中的最小值
 //
 // 参数：
 //   - x: 第一个数
@@ -32,9 +32,27 @@ func max(x, y int) int {
 //
 // 返回：
 //   - 两个数中的最小值
-func min(x, y int) int {
+func Min(x, y int) int {
 	if x < y {
 		return x
 	}
 	return y
+}
+
+// MapBoolCounter 统计指定布尔值在映射中出现的次数
+//
+// 参数：
+//   - elements: 目标映射
+//   - target: 目标元素
+//
+// 返回：
+//   - 出现次数
+func MapBoolCounter(elements map[string]bool, target bool) int {
+	count := 0
+	for _, element := range elements {
+		if element == target {
+			count++
+		}
+	}
+	return count
 }

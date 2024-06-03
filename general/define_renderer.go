@@ -21,7 +21,7 @@ var (
 	BorderStyle = renderer.NewStyle().Foreground(BorderColor)                                                 // 边框样式
 	CellStyle   = renderer.NewStyle().Align(lipgloss.Center).Padding(0, 1).Bold(false)                        // 单元格样式
 
-	highlightColor    = lipgloss.AdaptiveColor{Light: "#874BFD", Dark: "#7D56F4"}
+	highlightColor    = lipgloss.AdaptiveColor{Light: TabLightColor, Dark: TabDarkColor}
 	inactiveTabBorder = tabBorderWithBottom("┴", "─", "┴") // 不活跃标签的边框
 	activeTabBorder   = tabBorderWithBottom("┘", " ", "└") // 活跃标签的边框
 	docStyle          = lipgloss.NewStyle().Padding(0, 1, 0, 1)
