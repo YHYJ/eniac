@@ -31,7 +31,7 @@ var PartName = map[string]map[string]string{
 var GenealogyName = map[string]map[string]string{
 	"BIOSVendor":         {"zh": "BIOS 厂商", "en": "Vendor"},
 	"BIOSVersion":        {"zh": "BIOS 版本", "en": "Version"},
-	"BIOSDate":           {"zh": "BIOS 发布", "en": "Date"},
+	"BIOSDate":           {"zh": "BIOS 发布日期", "en": "Release Date"},
 	"BoardVendor":        {"zh": "主板厂商", "en": "Vendor"},
 	"BoardName":          {"zh": "主板名称", "en": "Name"},
 	"BoardVersion":       {"zh": "主板版本", "en": "Version"},
