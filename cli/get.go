@@ -37,8 +37,9 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 	var (
 		colorful          bool   = config.Main.Colorful
 		cpuCacheUnit      string = "KB"
-		memoryDataUnit    string = "GB"
+		MemoryDataUnit    string = "GB"
 		memoryPercentUnit string = "%"
+		SwapDataUnit      string = "GB"
 		updateRecordFile  string = "/tmp/system-checkupdates.log"
 	)
 
@@ -65,7 +66,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取数据
 		productInfo := general.GetProductInfo(sysInfo)
-		items = []string{"ProductVendor", "ProductName"}
+		items = config.Genealogy.Product.Items
 
 		// 组装表头
 		tableHeader := []string{""}
@@ -140,7 +141,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取数据
 		boardInfo := general.GetBoardInfo(sysInfo)
-		items = []string{"BoardVendor", "BoardName", "BoardVersion"}
+		items = config.Genealogy.Board.Items
 
 		// 组装表头
 		tableHeader := []string{""}
@@ -215,7 +216,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取数据
 		biosInfo := general.GetBIOSInfo(sysInfo)
-		items = []string{"BIOSVendor", "BIOSVersion", "BIOSDate"}
+		items = config.Genealogy.Bios.Items
 
 		// 组装表头
 		tableHeader := []string{""}
@@ -289,15 +290,15 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		}()
 
 		// 获取 CPU 配置项
-		if config.Genealogy.Cpu.CacheUnit != "" {
-			cpuCacheUnit = config.Genealogy.Cpu.CacheUnit
+		if config.Genealogy.CPU.CacheUnit != "" {
+			cpuCacheUnit = config.Genealogy.CPU.CacheUnit
 		} else {
 			color.Danger.Println("Config file is missing 'cpu.cache_unit' item, using default value")
 		}
 
 		// 获取数据
 		cpuInfo := general.GetCPUInfo(sysInfo, cpuCacheUnit)
-		items = []string{"CPUModel", "CPUNumber", "CPUCores", "CPUThreads", "CPUCache"}
+		items = config.Genealogy.CPU.Items
 
 		// 组装表头
 		tableHeader := []string{""}
@@ -372,7 +373,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取数据
 		gpuInfo := general.GetGPUInfo()
-		items = []string{"GPUAddress", "GPUDriver", "GPUProduct", "GPUVendor"}
+		items = config.Genealogy.GPU.Items
 
 		// 组装表头
 		tableHeader := []string{""}
@@ -447,7 +448,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取 Memory 配置项
 		if config.Genealogy.Memory.DataUnit != "" {
-			memoryDataUnit = config.Genealogy.Memory.DataUnit
+			MemoryDataUnit = config.Genealogy.Memory.DataUnit
 		} else {
 			color.Danger.Println("Config file is missing 'memory.data_unit' item, using default value")
 		}
@@ -458,8 +459,8 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 		}
 
 		// 获取数据
-		memoryInfo := general.GetMemoryInfo(memoryDataUnit, memoryPercentUnit)
-		items = []string{"MemoryUsedPercent", "MemoryTotal", "MemoryUsed", "MemoryAvail", "MemoryFree", "MemoryBuffCache", "MemoryShared"}
+		memoryInfo := general.GetMemoryInfo(MemoryDataUnit, memoryPercentUnit)
+		items = config.Genealogy.Memory.Items
 
 		// 组装表头
 		tableHeader := []string{""}
@@ -532,20 +533,20 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			return partName
 		}()
 
-		// 获取 Memory 配置项
-		if config.Genealogy.Memory.DataUnit != "" {
-			memoryDataUnit = config.Genealogy.Memory.DataUnit
+		// 获取 Swap 配置项
+		if config.Genealogy.Swap.DataUnit != "" {
+			SwapDataUnit = config.Genealogy.Swap.DataUnit
 		} else {
-			color.Danger.Println("Config file is missing 'memory.data_unit' item, using default value")
+			color.Danger.Println("Config file is missing 'swap.data_unit' item, using default value")
 		}
 
 		// 获取数据
-		swapInfo := general.GetSwapInfo(memoryDataUnit)
+		swapInfo := general.GetSwapInfo(SwapDataUnit)
 
 		// 组装表头
 		tableHeader := []string{""}
-		if swapInfo["SwapStatus"] == "Disabled" {
-			items = []string{"SwapStatus"}
+		if swapInfo["SwapStatus"] == "Unavailable" {
+			items = config.Genealogy.Swap.Items.Unavailable
 			for _, item := range items {
 				item = func() string {
 					itemName := general.GenealogyName[item][general.Language]
@@ -557,7 +558,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 				tableHeader = append(tableHeader, item)
 			}
 		} else {
-			items = []string{"SwapTotal", "SwapFree"}
+			items = config.Genealogy.Swap.Items.Available
 			for _, item := range items {
 				item = func() string {
 					itemName := general.GenealogyName[item][general.Language]
@@ -630,7 +631,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取数据
 		storageInfo := general.GetStorageInfo()
-		items = []string{"StorageName", "StorageSize", "StorageType", "StorageDriver", "StorageVendor", "StorageModel", "StorageSerial", "StorageRemovable"}
+		items = config.Genealogy.Storage.Items
 
 		// 组装表头
 		tableHeader := []string{""}
@@ -707,7 +708,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取数据
 		nicInfo := general.GetNicInfo()
-		items = []string{"NicName", "NicMacAddress", "NicDriver", "NicVendor", "NicProduct", "NicPCIAddress", "NicSpeed", "NicDuplex"}
+		items = config.Genealogy.Nic.Items
 
 		// 组装表头
 		tableHeader := []string{""}
@@ -784,7 +785,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取数据
 		osInfo := general.GetOSInfo(sysInfo)
-		items = []string{"OS", "Kernel", "Platform", "Arch", "TimeZone", "Hostname"}
+		items = config.Genealogy.OS.Items
 
 		// 组装表头
 		tableHeader := []string{""}
@@ -859,7 +860,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取数据
 		loadInfo := general.GetLoadInfo()
-		items = []string{"Load1", "Load5", "Load15", "Process"}
+		items = config.Genealogy.Load.Items
 
 		// 组装表头
 		tableHeader := []string{""}
@@ -939,7 +940,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取数据
 		timeInfo, _ := general.GetTimeInfo()
-		items = []string{"StartTime", "Uptime", "BootTime"}
+		items = config.Genealogy.Time.Items
 
 		// 组装表头
 		tableHeader := []string{""}
@@ -1014,7 +1015,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取数据
 		userInfo := general.GetUserInfo()
-		items = []string{"UserName", "User", "UserUid", "UserGid", "UserHomeDir"}
+		items = config.Genealogy.User.Items
 
 		// 组装表头
 		tableHeader := []string{""}
@@ -1112,7 +1113,7 @@ func GrabSystemInformation(configTree *toml.Tree, flags map[string]bool) {
 			for key, value := range packageInfo {
 				updateInfo[key] = value
 			}
-			items = []string{"UpdateDaemonStatus", "PackageQuantity", "PackageList"}
+			items = config.Genealogy.Update.Items
 
 			// 组装表头
 			tableHeader := []string{""}
