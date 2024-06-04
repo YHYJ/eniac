@@ -2060,6 +2060,11 @@ func GrabInformationToTab(configTree *toml.Tree) {
 			style = oddRowStyle // 奇数行
 		}
 
+		// 设置特定列格式
+		if col == 2 {
+			style = style.Align(lipgloss.Left)
+		}
+
 		return style
 	})
 
