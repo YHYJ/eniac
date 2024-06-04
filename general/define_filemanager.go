@@ -121,6 +121,34 @@ func FileExist(filePath string) bool {
 	return true
 }
 
+// ReadFileLink 如果文件是软链接文件，返回其指向的文件路径
+//
+// 参数：
+//   - filePath: 文件路径
+//
+// 返回：
+//   - 软链接文件所指向文件的路径
+//   - 报错信息
+func ReadFileLink(filePath string) (string, error) {
+	if !FileExist(filePath) {
+		return "", fmt.Errorf("File %s not exist", filePath)
+	}
+
+	fileinfo, err := os.Lstat(filePath)
+	if err != nil {
+		return "", err
+	}
+
+	if fileinfo.Mode()&os.ModeSymlink == 0 {
+		return "", fmt.Errorf("File %s is not a symlink", filePath)
+	}
+	link, err := os.Readlink(filePath)
+	if err != nil {
+		return "", err
+	}
+	return link, nil
+}
+
 // GetAbsPath 获取指定文件的绝对路径
 //
 // 参数：

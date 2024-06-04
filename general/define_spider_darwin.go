@@ -15,6 +15,7 @@ import (
 	"bufio"
 	"os"
 	"os/user"
+	"path"
 
 	"strconv"
 	"strings"
@@ -203,15 +204,46 @@ func GetCPUInfo(sysInfo sysinfo.SysInfo, dataUnit string) map[string]interface{}
 func GetOSInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
 	osInfo := make(map[string]interface{})
 
-	osCode := FindSystemCode(hostData.PlatformVersion)
+	// 需要额外步骤获取的信息
+	osCode := FindSystemCode(hostData.PlatformVersion) // 系统代号
+	timeZone := GetTimeZoneOriginal()                  // 时区
+
 	osInfo["OS"] = color.Sprintf("%s(%s)", osCode, hostData.PlatformVersion) // 操作系统
 	osInfo["Arch"] = hostData.KernelArch                                     // 系统架构
 	osInfo["Kernel"] = hostData.KernelVersion                                // 内核版本
 	osInfo["Platform"] = UpperStringFirstChar(hostData.Platform)             // 平台
 	osInfo["Hostname"] = hostData.Hostname                                   // 主机名
-	osInfo["TimeZone"] = sysInfo.Node.Timezone                               // 时区
+	osInfo["TimeZone"] = timeZone                                            // 时区
 
 	return osInfo
+}
+
+// GetTimeZoneOriginal 获取时区信息的原始方法（检测 /etc/localtime 实际指向的文件）
+//
+// 返回：
+//   - 时区信息
+func GetTimeZoneOriginal() string {
+	var localtimeFile = "/etc/localtime"
+	var timeZone string
+
+	filePath, err := ReadFileLink(localtimeFile)
+	if err != nil {
+		timeZone = ""
+	}
+
+	dir, file := path.Split(filePath)
+	if len(dir) == 0 || len(file) == 0 {
+		timeZone = ""
+	}
+
+	_, fname := path.Split(dir[:len(dir)-1])
+	if fname == "zoneinfo" {
+		timeZone = file
+	} else {
+		timeZone = path.Join(fname, file)
+	}
+
+	return timeZone
 }
 
 // GetProductInfo 获取产品信息
