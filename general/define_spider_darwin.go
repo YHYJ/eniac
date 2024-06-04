@@ -208,12 +208,12 @@ func GetOSInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
 	osCode := FindSystemCode(hostData.PlatformVersion) // 系统代号
 	timeZone := GetTimeZoneOriginal()                  // 时区
 
-	osInfo["OS"] = color.Sprintf("%s(%s)", osCode, hostData.PlatformVersion) // 操作系统
-	osInfo["Arch"] = hostData.KernelArch                                     // 系统架构
-	osInfo["Kernel"] = hostData.KernelVersion                                // 内核版本
-	osInfo["Platform"] = UpperStringFirstChar(hostData.Platform)             // 平台
-	osInfo["Hostname"] = hostData.Hostname                                   // 主机名
-	osInfo["TimeZone"] = timeZone                                            // 时区
+	osInfo["OS"] = color.Sprintf("%s %s", osCode, hostData.PlatformVersion) // 操作系统
+	osInfo["Arch"] = hostData.KernelArch                                    // 系统架构
+	osInfo["Kernel"] = hostData.KernelVersion                               // 内核版本
+	osInfo["Platform"] = UpperStringFirstChar(hostData.Platform)            // 平台
+	osInfo["Hostname"] = hostData.Hostname                                  // 主机名
+	osInfo["TimeZone"] = timeZone                                           // 时区
 
 	return osInfo
 }
