@@ -18,6 +18,7 @@ type versionRange struct {
 }
 
 // 系统版本范围和系统代号的对应关系，右包含
+// 数据来源：https://support.apple.com/zh-cn/109033
 var versionCode = map[versionRange]string{
 	{Lower: "0.0.0", Upper: "10.0.4"}:    "Mac OS X Cheetah",
 	{Lower: "10.0.4", Upper: "10.1.5"}:   "Mac OS X Puma",
