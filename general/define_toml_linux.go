@@ -1,5 +1,7 @@
+//go:build linux
+
 /*
-File: define_toml.go
+File: define_toml_linux.go
 Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2024-04-11 14:58:58
@@ -159,20 +161,13 @@ func LoadConfigToStruct(configTree *toml.Tree) (*Config, error) {
 //   - 写入的字节数
 //   - 错误信息
 func WriteTomlConfig(filePath string) (int64, error) {
-	// 根据系统不同决定某些参数
-	var (
-		genealogyUpdateRecordFile = "" // 定义不同平台下的可更新安装包记录文件
-	)
-	if Platform == "linux" {
-		genealogyUpdateRecordFile = "/tmp/system-checkupdates.log"
-	} else if Platform == "darwin" {
-		genealogyUpdateRecordFile = "/tmp/system-checkupdates.log"
-	} else if Platform == "windows" {
-	}
+	// 可更新安装包记录文件
+	var genealogyUpdateRecordFile string = "/tmp/system-checkupdates.log"
+
 	// 定义一个map[string]interface{}类型的变量并赋值
 	exampleConf := map[string]interface{}{
 		"main": map[string]interface{}{
-			"colorful":  true,
+			"colorful": true,
 		},
 		"genealogy": map[string]interface{}{
 			"bios": map[string]interface{}{
@@ -243,7 +238,8 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"os": map[string]interface{}{
 				"items": []string{
 					"OS",
-					"Kernel",
+					"CurrentKernel",
+					"LatestKernel",
 					"Platform",
 					"Arch",
 					"TimeZone",
