@@ -162,7 +162,7 @@ func LoadConfigToStruct(configTree *toml.Tree) (*Config, error) {
 //   - 错误信息
 func WriteTomlConfig(filePath string) (int64, error) {
 	// 可更新安装包记录文件
-	var genealogyUpdateRecordFile string = "/tmp/system-checkupdates.log"
+	var genealogyUpdateRecordFile = "/tmp/system-checkupdates.log"
 
 	// 定义一个map[string]interface{}类型的变量并赋值
 	exampleConf := map[string]interface{}{
