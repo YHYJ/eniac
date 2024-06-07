@@ -40,7 +40,7 @@
 
 ---
 
-一个 Linux 系统交互工具
+一个查看系统信息的工具，支持 Linux 和 macOS
 
 ## Install
 
