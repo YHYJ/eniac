@@ -47,6 +47,8 @@ var GenealogyName = map[string]map[string]string{
 	"OS":                 {"zh": "操作系统", "en": "OS"},
 	"Arch":               {"zh": "系统架构", "en": "Arch"},
 	"Kernel":             {"zh": "内核版本", "en": "Kernel"},
+	"CurrentKernel":      {"zh": "当前内核版本", "en": "Current Kernel"},
+	"LatestKernel":       {"zh": "最新内核版本", "en": "Latest Kernel"},
 	"Platform":           {"zh": "系统类型", "en": "Platform"},
 	"Hostname":           {"zh": "主机名称", "en": "Hostname"},
 	"TimeZone":           {"zh": "时区", "en": "Time zone"},

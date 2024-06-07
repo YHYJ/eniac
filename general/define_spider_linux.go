@@ -362,7 +362,8 @@ func GetOSInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
 	osInfo := make(map[string]interface{})
 	osInfo["OS"] = UpperStringFirstChar(sysInfo.OS.Name)         // 操作系统
 	osInfo["Arch"] = sysInfo.OS.Architecture                     // 系统架构
-	osInfo["Kernel"] = sysInfo.Kernel.Release                    // 内核版本
+	osInfo["CurrentKernel"] = sysInfo.Kernel.Release             // 当前内核版本
+	osInfo["LatestKernel"] = GetLatestKernelVersion()            // 本地最新内核版本
 	osInfo["Platform"] = UpperStringFirstChar(sysInfo.OS.Vendor) // 平台
 	osInfo["Hostname"] = hostData.Hostname                       // 主机名
 	osInfo["TimeZone"] = sysInfo.Node.Timezone                   // 时区
