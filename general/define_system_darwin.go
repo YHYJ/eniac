@@ -6,7 +6,7 @@ Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2024-06-04 11:03:33
 
-Description: 系统代号和系统版本的对应关系
+Description: 系统相关方法
 */
 
 package general
