@@ -12,8 +12,6 @@ Description: 信息抓取器
 package general
 
 import (
-	"bufio"
-	"os"
 	"os/user"
 
 	"strconv"
@@ -251,63 +249,6 @@ func GetTimeInfo() (map[string]interface{}, error) {
 	timeInfo["StartTime"] = strings.Split(strings.Split(StartTime, "\n")[0], "= ")[1] // 系统启动用时
 
 	return timeInfo, nil
-}
-
-// GetPackageInfo 读取可更新包信息
-//
-// 参数：
-//   - filePath: 更新信息记录文件路径
-//   - line: 读取指定行，等于 0 时读取全部行
-//
-// 返回：
-//   - 可更新包信息
-//   - 错误信息
-func GetPackageInfo(filePath string, line int) (map[string]interface{}, error) {
-	var packageSlice []string
-	if filePath != "" && FileExist(filePath) {
-		// 打开文件
-		text, err := os.Open(filePath)
-		if err != nil {
-			return nil, err
-		}
-		defer text.Close()
-
-		// 创建一个扫描器对象按行遍历
-		scanner := bufio.NewScanner(text)
-		// 行计数
-		count := 1
-		// 逐行读取，输出指定行
-		for scanner.Scan() {
-			if line == count {
-				packageSlice = append(packageSlice, scanner.Text())
-				break
-			}
-			packageSlice = append(packageSlice, scanner.Text())
-			count++
-		}
-	}
-	updateInfo := make(map[string]interface{})
-	updateInfo["PackageList"] = packageSlice
-	updateInfo["PackageQuantity"] = strconv.Itoa(len(packageSlice))
-
-	return updateInfo, nil
-}
-
-// GetUpdateDaemonInfo 获取更新检测服务的信息
-//
-// 返回：
-//   - 更新检测服务的信息
-//   - 错误信息
-func GetUpdateDaemonInfo() (map[string]interface{}, error) {
-	daemonInfo := make(map[string]interface{})
-	daemonArgs := []string{"is-active", "system-checkupdates.timer"}
-	updateDaemonStatus, err := RunCommandGetResult("systemctl", daemonArgs)
-	if err != nil {
-		return nil, err
-	}
-	daemonInfo["UpdateDaemonStatus"] = updateDaemonStatus
-
-	return daemonInfo, nil
 }
 
 // GetUserInfo 获取用户信息
