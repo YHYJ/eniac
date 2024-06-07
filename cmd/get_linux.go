@@ -1,7 +1,7 @@
-//go:build !darwin
+//go:build linux
 
 /*
-File: get.go
+File: get_linux.go
 Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2023-04-20 10:53:10

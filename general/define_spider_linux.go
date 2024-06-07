@@ -1,7 +1,7 @@
-//go:build !darwin
+//go:build linux
 
 /*
-File: define_spider.go
+File: define_spider_linux.go
 Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2024-04-11 14:50:52
