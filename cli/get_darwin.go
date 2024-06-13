@@ -51,7 +51,7 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 	// 获取配置项
 	config, err := general.LoadConfigToStruct(configTree)
 	if err != nil {
-		color.Danger.Println(err)
+		color.Danger.Printf("Load config error: %s\n", err)
 		return
 	}
 
@@ -796,7 +796,7 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	// 获取配置项
 	config, err := general.LoadConfigToStruct(configTree)
 	if err != nil {
-		color.Danger.Println(err)
+		color.Danger.Printf("Load config error: %s\n", err)
 		return
 	}
 
@@ -1488,6 +1488,6 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	tabContents = append(tabContents, dataTable.String())
 
 	if err := general.TabSelector(tabs, tabContents); err != nil {
-		color.Danger.Println(err)
+		color.Danger.Printf("Tab selector error: %s\n", err)
 	}
 }
