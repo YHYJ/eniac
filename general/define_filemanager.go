@@ -127,25 +127,25 @@ func FileExist(filePath string) bool {
 // ReadFileLink 如果文件是软链接文件，返回其指向的文件路径
 //
 // 参数：
-//   - filePath: 文件路径
+//   - file: 文件路径
 //
 // 返回：
 //   - 软链接文件所指向文件的路径
 //   - 报错信息
-func ReadFileLink(filePath string) (string, error) {
-	if !FileExist(filePath) {
-		return "", fmt.Errorf("File %s not exist", filePath)
+func ReadFileLink(file string) (string, error) {
+	if !FileExist(file) {
+		return "", fmt.Errorf("File %s not exist", file)
 	}
 
-	fileinfo, err := os.Lstat(filePath)
+	fileinfo, err := os.Lstat(file)
 	if err != nil {
 		return "", err
 	}
 
 	if fileinfo.Mode()&os.ModeSymlink == 0 {
-		return "", fmt.Errorf("File %s is not a symlink", filePath)
+		return "", fmt.Errorf("File %s is not a symlink", file)
 	}
-	link, err := os.Readlink(filePath)
+	link, err := os.Readlink(file)
 	if err != nil {
 		return "", err
 	}
@@ -174,18 +174,18 @@ func GetAbsPath(filePath string) string {
 //   - 无法判断文件夹
 //
 // 参数：
-//   - filePath: 文件路径
+//   - file: 文件路径
 //
 // 返回：
 //   - 文件为空返回 true，否则返回 false
-func FileEmpty(filePath string) bool {
-	file, err := os.Open(filePath)
+func FileEmpty(file string) bool {
+	text, err := os.Open(file)
 	if err != nil {
 		return true
 	}
-	defer file.Close()
+	defer text.Close()
 
-	fi, err := file.Stat()
+	fi, err := text.Stat()
 	if err != nil {
 		return true
 	}
@@ -197,18 +197,18 @@ func FileEmpty(filePath string) bool {
 //   - 包括隐藏文件
 //
 // 参数：
-//   - dirPath: 文件夹路径
+//   - dir: 文件夹路径
 //
 // 返回：
 //   - 文件夹为空返回 true，否则返回 false
-func FolderEmpty(dirPath string) bool {
-	file, err := os.Open(dirPath)
+func FolderEmpty(dir string) bool {
+	text, err := os.Open(dir)
 	if err != nil {
 		return true
 	}
-	defer file.Close()
+	defer text.Close()
 
-	_, err = file.Readdir(1)
+	_, err = text.Readdir(1)
 	if err == io.EOF {
 		return true
 	}
@@ -218,21 +218,21 @@ func FolderEmpty(dirPath string) bool {
 // CreateFile 创建文件，包括其父目录
 //
 // 参数：
-//   - filePath: 文件路径
+//   - file: 文件路径
 //
 // 返回：
 //   - 错误信息
-func CreateFile(filePath string) error {
-	if FileExist(filePath) {
+func CreateFile(file string) error {
+	if FileExist(file) {
 		return nil
 	}
 	// 创建父目录
-	parentPath := filepath.Dir(filePath)
+	parentPath := filepath.Dir(file)
 	if err := os.MkdirAll(parentPath, os.ModePerm); err != nil {
 		return err
 	}
 	// 创建文件
-	if _, err := os.Create(filePath); err != nil {
+	if _, err := os.Create(file); err != nil {
 		return err
 	}
 
@@ -242,15 +242,15 @@ func CreateFile(filePath string) error {
 // CreateDir 创建文件夹
 //
 // 参数：
-//   - dirPath: 文件夹路径
+//   - dir: 文件夹路径
 //
 // 返回：
 //   - 错误信息
-func CreateDir(dirPath string) error {
-	if FileExist(dirPath) {
+func CreateDir(dir string) error {
+	if FileExist(dir) {
 		return nil
 	}
-	return os.MkdirAll(dirPath, os.ModePerm)
+	return os.MkdirAll(dir, os.ModePerm)
 }
 
 // GoToDir 进到指定文件夹
@@ -264,51 +264,61 @@ func GoToDir(dirPath string) error {
 	return os.Chdir(dirPath)
 }
 
-// WriteFile 写入内容到文件
+// WriteFile 写入内容到文件，文件不存在则创建，不自动换行
 //
 // 参数：
 //   - filePath: 文件路径
 //   - content: 内容
+//   - mode: 写入模式，追加('a', O_APPEND, 默认)或覆盖('t', O_TRUNC)
 //
 // 返回：
 //   - 错误信息
-func WriteFile(filePath string, content string) error {
-	// 文件存在
-	if FileExist(filePath) {
-		if FileEmpty(filePath) { // 文件内容为空
-			// 打开文件并写入内容
-			file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_TRUNC, 0666)
-			if err != nil {
-				return err
-			} else {
-				_, err := file.WriteString(content)
-				if err != nil {
-					return err
-				}
-			}
-		} else { // 文件内容不为空
-			return fmt.Errorf("File %s is not empty", filePath)
-		}
-	} else {
-		// 文件不存在，创建文件
-		if err := CreateFile(filePath); err != nil {
-			return err
-		}
-		// 打开文件并写入内容
-		file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_TRUNC, 0666)
-		if err != nil {
-			return err
-		} else {
-			_, err := file.WriteString(content)
-			if err != nil {
-				return err
-			}
-		}
+func WriteFile(filePath, content, mode string) error {
+	// 确定写入模式
+	writeMode := os.O_WRONLY | os.O_CREATE | os.O_APPEND
+	if mode == "t" {
+		writeMode = os.O_WRONLY | os.O_CREATE | os.O_TRUNC
+	}
+
+	// 将内容写入文件
+	file, err := os.OpenFile(filePath, writeMode, 0666)
+	if err != nil {
+		return err
+	}
+	if _, err = file.WriteString(content); err != nil {
+		return err
 	}
 	return nil
 }
 
-// DeleteFile 删除文件
+// WriteFileWithNewLine 写入内容到文件，文件不存在则创建，自动换行
+//
+// 参数：
+//   - filePath: 文件路径
+//   - content: 写入内容
+//   - mode: 写入模式，追加('a', O_APPEND, 默认)或覆盖('t', O_TRUNC)
+//
+// 返回：
+//   - 错误信息
+func WriteFileWithNewLine(filePath, content, mode string) error {
+	// 确定写入模式
+	writeMode := os.O_WRONLY | os.O_CREATE | os.O_APPEND
+	if mode == "t" {
+		writeMode = os.O_WRONLY | os.O_CREATE | os.O_TRUNC
+	}
+
+	// 将内容写入文件
+	file, err := os.OpenFile(filePath, writeMode, 0666)
+	if err != nil {
+		return err
+	}
+	if _, err = file.WriteString(content + "\n"); err != nil {
+		return err
+	}
+	return nil
+}
+
+// DeleteFile 删除文件，如果目标是文件夹则包括其下所有文件
 //
 // 参数：
 //   - filePath: 文件路径
@@ -319,7 +329,7 @@ func DeleteFile(filePath string) error {
 	if !FileExist(filePath) {
 		return nil
 	}
-	return os.Remove(filePath)
+	return os.RemoveAll(filePath)
 }
 
 // CompareFile 并发比较两个文件是否相同
