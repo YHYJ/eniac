@@ -30,7 +30,7 @@ var getCmd = &cobra.Command{
 		// 读取配置文件
 		confTree, err := general.GetTomlConfig(configFile)
 		if err != nil {
-			color.Danger.Printf("%s, use default configuration\n", err)
+			color.Warn.Printf("%s, use default configuration\n", err)
 		}
 
 		if cmd.Flags().NFlag() == 0 {

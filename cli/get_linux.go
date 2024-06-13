@@ -52,7 +52,8 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 	// 获取配置项
 	config, err := general.LoadConfigToStruct(configTree)
 	if err != nil {
-		color.Danger.Printf("Load config error: %s\n", err)
+		fileName, lineNo := general.GetCallerInfo()
+		color.Danger.Printf("Load config error (%s:%d): %s\n", fileName, lineNo+1, err)
 		return
 	}
 
@@ -292,7 +293,7 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		if config.Genealogy.CPU.CacheUnit != "" {
 			cpuCacheUnit = config.Genealogy.CPU.CacheUnit
 		} else {
-			color.Danger.Println("Config file is missing 'cpu.cache_unit' item, using default value")
+			color.Warn.Println("Config file is missing 'cpu.cache_unit' item, using default value")
 		}
 
 		// 获取数据
@@ -433,12 +434,12 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		if config.Genealogy.Memory.DataUnit != "" {
 			MemoryDataUnit = config.Genealogy.Memory.DataUnit
 		} else {
-			color.Danger.Println("Config file is missing 'memory.data_unit' item, using default value")
+			color.Warn.Println("Config file is missing 'memory.data_unit' item, using default value")
 		}
 		if config.Genealogy.Memory.PercentUnit != "" {
 			memoryPercentUnit = config.Genealogy.Memory.PercentUnit
 		} else {
-			color.Danger.Println("Config file is missing 'memory.percent_unit' item, using default value")
+			color.Warn.Println("Config file is missing 'memory.percent_unit' item, using default value")
 		}
 
 		// 获取数据
@@ -512,7 +513,7 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		if config.Genealogy.Swap.DataUnit != "" {
 			SwapDataUnit = config.Genealogy.Swap.DataUnit
 		} else {
-			color.Danger.Println("Config file is missing 'swap.data_unit' item, using default value")
+			color.Warn.Println("Config file is missing 'swap.data_unit' item, using default value")
 		}
 
 		// 获取数据
@@ -999,7 +1000,7 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		if config.Genealogy.Update.RecordFile != "" {
 			updateRecordFile = config.Genealogy.Update.RecordFile
 		} else {
-			color.Danger.Println("Config file is missing 'update.record_file' item, using default value")
+			color.Warn.Println("Config file is missing 'update.record_file' item, using default value")
 		}
 
 		if flags["onlyFlag"] {
@@ -1104,7 +1105,8 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	// 获取配置项
 	config, err := general.LoadConfigToStruct(configTree)
 	if err != nil {
-		color.Danger.Printf("Load config error: %s\n", err)
+		fileName, lineNo := general.GetCallerInfo()
+		color.Danger.Printf("Load config error (%s:%d): %s\n", fileName, lineNo+1, err)
 		return
 	}
 
@@ -1334,7 +1336,7 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	if config.Genealogy.CPU.CacheUnit != "" {
 		cpuCacheUnit = config.Genealogy.CPU.CacheUnit
 	} else {
-		color.Danger.Println("Config file is missing 'cpu.cache_unit' item, using default value")
+		color.Warn.Println("Config file is missing 'cpu.cache_unit' item, using default value")
 	}
 
 	// 获取数据
@@ -1465,12 +1467,12 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	if config.Genealogy.Memory.DataUnit != "" {
 		MemoryDataUnit = config.Genealogy.Memory.DataUnit
 	} else {
-		color.Danger.Println("Config file is missing 'memory.data_unit' item, using default value")
+		color.Warn.Println("Config file is missing 'memory.data_unit' item, using default value")
 	}
 	if config.Genealogy.Memory.PercentUnit != "" {
 		memoryPercentUnit = config.Genealogy.Memory.PercentUnit
 	} else {
-		color.Danger.Println("Config file is missing 'memory.percent_unit' item, using default value")
+		color.Warn.Println("Config file is missing 'memory.percent_unit' item, using default value")
 	}
 
 	// 获取数据
@@ -1539,7 +1541,7 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	if config.Genealogy.Swap.DataUnit != "" {
 		SwapDataUnit = config.Genealogy.Swap.DataUnit
 	} else {
-		color.Danger.Println("Config file is missing 'swap.data_unit' item, using default value")
+		color.Warn.Println("Config file is missing 'swap.data_unit' item, using default value")
 	}
 
 	// 获取数据
@@ -1999,7 +2001,7 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	if config.Genealogy.Update.RecordFile != "" {
 		updateRecordFile = config.Genealogy.Update.RecordFile
 	} else {
-		color.Danger.Println("Config file is missing 'update.record_file' item, using default value")
+		color.Warn.Println("Config file is missing 'update.record_file' item, using default value")
 	}
 
 	// 获取数据
@@ -2077,6 +2079,7 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	tabContents = append(tabContents, dataTable.String())
 
 	if err := general.TabSelector(tabs, tabContents); err != nil {
-		color.Danger.Printf("Tab selector error: %s\n", err)
+		fileName, lineNo := general.GetCallerInfo()
+		color.Danger.Printf("Tab selector error (%s:%d): %s\n", fileName, lineNo+1, err)
 	}
 }
