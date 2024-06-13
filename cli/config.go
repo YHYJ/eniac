@@ -27,7 +27,8 @@ func CreateConfigFile(configFile string) {
 		// 询问是否覆写已存在的配置文件
 		overWrite, err := general.AskUser(general.QuestionText(color.Sprintf(general.OverWriteTips, "Configuration")), []string{"y", "N"})
 		if err != nil {
-			color.Danger.Println(err)
+			fileName, lineNo := general.GetCallerInfo()
+			color.Danger.Printf("Ask user error (%s:%d): %s\n", fileName, lineNo+1, err)
 			return
 		}
 
