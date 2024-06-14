@@ -1,5 +1,4 @@
   - [ ] 从配置文件获取到的某一项的 items 长度为0时不显示该项 (2024-06-13 15:56)
-  - [ ] 检测系统是否能提供 update 信息 (2024-06-13 14:44)
   - [ ] 完善构建约束 (2024-06-04 12:03)
   - [ ] 考虑使用专门的 i18n 包代替 general/define_i18n.go (2024-05-29 16:24)
     - [ ] 需要将 i18n 文件打到包内，参考 skynet (2024-05-29 16:25)
@@ -14,3 +13,4 @@
   - [X] 取消 'no such file' 报错 (2024-05-23 21:34)
   - [X] 先更新样式：使用 github.com/charmbracelet/lipgloss 替换 github.com/olekukonko/tablewriter 输出信息 (2024-05-30 14:49)
   - [X] 再更新布局，现在是所有信息一次输出，改成 Tab 样式的，参考 https://github.com/charmbracelet/bubbletea/tree/master/examples/tabs (2024-05-30 14:51)
+  - [X] 检测系统是否能提供 update 信息 (2024-06-13 14:44)
