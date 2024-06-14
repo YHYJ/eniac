@@ -675,10 +675,13 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 			tableHeader = append(tableHeader, itemI18n)
 
 			var cellData string
-			if item == "Process" {
-				cellData = color.Sprintf("%d", loadInfo[item].(uint64))
-			} else {
-				cellData = color.Sprintf("%.2f", loadInfo[item].(float64))
+			switch info := loadInfo[item].(type) {
+			case uint64:
+				cellData = color.Sprintf("%d", info)
+			case float64:
+				cellData = color.Sprintf("%.2f", info)
+			default:
+				cellData = color.Sprintf("%v", info)
 			}
 			rowData = append(rowData, cellData)
 		}
@@ -1386,10 +1389,13 @@ func GrabInformationToTab(configTree *toml.Tree) {
 		tableHeader = append(tableHeader, itemI18n)
 
 		var cellData string
-		if item == "Process" {
-			cellData = color.Sprintf("%d", loadInfo[item].(uint64))
-		} else {
-			cellData = color.Sprintf("%.2f", loadInfo[item].(float64))
+		switch info := loadInfo[item].(type) {
+		case uint64:
+			cellData = color.Sprintf("%d", info)
+		case float64:
+			cellData = color.Sprintf("%.2f", info)
+		default:
+			cellData = color.Sprintf("%v", info)
 		}
 		rowData = append(rowData, cellData)
 	}
