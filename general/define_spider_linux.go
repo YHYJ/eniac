@@ -450,13 +450,29 @@ func GetPackageInfo(filePath string, line int) (map[string]interface{}, error) {
 //   - 错误信息
 func GetUpdateDaemonInfo() (map[string]interface{}, error) {
 	daemonInfo := make(map[string]interface{})
-	daemonArgs := []string{"is-active", "system-checkupdates.timer"}
-	updateDaemonStatus, err := RunCommandGetResult("systemctl", daemonArgs)
-	if err != nil {
-		return nil, err
-	}
-	daemonInfo["UpdateDaemonStatus"] = updateDaemonStatus
 
+	// 判断更新检测服务状态的依据
+	const basis = "system-checkupdates.timer"
+
+	// 检查更新检测服务是否可用（值为 enabled, disabled 或空字符串）
+	daemonIsEnabledArgs := []string{"is-enabled", basis}
+	updateDaemonIsEnabled, _ := RunCommandGetResult("systemctl", daemonIsEnabledArgs)
+
+	switch updateDaemonIsEnabled {
+	case "enabled":
+		// 检查更新检测服务是否处于活动状态
+		daemonIsActiveArgs := []string{"is-active", basis}
+		updateDaemonIsActive, err := RunCommandGetResult("systemctl", daemonIsActiveArgs)
+		if err != nil {
+			return nil, err
+		}
+
+		daemonInfo["UpdateDaemonStatus"] = updateDaemonIsActive
+	case "disabled":
+		daemonInfo["UpdateDaemonStatus"] = "disabled"
+	default:
+		daemonInfo["UpdateDaemonStatus"] = "not-found"
+	}
 	return daemonInfo, nil
 }
 
