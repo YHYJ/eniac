@@ -255,9 +255,6 @@ func GetMemoryInfo(dataUnit string, percentUnit string) map[string]interface{} {
 	memBuffCache, memBuffCacheUnit := Human(float64(memData.Buffers+memData.Cached), "B")
 	memAvail, memAvailUnit := Human(float64(memData.Available), "B")
 
-	// 使用冒泡排序找出最大值用以组装格式字符串
-	memData := []float64{memTotal, memUsed, memUsedPercent, memFree, memShared, memBuffCache, memAvail}
-	BubbleSort(memData)
 	formatString := "%.2f %s"
 
 	memoryInfo := make(map[string]interface{})
@@ -283,9 +280,6 @@ func GetSwapInfo(dataUnit string) map[string]interface{} {
 	swapTotal, swapTotalUnit := Human(float64(memData.SwapTotal), "B")
 	swapFree, swapFreeUnit := Human(float64(memData.SwapFree), "B")
 
-	// 使用冒泡排序找出最大值用以组装格式字符串
-	swapData := []float64{swapTotal, swapFree}
-	BubbleSort(swapData)
 	formatString := "%.2f %s"
 
 	swapInfo := make(map[string]interface{})
