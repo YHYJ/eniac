@@ -75,7 +75,7 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 
 	// 获取随机颜色切片
 	if colorful {
-		colors = general.GetColor(viewQuantity * 2) //因为分奇数/偶数行，所以要乘2
+		colors = general.GetColor(viewQuantity * 2) // 因为分奇数/偶数行，所以要乘2
 	}
 
 	// 执行对应函数

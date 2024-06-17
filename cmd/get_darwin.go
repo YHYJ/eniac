@@ -72,20 +72,11 @@ var getCmd = &cobra.Command{
 				allFlags["userFlag"], _ = cmd.Flags().GetBool("user")
 			}
 
-			var (
-				noticeSlogan []string // 提示标语
-			)
-
 			// 抓取系统信息
 			cli.GrabInformationToTable(confTree, allFlags)
 
-			// 输出标语
-			if len(noticeSlogan) > 0 {
-				color.Println()
-				for _, slogan := range noticeSlogan {
-					color.Notice.Tips(general.PrimaryText(slogan))
-				}
-			}
+			// 显示通知
+			general.Notification()
 		}
 	},
 }
