@@ -73,7 +73,7 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 
 	// 获取随机颜色切片
 	if colorful {
-		colors = general.GetColor(viewQuantity * 2) //因为分奇数/偶数行，所以要乘2
+		colors = general.GetColor(viewQuantity * 2) // 因为分奇数/偶数行，所以要乘2
 	}
 
 	// 执行对应函数
@@ -87,61 +87,66 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		}()
 
 		// 获取数据
-		productInfo := general.GetProductInfo(sysInfo)
-		items = config.Genealogy.Product.Items
+		productInfo := general.GetProductInfo(sysInfo) // 原始数据
+		items = config.Genealogy.Product.Items         // 原始表头
 
-		// 组装表
-		tableHeader = []string{""}      // 表头
-		tableData = [][]string{}        // 表数据
-		rowData = []string{productPart} // 行数据
-		for _, item := range items {
-			itemI18n := func() string {
-				itemName := general.GenealogyName[item][general.Language]
-				if itemName == "" {
-					itemName = item
+		// 未配置表头时不显示该项，发送通知
+		if len(items) == 0 {
+			general.Notifier = append(general.Notifier, "Product items is empty")
+		} else {
+			// 组装表
+			tableHeader = []string{""}      // 表头
+			tableData = [][]string{}        // 表数据
+			rowData = []string{productPart} // 行数据
+			for _, item := range items {
+				itemI18n := func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
+				tableHeader = append(tableHeader, itemI18n)
+				rowData = append(rowData, productInfo[item].(string))
+			}
+			tableData = append(tableData, rowData)
+
+			// 获取随机颜色
+			oddRowColor = colors[0]
+			evenRowColor = colors[1]
+			colors = colors[2:]
+
+			oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+			evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
+
+			dataTable = table.New()                                 // 创建一个表格
+			dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+			dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+			dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+				var style lipgloss.Style
+
+				switch {
+				case row == 0:
+					return general.HeaderStyle // 第一行为表头
+				case row%2 == 0:
+					style = evenRowStyle // 偶数行
+				default:
+					style = oddRowStyle // 奇数行
 				}
-				return itemName
-			}()
-			tableHeader = append(tableHeader, itemI18n)
-			rowData = append(rowData, productInfo[item].(string))
+
+				// 设置第一列格式
+				if col == 0 {
+					style = style.Foreground(general.ColumnOneColor)
+				}
+
+				return style
+			})
+
+			dataTable.Headers(tableHeader...) // 设置表头
+			dataTable.Rows(tableData...)      // 设置单元格
+
+			color.Println(dataTable)
 		}
-		tableData = append(tableData, rowData)
-
-		// 获取随机颜色
-		oddRowColor = colors[0]
-		evenRowColor = colors[1]
-		colors = colors[2:]
-
-		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-		dataTable = table.New()                                 // 创建一个表格
-		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-			var style lipgloss.Style
-
-			switch {
-			case row == 0:
-				return general.HeaderStyle // 第一行为表头
-			case row%2 == 0:
-				style = evenRowStyle // 偶数行
-			default:
-				style = oddRowStyle // 奇数行
-			}
-
-			// 设置第一列格式
-			if col == 0 {
-				style = style.Foreground(general.ColumnOneColor)
-			}
-
-			return style
-		})
-
-		dataTable.Headers(tableHeader...) // 设置表头
-		dataTable.Rows(tableData...)      // 设置单元格
-
-		color.Println(dataTable)
 	}
 
 	if flags["boardFlag"] {
@@ -154,61 +159,66 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		}()
 
 		// 获取数据
-		boardInfo := general.GetBoardInfo(sysInfo)
-		items = config.Genealogy.Board.Items
+		boardInfo := general.GetBoardInfo(sysInfo) // 原始数据
+		items = config.Genealogy.Board.Items       // 原始表头
 
-		// 组装表
-		tableHeader = []string{""}    // 表头
-		tableData = [][]string{}      // 表数据
-		rowData = []string{boardPart} // 行数据
-		for _, item := range items {
-			itemI18n := func() string {
-				itemName := general.GenealogyName[item][general.Language]
-				if itemName == "" {
-					itemName = item
+		// 未配置表头时不显示该项，发送通知
+		if len(items) == 0 {
+			general.Notifier = append(general.Notifier, "Board items is empty")
+		} else {
+			// 组装表
+			tableHeader = []string{""}    // 表头
+			tableData = [][]string{}      // 表数据
+			rowData = []string{boardPart} // 行数据
+			for _, item := range items {
+				itemI18n := func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
+				tableHeader = append(tableHeader, itemI18n)
+				rowData = append(rowData, boardInfo[item].(string))
+			}
+			tableData = append(tableData, rowData)
+
+			// 获取随机颜色
+			oddRowColor = colors[0]
+			evenRowColor = colors[1]
+			colors = colors[2:]
+
+			oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+			evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
+
+			dataTable = table.New()                                 // 创建一个表格
+			dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+			dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+			dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+				var style lipgloss.Style
+
+				switch {
+				case row == 0:
+					return general.HeaderStyle // 第一行为表头
+				case row%2 == 0:
+					style = evenRowStyle // 偶数行
+				default:
+					style = oddRowStyle // 奇数行
 				}
-				return itemName
-			}()
-			tableHeader = append(tableHeader, itemI18n)
-			rowData = append(rowData, boardInfo[item].(string))
+
+				// 设置第一列格式
+				if col == 0 {
+					style = style.Foreground(general.ColumnOneColor)
+				}
+
+				return style
+			})
+
+			dataTable.Headers(tableHeader...) // 设置表头
+			dataTable.Rows(tableData...)      // 设置单元格
+
+			color.Println(dataTable)
 		}
-		tableData = append(tableData, rowData)
-
-		// 获取随机颜色
-		oddRowColor = colors[0]
-		evenRowColor = colors[1]
-		colors = colors[2:]
-
-		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-		dataTable = table.New()                                 // 创建一个表格
-		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-			var style lipgloss.Style
-
-			switch {
-			case row == 0:
-				return general.HeaderStyle // 第一行为表头
-			case row%2 == 0:
-				style = evenRowStyle // 偶数行
-			default:
-				style = oddRowStyle // 奇数行
-			}
-
-			// 设置第一列格式
-			if col == 0 {
-				style = style.Foreground(general.ColumnOneColor)
-			}
-
-			return style
-		})
-
-		dataTable.Headers(tableHeader...) // 设置表头
-		dataTable.Rows(tableData...)      // 设置单元格
-
-		color.Println(dataTable)
 	}
 
 	if flags["biosFlag"] {
@@ -221,61 +231,66 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		}()
 
 		// 获取数据
-		biosInfo := general.GetBIOSInfo(sysInfo)
-		items = config.Genealogy.Bios.Items
+		biosInfo := general.GetBIOSInfo(sysInfo) // 原始数据
+		items = config.Genealogy.Bios.Items      // 原始表头
 
-		// 组装表
-		tableHeader = []string{""}   // 表头
-		tableData = [][]string{}     // 表数据
-		rowData = []string{biosPart} // 行数据
-		for _, item := range items {
-			itemI18n := func() string {
-				itemName := general.GenealogyName[item][general.Language]
-				if itemName == "" {
-					itemName = item
+		// 未配置表头时不显示该项，发送通知
+		if len(items) == 0 {
+			general.Notifier = append(general.Notifier, "BIOS items is empty")
+		} else {
+			// 组装表
+			tableHeader = []string{""}   // 表头
+			tableData = [][]string{}     // 表数据
+			rowData = []string{biosPart} // 行数据
+			for _, item := range items {
+				itemI18n := func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
+				tableHeader = append(tableHeader, itemI18n)
+				rowData = append(rowData, biosInfo[item].(string))
+			}
+			tableData = append(tableData, rowData)
+
+			// 获取随机颜色
+			oddRowColor = colors[0]
+			evenRowColor = colors[1]
+			colors = colors[2:]
+
+			oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+			evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
+
+			dataTable = table.New()                                 // 创建一个表格
+			dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+			dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+			dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+				var style lipgloss.Style
+
+				switch {
+				case row == 0:
+					return general.HeaderStyle // 第一行为表头
+				case row%2 == 0:
+					style = evenRowStyle // 偶数行
+				default:
+					style = oddRowStyle // 奇数行
 				}
-				return itemName
-			}()
-			tableHeader = append(tableHeader, itemI18n)
-			rowData = append(rowData, biosInfo[item].(string))
+
+				// 设置第一列格式
+				if col == 0 {
+					style = style.Foreground(general.ColumnOneColor)
+				}
+
+				return style
+			})
+
+			dataTable.Headers(tableHeader...) // 设置表头
+			dataTable.Rows(tableData...)      // 设置单元格
+
+			color.Println(dataTable)
 		}
-		tableData = append(tableData, rowData)
-
-		// 获取随机颜色
-		oddRowColor = colors[0]
-		evenRowColor = colors[1]
-		colors = colors[2:]
-
-		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-		dataTable = table.New()                                 // 创建一个表格
-		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-			var style lipgloss.Style
-
-			switch {
-			case row == 0:
-				return general.HeaderStyle // 第一行为表头
-			case row%2 == 0:
-				style = evenRowStyle // 偶数行
-			default:
-				style = oddRowStyle // 奇数行
-			}
-
-			// 设置第一列格式
-			if col == 0 {
-				style = style.Foreground(general.ColumnOneColor)
-			}
-
-			return style
-		})
-
-		dataTable.Headers(tableHeader...) // 设置表头
-		dataTable.Rows(tableData...)      // 设置单元格
-
-		color.Println(dataTable)
 	}
 
 	if flags["cpuFlag"] {
@@ -295,61 +310,66 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		}
 
 		// 获取数据
-		cpuInfo := general.GetCPUInfo(sysInfo, cpuCacheUnit)
-		items = config.Genealogy.CPU.Items
+		cpuInfo := general.GetCPUInfo(sysInfo, cpuCacheUnit) // 原始数据
+		items = config.Genealogy.CPU.Items                   // 原始表头
 
-		// 组装表
-		tableHeader = []string{""}  // 表头
-		tableData = [][]string{}    // 表数据
-		rowData = []string{cpuPart} // 行数据
-		for _, item := range items {
-			itemI18n := func() string {
-				itemName := general.GenealogyName[item][general.Language]
-				if itemName == "" {
-					itemName = item
+		// 未配置表头时不显示该项，发送通知
+		if len(items) == 0 {
+			general.Notifier = append(general.Notifier, "CPU items is empty")
+		} else {
+			// 组装表
+			tableHeader = []string{""}  // 表头
+			tableData = [][]string{}    // 表数据
+			rowData = []string{cpuPart} // 行数据
+			for _, item := range items {
+				itemI18n := func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
+				tableHeader = append(tableHeader, itemI18n)
+				rowData = append(rowData, color.Sprintf("%v", cpuInfo[item]))
+			}
+			tableData = append(tableData, rowData)
+
+			// 获取随机颜色
+			oddRowColor = colors[0]
+			evenRowColor = colors[1]
+			colors = colors[2:]
+
+			oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+			evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
+
+			dataTable = table.New()                                 // 创建一个表格
+			dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+			dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+			dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+				var style lipgloss.Style
+
+				switch {
+				case row == 0:
+					return general.HeaderStyle // 第一行为表头
+				case row%2 == 0:
+					style = evenRowStyle // 偶数行
+				default:
+					style = oddRowStyle // 奇数行
 				}
-				return itemName
-			}()
-			tableHeader = append(tableHeader, itemI18n)
-			rowData = append(rowData, color.Sprintf("%v", cpuInfo[item]))
+
+				// 设置第一列格式
+				if col == 0 {
+					style = style.Foreground(general.ColumnOneColor)
+				}
+
+				return style
+			})
+
+			dataTable.Headers(tableHeader...) // 设置表头
+			dataTable.Rows(tableData...)      // 设置单元格
+
+			color.Println(dataTable)
 		}
-		tableData = append(tableData, rowData)
-
-		// 获取随机颜色
-		oddRowColor = colors[0]
-		evenRowColor = colors[1]
-		colors = colors[2:]
-
-		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-		dataTable = table.New()                                 // 创建一个表格
-		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-			var style lipgloss.Style
-
-			switch {
-			case row == 0:
-				return general.HeaderStyle // 第一行为表头
-			case row%2 == 0:
-				style = evenRowStyle // 偶数行
-			default:
-				style = oddRowStyle // 奇数行
-			}
-
-			// 设置第一列格式
-			if col == 0 {
-				style = style.Foreground(general.ColumnOneColor)
-			}
-
-			return style
-		})
-
-		dataTable.Headers(tableHeader...) // 设置表头
-		dataTable.Rows(tableData...)      // 设置单元格
-
-		color.Println(dataTable)
 	}
 
 	if flags["memoryFlag"] {
@@ -374,61 +394,66 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		}
 
 		// 获取数据
-		memoryInfo := general.GetMemoryInfo(MemoryDataUnit, memoryPercentUnit)
-		items = config.Genealogy.Memory.Items
+		memoryInfo := general.GetMemoryInfo(MemoryDataUnit, memoryPercentUnit) // 原始数据
+		items = config.Genealogy.Memory.Items                                  // 原始表头
 
-		// 组装表
-		tableHeader = []string{""}     // 表头
-		tableData = [][]string{}       // 表数据
-		rowData = []string{memoryPart} // 行数据
-		for _, item := range items {
-			itemI18n := func() string {
-				itemName := general.GenealogyName[item][general.Language]
-				if itemName == "" {
-					itemName = item
+		// 未配置表头时不显示该项，发送通知
+		if len(items) == 0 {
+			general.Notifier = append(general.Notifier, "Memory items is empty")
+		} else {
+			// 组装表
+			tableHeader = []string{""}     // 表头
+			tableData = [][]string{}       // 表数据
+			rowData = []string{memoryPart} // 行数据
+			for _, item := range items {
+				itemI18n := func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
+				tableHeader = append(tableHeader, itemI18n)
+				rowData = append(rowData, memoryInfo[item].(string))
+			}
+			tableData = append(tableData, rowData)
+
+			// 获取随机颜色
+			oddRowColor = colors[0]
+			evenRowColor = colors[1]
+			colors = colors[2:]
+
+			oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+			evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
+
+			dataTable = table.New()                                 // 创建一个表格
+			dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+			dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+			dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+				var style lipgloss.Style
+
+				switch {
+				case row == 0:
+					return general.HeaderStyle // 第一行为表头
+				case row%2 == 0:
+					style = evenRowStyle // 偶数行
+				default:
+					style = oddRowStyle // 奇数行
 				}
-				return itemName
-			}()
-			tableHeader = append(tableHeader, itemI18n)
-			rowData = append(rowData, memoryInfo[item].(string))
+
+				// 设置第一列格式
+				if col == 0 {
+					style = style.Foreground(general.ColumnOneColor)
+				}
+
+				return style
+			})
+
+			dataTable.Headers(tableHeader...) // 设置表头
+			dataTable.Rows(tableData...)      // 设置单元格
+
+			color.Println(dataTable)
 		}
-		tableData = append(tableData, rowData)
-
-		// 获取随机颜色
-		oddRowColor = colors[0]
-		evenRowColor = colors[1]
-		colors = colors[2:]
-
-		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-		dataTable = table.New()                                 // 创建一个表格
-		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-			var style lipgloss.Style
-
-			switch {
-			case row == 0:
-				return general.HeaderStyle // 第一行为表头
-			case row%2 == 0:
-				style = evenRowStyle // 偶数行
-			default:
-				style = oddRowStyle // 奇数行
-			}
-
-			// 设置第一列格式
-			if col == 0 {
-				style = style.Foreground(general.ColumnOneColor)
-			}
-
-			return style
-		})
-
-		dataTable.Headers(tableHeader...) // 设置表头
-		dataTable.Rows(tableData...)      // 设置单元格
-
-		color.Println(dataTable)
 	}
 
 	if flags["swapFlag"] {
@@ -448,65 +473,70 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		}
 
 		// 获取数据
-		swapInfo := general.GetSwapInfo(SwapDataUnit)
+		swapInfo := general.GetSwapInfo(SwapDataUnit) // 原始数据
 		if swapInfo["SwapStatus"] == "Unavailable" {
-			items = config.Genealogy.Swap.Items.Unavailable
+			items = config.Genealogy.Swap.Items.Unavailable // 原始表头
 		} else {
-			items = config.Genealogy.Swap.Items.Available
+			items = config.Genealogy.Swap.Items.Available // 原始表头
 		}
 
-		// 组装表
-		tableHeader = []string{""}   // 表头
-		tableData = [][]string{}     // 表数据
-		rowData = []string{swapPart} // 行数据
-		for _, item := range items {
-			itemI18n := func() string {
-				itemName := general.GenealogyName[item][general.Language]
-				if itemName == "" {
-					itemName = item
+		// 未配置表头时不显示该项，发送通知
+		if len(items) == 0 {
+			general.Notifier = append(general.Notifier, "Swap items is empty")
+		} else {
+			// 组装表
+			tableHeader = []string{""}   // 表头
+			tableData = [][]string{}     // 表数据
+			rowData = []string{swapPart} // 行数据
+			for _, item := range items {
+				itemI18n := func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
+				tableHeader = append(tableHeader, itemI18n)
+				rowData = append(rowData, color.Sprintf("%v", swapInfo[item]))
+			}
+			tableData = append(tableData, rowData)
+
+			// 获取随机颜色
+			oddRowColor = colors[0]
+			evenRowColor = colors[1]
+			colors = colors[2:]
+
+			oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+			evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
+
+			dataTable = table.New()                                 // 创建一个表格
+			dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+			dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+			dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+				var style lipgloss.Style
+
+				switch {
+				case row == 0:
+					return general.HeaderStyle // 第一行为表头
+				case row%2 == 0:
+					style = evenRowStyle // 偶数行
+				default:
+					style = oddRowStyle // 奇数行
 				}
-				return itemName
-			}()
-			tableHeader = append(tableHeader, itemI18n)
-			rowData = append(rowData, color.Sprintf("%v", swapInfo[item]))
+
+				// 设置第一列格式
+				if col == 0 {
+					style = style.Foreground(general.ColumnOneColor)
+				}
+
+				return style
+			})
+
+			dataTable.Headers(tableHeader...) // 设置表头
+			dataTable.Rows(tableData...)      // 设置单元格
+
+			color.Println(dataTable)
 		}
-		tableData = append(tableData, rowData)
-
-		// 获取随机颜色
-		oddRowColor = colors[0]
-		evenRowColor = colors[1]
-		colors = colors[2:]
-
-		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-		dataTable = table.New()                                 // 创建一个表格
-		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-			var style lipgloss.Style
-
-			switch {
-			case row == 0:
-				return general.HeaderStyle // 第一行为表头
-			case row%2 == 0:
-				style = evenRowStyle // 偶数行
-			default:
-				style = oddRowStyle // 奇数行
-			}
-
-			// 设置第一列格式
-			if col == 0 {
-				style = style.Foreground(general.ColumnOneColor)
-			}
-
-			return style
-		})
-
-		dataTable.Headers(tableHeader...) // 设置表头
-		dataTable.Rows(tableData...)      // 设置单元格
-
-		color.Println(dataTable)
 	}
 
 	if flags["storageFlag"] {
@@ -519,65 +549,70 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		}()
 
 		// 获取数据
-		storageInfo := general.GetStorageInfo()
-		items = config.Genealogy.Storage.Items
+		storageInfo := general.GetStorageInfo() // 原始数据
+		items = config.Genealogy.Storage.Items  // 原始表头
 
-		// 组装表
-		tableHeader = []string{""} // 表头
-		tableData = [][]string{}   // 表数据
-		for _, item := range items {
-			itemI18n := func() string {
-				itemName := general.GenealogyName[item][general.Language]
-				if itemName == "" {
-					itemName = item
-				}
-				return itemName
-			}()
-			tableHeader = append(tableHeader, itemI18n)
-		}
-		for index := 1; index <= len(storageInfo); index++ {
-			rowData = []string{diskPart + strconv.Itoa(index)} // 行数据
+		// 未配置表头时不显示该项，发送通知
+		if len(items) == 0 {
+			general.Notifier = append(general.Notifier, "Storage items is empty")
+		} else {
+			// 组装表
+			tableHeader = []string{""} // 表头
+			tableData = [][]string{}   // 表数据
 			for _, item := range items {
-				rowData = append(rowData, storageInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string))
+				itemI18n := func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
+				tableHeader = append(tableHeader, itemI18n)
 			}
-			tableData = append(tableData, rowData)
+			for index := 1; index <= len(storageInfo); index++ {
+				rowData = []string{diskPart + strconv.Itoa(index)} // 行数据
+				for _, item := range items {
+					rowData = append(rowData, storageInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string))
+				}
+				tableData = append(tableData, rowData)
+			}
+
+			// 获取随机颜色
+			oddRowColor = colors[0]
+			evenRowColor = colors[1]
+			colors = colors[2:]
+
+			oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+			evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
+
+			dataTable = table.New()                                 // 创建一个表格
+			dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+			dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+			dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+				var style lipgloss.Style
+
+				switch {
+				case row == 0:
+					return general.HeaderStyle // 第一行为表头
+				case row%2 == 0:
+					style = evenRowStyle // 偶数行
+				default:
+					style = oddRowStyle // 奇数行
+				}
+
+				// 设置第一列格式
+				if col == 0 {
+					style = style.Foreground(general.ColumnOneColor)
+				}
+
+				return style
+			})
+
+			dataTable.Headers(tableHeader...) // 设置表头
+			dataTable.Rows(tableData...)      // 设置单元格
+
+			color.Println(dataTable)
 		}
-
-		// 获取随机颜色
-		oddRowColor = colors[0]
-		evenRowColor = colors[1]
-		colors = colors[2:]
-
-		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-		dataTable = table.New()                                 // 创建一个表格
-		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-			var style lipgloss.Style
-
-			switch {
-			case row == 0:
-				return general.HeaderStyle // 第一行为表头
-			case row%2 == 0:
-				style = evenRowStyle // 偶数行
-			default:
-				style = oddRowStyle // 奇数行
-			}
-
-			// 设置第一列格式
-			if col == 0 {
-				style = style.Foreground(general.ColumnOneColor)
-			}
-
-			return style
-		})
-
-		dataTable.Headers(tableHeader...) // 设置表头
-		dataTable.Rows(tableData...)      // 设置单元格
-
-		color.Println(dataTable)
 	}
 
 	if flags["osFlag"] {
@@ -590,61 +625,66 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		}()
 
 		// 获取数据
-		osInfo := general.GetOSInfo(sysInfo)
-		items = config.Genealogy.OS.Items
+		osInfo := general.GetOSInfo(sysInfo) // 原始数据
+		items = config.Genealogy.OS.Items    // 原始表头
 
-		// 组装表
-		tableHeader = []string{""} // 表头
-		tableData = [][]string{}   // 表数据
-		rowData = []string{osPart} // 行数据
-		for _, item := range items {
-			itemI18n := func() string {
-				itemName := general.GenealogyName[item][general.Language]
-				if itemName == "" {
-					itemName = item
+		// 未配置表头时不显示该项，发送通知
+		if len(items) == 0 {
+			general.Notifier = append(general.Notifier, "OS items is empty")
+		} else {
+			// 组装表
+			tableHeader = []string{""} // 表头
+			tableData = [][]string{}   // 表数据
+			rowData = []string{osPart} // 行数据
+			for _, item := range items {
+				itemI18n := func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
+				tableHeader = append(tableHeader, itemI18n)
+				rowData = append(rowData, osInfo[item].(string))
+			}
+			tableData = append(tableData, rowData)
+
+			// 获取随机颜色
+			oddRowColor = colors[0]
+			evenRowColor = colors[1]
+			colors = colors[2:]
+
+			oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+			evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
+
+			dataTable = table.New()                                 // 创建一个表格
+			dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+			dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+			dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+				var style lipgloss.Style
+
+				switch {
+				case row == 0:
+					return general.HeaderStyle // 第一行为表头
+				case row%2 == 0:
+					style = evenRowStyle // 偶数行
+				default:
+					style = oddRowStyle // 奇数行
 				}
-				return itemName
-			}()
-			tableHeader = append(tableHeader, itemI18n)
-			rowData = append(rowData, osInfo[item].(string))
+
+				// 设置第一列格式
+				if col == 0 {
+					style = style.Foreground(general.ColumnOneColor)
+				}
+
+				return style
+			})
+
+			dataTable.Headers(tableHeader...) // 设置表头
+			dataTable.Rows(tableData...)      // 设置单元格
+
+			color.Println(dataTable)
 		}
-		tableData = append(tableData, rowData)
-
-		// 获取随机颜色
-		oddRowColor = colors[0]
-		evenRowColor = colors[1]
-		colors = colors[2:]
-
-		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-		dataTable = table.New()                                 // 创建一个表格
-		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-			var style lipgloss.Style
-
-			switch {
-			case row == 0:
-				return general.HeaderStyle // 第一行为表头
-			case row%2 == 0:
-				style = evenRowStyle // 偶数行
-			default:
-				style = oddRowStyle // 奇数行
-			}
-
-			// 设置第一列格式
-			if col == 0 {
-				style = style.Foreground(general.ColumnOneColor)
-			}
-
-			return style
-		})
-
-		dataTable.Headers(tableHeader...) // 设置表头
-		dataTable.Rows(tableData...)      // 设置单元格
-
-		color.Println(dataTable)
 	}
 
 	if flags["loadFlag"] {
@@ -657,71 +697,76 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		}()
 
 		// 获取数据
-		loadInfo := general.GetLoadInfo()
-		items = config.Genealogy.Load.Items
+		loadInfo := general.GetLoadInfo()   // 原始数据
+		items = config.Genealogy.Load.Items // 原始表头
 
-		// 组装表
-		tableHeader = []string{""}   // 表头
-		tableData = [][]string{}     // 表数据
-		rowData = []string{loadPart} // 行数据
-		for _, item := range items {
-			itemI18n := func() string {
-				itemName := general.GenealogyName[item][general.Language]
-				if itemName == "" {
-					itemName = item
+		// 未配置表头时不显示该项，发送通知
+		if len(items) == 0 {
+			general.Notifier = append(general.Notifier, "Load items is empty")
+		} else {
+			// 组装表
+			tableHeader = []string{""}   // 表头
+			tableData = [][]string{}     // 表数据
+			rowData = []string{loadPart} // 行数据
+			for _, item := range items {
+				itemI18n := func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
+				tableHeader = append(tableHeader, itemI18n)
+
+				var cellData string
+				switch info := loadInfo[item].(type) {
+				case uint64:
+					cellData = color.Sprintf("%d", info)
+				case float64:
+					cellData = color.Sprintf("%.2f", info)
+				default:
+					cellData = color.Sprintf("%v", info)
 				}
-				return itemName
-			}()
-			tableHeader = append(tableHeader, itemI18n)
-
-			var cellData string
-			switch info := loadInfo[item].(type) {
-			case uint64:
-				cellData = color.Sprintf("%d", info)
-			case float64:
-				cellData = color.Sprintf("%.2f", info)
-			default:
-				cellData = color.Sprintf("%v", info)
+				rowData = append(rowData, cellData)
 			}
-			rowData = append(rowData, cellData)
+			tableData = append(tableData, rowData)
+
+			// 获取随机颜色
+			oddRowColor = colors[0]
+			evenRowColor = colors[1]
+			colors = colors[2:]
+
+			oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+			evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
+
+			dataTable = table.New()                                 // 创建一个表格
+			dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+			dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+			dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+				var style lipgloss.Style
+
+				switch {
+				case row == 0:
+					return general.HeaderStyle // 第一行为表头
+				case row%2 == 0:
+					style = evenRowStyle // 偶数行
+				default:
+					style = oddRowStyle // 奇数行
+				}
+
+				// 设置第一列格式
+				if col == 0 {
+					style = style.Foreground(general.ColumnOneColor)
+				}
+
+				return style
+			})
+
+			dataTable.Headers(tableHeader...) // 设置表头
+			dataTable.Rows(tableData...)      // 设置单元格
+
+			color.Println(dataTable)
 		}
-		tableData = append(tableData, rowData)
-
-		// 获取随机颜色
-		oddRowColor = colors[0]
-		evenRowColor = colors[1]
-		colors = colors[2:]
-
-		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-		dataTable = table.New()                                 // 创建一个表格
-		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-			var style lipgloss.Style
-
-			switch {
-			case row == 0:
-				return general.HeaderStyle // 第一行为表头
-			case row%2 == 0:
-				style = evenRowStyle // 偶数行
-			default:
-				style = oddRowStyle // 奇数行
-			}
-
-			// 设置第一列格式
-			if col == 0 {
-				style = style.Foreground(general.ColumnOneColor)
-			}
-
-			return style
-		})
-
-		dataTable.Headers(tableHeader...) // 设置表头
-		dataTable.Rows(tableData...)      // 设置单元格
-
-		color.Println(dataTable)
 	}
 
 	if flags["userFlag"] {
@@ -734,61 +779,66 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		}()
 
 		// 获取数据
-		userInfo := general.GetUserInfo()
-		items = config.Genealogy.User.Items
+		userInfo := general.GetUserInfo()   // 原始数据
+		items = config.Genealogy.User.Items // 原始表头
 
-		// 组装表
-		tableHeader = []string{""}   // 表头
-		tableData = [][]string{}     // 表数据
-		rowData = []string{userPart} // 行数据
-		for _, item := range items {
-			itemI18n := func() string {
-				itemName := general.GenealogyName[item][general.Language]
-				if itemName == "" {
-					itemName = item
+		// 未配置表头时不显示该项，发送通知
+		if len(items) == 0 {
+			general.Notifier = append(general.Notifier, "User items is empty")
+		} else {
+			// 组装表
+			tableHeader = []string{""}   // 表头
+			tableData = [][]string{}     // 表数据
+			rowData = []string{userPart} // 行数据
+			for _, item := range items {
+				itemI18n := func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
+				tableHeader = append(tableHeader, itemI18n)
+				rowData = append(rowData, userInfo[item].(string))
+			}
+			tableData = append(tableData, rowData)
+
+			// 获取随机颜色
+			oddRowColor = colors[0]
+			evenRowColor = colors[1]
+			colors = colors[2:]
+
+			oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+			evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
+
+			dataTable = table.New()                                 // 创建一个表格
+			dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+			dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+			dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+				var style lipgloss.Style
+
+				switch {
+				case row == 0:
+					return general.HeaderStyle // 第一行为表头
+				case row%2 == 0:
+					style = evenRowStyle // 偶数行
+				default:
+					style = oddRowStyle // 奇数行
 				}
-				return itemName
-			}()
-			tableHeader = append(tableHeader, itemI18n)
-			rowData = append(rowData, userInfo[item].(string))
+
+				// 设置第一列格式
+				if col == 0 {
+					style = style.Foreground(general.ColumnOneColor)
+				}
+
+				return style
+			})
+
+			dataTable.Headers(tableHeader...) // 设置表头
+			dataTable.Rows(tableData...)      // 设置单元格
+
+			color.Println(dataTable)
 		}
-		tableData = append(tableData, rowData)
-
-		// 获取随机颜色
-		oddRowColor = colors[0]
-		evenRowColor = colors[1]
-		colors = colors[2:]
-
-		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-		dataTable = table.New()                                 // 创建一个表格
-		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-			var style lipgloss.Style
-
-			switch {
-			case row == 0:
-				return general.HeaderStyle // 第一行为表头
-			case row%2 == 0:
-				style = evenRowStyle // 偶数行
-			default:
-				style = oddRowStyle // 奇数行
-			}
-
-			// 设置第一列格式
-			if col == 0 {
-				style = style.Foreground(general.ColumnOneColor)
-			}
-
-			return style
-		})
-
-		dataTable.Headers(tableHeader...) // 设置表头
-		dataTable.Rows(tableData...)      // 设置单元格
-
-		color.Println(dataTable)
 	}
 }
 
@@ -828,7 +878,7 @@ func GrabInformationToTab(configTree *toml.Tree) {
 
 	// 获取随机颜色切片
 	if colorful {
-		colors = general.GetColor(viewQuantity * 2) //因为分奇数/偶数行，所以要乘2
+		colors = general.GetColor(viewQuantity * 2) // 因为分奇数/偶数行，所以要乘2
 	}
 
 	// ---------- Product
@@ -841,57 +891,60 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	}()
 
 	// 获取数据
-	productInfo := general.GetProductInfo(sysInfo)
-	items = config.Genealogy.Product.Items
+	productInfo := general.GetProductInfo(sysInfo) // 原始数据
+	items = config.Genealogy.Product.Items         // 原始表头
 
-	// 组装表
-	tableHeader = []string{} // 表头
-	tableData = [][]string{} // 表数据
-	rowData = []string{}     // 行数据
-	for _, item := range items {
-		itemI18n := func() string {
-			itemName := general.GenealogyName[item][general.Language]
-			if itemName == "" {
-				itemName = item
-			}
-			return itemName
-		}()
-		tableHeader = append(tableHeader, itemI18n)
-		rowData = append(rowData, productInfo[item].(string))
-	}
-	tableData = append(tableData, rowData)
-
-	// 获取随机颜色
-	oddRowColor = colors[0]
-	evenRowColor = colors[1]
-	colors = colors[2:]
-
-	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-	dataTable = table.New()
-	dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-	dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-	dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-		var style lipgloss.Style
-
-		switch {
-		case row == 0:
-			return general.HeaderStyle // 第一行为表头
-		case row%2 == 0:
-			style = evenRowStyle // 偶数行
-		default:
-			style = oddRowStyle // 奇数行
+	// 未配置表头时不显示该项
+	if len(items) != 0 {
+		// 组装表
+		tableHeader = []string{} // 表头
+		tableData = [][]string{} // 表数据
+		rowData = []string{}     // 行数据
+		for _, item := range items {
+			itemI18n := func() string {
+				itemName := general.GenealogyName[item][general.Language]
+				if itemName == "" {
+					itemName = item
+				}
+				return itemName
+			}()
+			tableHeader = append(tableHeader, itemI18n)
+			rowData = append(rowData, productInfo[item].(string))
 		}
+		tableData = append(tableData, rowData)
 
-		return style
-	})
+		// 获取随机颜色
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
-	dataTable.Headers(tableHeader...) // 设置表头
-	dataTable.Rows(tableData...)      // 设置单元格
+		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 
-	tabs = append(tabs, productPart)
-	tabContents = append(tabContents, dataTable.String())
+		dataTable = table.New()
+		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
+
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = evenRowStyle // 偶数行
+			default:
+				style = oddRowStyle // 奇数行
+			}
+
+			return style
+		})
+
+		dataTable.Headers(tableHeader...) // 设置表头
+		dataTable.Rows(tableData...)      // 设置单元格
+
+		tabs = append(tabs, productPart)
+		tabContents = append(tabContents, dataTable.String())
+	}
 
 	// ---------- Board
 	boardPart := func() string {
@@ -903,57 +956,60 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	}()
 
 	// 获取数据
-	boardInfo := general.GetBoardInfo(sysInfo)
-	items = config.Genealogy.Board.Items
+	boardInfo := general.GetBoardInfo(sysInfo) // 原始数据
+	items = config.Genealogy.Board.Items       // 原始表头
 
-	// 组装表
-	tableHeader = []string{} // 表头
-	tableData = [][]string{} // 表数据
-	rowData = []string{}     // 行数据
-	for _, item := range items {
-		itemI18n := func() string {
-			itemName := general.GenealogyName[item][general.Language]
-			if itemName == "" {
-				itemName = item
-			}
-			return itemName
-		}()
-		tableHeader = append(tableHeader, itemI18n)
-		rowData = append(rowData, boardInfo[item].(string))
-	}
-	tableData = append(tableData, rowData)
-
-	// 获取随机颜色
-	oddRowColor = colors[0]
-	evenRowColor = colors[1]
-	colors = colors[2:]
-
-	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-	dataTable = table.New()
-	dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-	dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-	dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-		var style lipgloss.Style
-
-		switch {
-		case row == 0:
-			return general.HeaderStyle // 第一行为表头
-		case row%2 == 0:
-			style = evenRowStyle // 偶数行
-		default:
-			style = oddRowStyle // 奇数行
+	// 未配置表头时不显示该项
+	if len(items) != 0 {
+		// 组装表
+		tableHeader = []string{} // 表头
+		tableData = [][]string{} // 表数据
+		rowData = []string{}     // 行数据
+		for _, item := range items {
+			itemI18n := func() string {
+				itemName := general.GenealogyName[item][general.Language]
+				if itemName == "" {
+					itemName = item
+				}
+				return itemName
+			}()
+			tableHeader = append(tableHeader, itemI18n)
+			rowData = append(rowData, boardInfo[item].(string))
 		}
+		tableData = append(tableData, rowData)
 
-		return style
-	})
+		// 获取随机颜色
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
-	dataTable.Headers(tableHeader...) // 设置表头
-	dataTable.Rows(tableData...)      // 设置单元格
+		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 
-	tabs = append(tabs, boardPart)
-	tabContents = append(tabContents, dataTable.String())
+		dataTable = table.New()
+		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
+
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = evenRowStyle // 偶数行
+			default:
+				style = oddRowStyle // 奇数行
+			}
+
+			return style
+		})
+
+		dataTable.Headers(tableHeader...) // 设置表头
+		dataTable.Rows(tableData...)      // 设置单元格
+
+		tabs = append(tabs, boardPart)
+		tabContents = append(tabContents, dataTable.String())
+	}
 
 	// ---------- Bios
 	biosPart := func() string {
@@ -965,57 +1021,60 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	}()
 
 	// 获取数据
-	biosInfo := general.GetBIOSInfo(sysInfo)
-	items = config.Genealogy.Bios.Items
+	biosInfo := general.GetBIOSInfo(sysInfo) // 原始数据
+	items = config.Genealogy.Bios.Items      // 原始表头
 
-	// 组装表
-	tableHeader = []string{} // 表头
-	tableData = [][]string{} // 表数据
-	rowData = []string{}     // 行数据
-	for _, item := range items {
-		itemI18n := func() string {
-			itemName := general.GenealogyName[item][general.Language]
-			if itemName == "" {
-				itemName = item
-			}
-			return itemName
-		}()
-		tableHeader = append(tableHeader, itemI18n)
-		rowData = append(rowData, biosInfo[item].(string))
-	}
-	tableData = append(tableData, rowData)
-
-	// 获取随机颜色
-	oddRowColor = colors[0]
-	evenRowColor = colors[1]
-	colors = colors[2:]
-
-	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-	dataTable = table.New()
-	dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-	dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-	dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-		var style lipgloss.Style
-
-		switch {
-		case row == 0:
-			return general.HeaderStyle // 第一行为表头
-		case row%2 == 0:
-			style = evenRowStyle // 偶数行
-		default:
-			style = oddRowStyle // 奇数行
+	// 未配置表头时不显示该项
+	if len(items) != 0 {
+		// 组装表
+		tableHeader = []string{} // 表头
+		tableData = [][]string{} // 表数据
+		rowData = []string{}     // 行数据
+		for _, item := range items {
+			itemI18n := func() string {
+				itemName := general.GenealogyName[item][general.Language]
+				if itemName == "" {
+					itemName = item
+				}
+				return itemName
+			}()
+			tableHeader = append(tableHeader, itemI18n)
+			rowData = append(rowData, biosInfo[item].(string))
 		}
+		tableData = append(tableData, rowData)
 
-		return style
-	})
+		// 获取随机颜色
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
-	dataTable.Headers(tableHeader...) // 设置表头
-	dataTable.Rows(tableData...)      // 设置单元格
+		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 
-	tabs = append(tabs, biosPart)
-	tabContents = append(tabContents, dataTable.String())
+		dataTable = table.New()
+		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
+
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = evenRowStyle // 偶数行
+			default:
+				style = oddRowStyle // 奇数行
+			}
+
+			return style
+		})
+
+		dataTable.Headers(tableHeader...) // 设置表头
+		dataTable.Rows(tableData...)      // 设置单元格
+
+		tabs = append(tabs, biosPart)
+		tabContents = append(tabContents, dataTable.String())
+	}
 
 	// ---------- CPU
 	cpuPart := func() string {
@@ -1034,57 +1093,60 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	}
 
 	// 获取数据
-	cpuInfo := general.GetCPUInfo(sysInfo, cpuCacheUnit)
-	items = config.Genealogy.CPU.Items
+	cpuInfo := general.GetCPUInfo(sysInfo, cpuCacheUnit) // 原始数据
+	items = config.Genealogy.CPU.Items                   // 原始表头
 
-	// 组装表
-	tableHeader = []string{} // 表头
-	tableData = [][]string{} // 表数据
-	rowData = []string{}     // 行数据
-	for _, item := range items {
-		itemI18n := func() string {
-			itemName := general.GenealogyName[item][general.Language]
-			if itemName == "" {
-				itemName = item
-			}
-			return itemName
-		}()
-		tableHeader = append(tableHeader, itemI18n)
-		rowData = append(rowData, color.Sprintf("%v", cpuInfo[item]))
-	}
-	tableData = append(tableData, rowData)
-
-	// 获取随机颜色
-	oddRowColor = colors[0]
-	evenRowColor = colors[1]
-	colors = colors[2:]
-
-	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-	dataTable = table.New()
-	dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-	dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-	dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-		var style lipgloss.Style
-
-		switch {
-		case row == 0:
-			return general.HeaderStyle // 第一行为表头
-		case row%2 == 0:
-			style = evenRowStyle // 偶数行
-		default:
-			style = oddRowStyle // 奇数行
+	// 未配置表头时不显示该项
+	if len(items) != 0 {
+		// 组装表
+		tableHeader = []string{} // 表头
+		tableData = [][]string{} // 表数据
+		rowData = []string{}     // 行数据
+		for _, item := range items {
+			itemI18n := func() string {
+				itemName := general.GenealogyName[item][general.Language]
+				if itemName == "" {
+					itemName = item
+				}
+				return itemName
+			}()
+			tableHeader = append(tableHeader, itemI18n)
+			rowData = append(rowData, color.Sprintf("%v", cpuInfo[item]))
 		}
+		tableData = append(tableData, rowData)
 
-		return style
-	})
+		// 获取随机颜色
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
-	dataTable.Headers(tableHeader...) // 设置表头
-	dataTable.Rows(tableData...)      // 设置单元格
+		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 
-	tabs = append(tabs, cpuPart)
-	tabContents = append(tabContents, dataTable.String())
+		dataTable = table.New()
+		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
+
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = evenRowStyle // 偶数行
+			default:
+				style = oddRowStyle // 奇数行
+			}
+
+			return style
+		})
+
+		dataTable.Headers(tableHeader...) // 设置表头
+		dataTable.Rows(tableData...)      // 设置单元格
+
+		tabs = append(tabs, cpuPart)
+		tabContents = append(tabContents, dataTable.String())
+	}
 
 	// ---------- Memory
 	memoryPart := func() string {
@@ -1108,57 +1170,60 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	}
 
 	// 获取数据
-	memoryInfo := general.GetMemoryInfo(MemoryDataUnit, memoryPercentUnit)
-	items = config.Genealogy.Memory.Items
+	memoryInfo := general.GetMemoryInfo(MemoryDataUnit, memoryPercentUnit) // 原始数据
+	items = config.Genealogy.Memory.Items                                  // 原始表头
 
-	// 组装表
-	tableHeader = []string{} // 表头
-	tableData = [][]string{} // 表数据
-	rowData = []string{}     // 行数据
-	for _, item := range items {
-		itemI18n := func() string {
-			itemName := general.GenealogyName[item][general.Language]
-			if itemName == "" {
-				itemName = item
-			}
-			return itemName
-		}()
-		tableHeader = append(tableHeader, itemI18n)
-		rowData = append(rowData, memoryInfo[item].(string))
-	}
-	tableData = append(tableData, rowData)
-
-	// 获取随机颜色
-	oddRowColor = colors[0]
-	evenRowColor = colors[1]
-	colors = colors[2:]
-
-	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-	dataTable = table.New()
-	dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-	dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-	dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-		var style lipgloss.Style
-
-		switch {
-		case row == 0:
-			return general.HeaderStyle // 第一行为表头
-		case row%2 == 0:
-			style = evenRowStyle // 偶数行
-		default:
-			style = oddRowStyle // 奇数行
+	// 未配置表头时不显示该项
+	if len(items) != 0 {
+		// 组装表
+		tableHeader = []string{} // 表头
+		tableData = [][]string{} // 表数据
+		rowData = []string{}     // 行数据
+		for _, item := range items {
+			itemI18n := func() string {
+				itemName := general.GenealogyName[item][general.Language]
+				if itemName == "" {
+					itemName = item
+				}
+				return itemName
+			}()
+			tableHeader = append(tableHeader, itemI18n)
+			rowData = append(rowData, memoryInfo[item].(string))
 		}
+		tableData = append(tableData, rowData)
 
-		return style
-	})
+		// 获取随机颜色
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
-	dataTable.Headers(tableHeader...) // 设置表头
-	dataTable.Rows(tableData...)      // 设置单元格
+		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 
-	tabs = append(tabs, memoryPart)
-	tabContents = append(tabContents, dataTable.String())
+		dataTable = table.New()
+		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
+
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = evenRowStyle // 偶数行
+			default:
+				style = oddRowStyle // 奇数行
+			}
+
+			return style
+		})
+
+		dataTable.Headers(tableHeader...) // 设置表头
+		dataTable.Rows(tableData...)      // 设置单元格
+
+		tabs = append(tabs, memoryPart)
+		tabContents = append(tabContents, dataTable.String())
+	}
 
 	// ---------- Swap
 	swapPart := func() string {
@@ -1177,61 +1242,64 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	}
 
 	// 获取数据
-	swapInfo := general.GetSwapInfo(SwapDataUnit)
+	swapInfo := general.GetSwapInfo(SwapDataUnit) // 原始数据
 	if swapInfo["SwapStatus"] == "Unavailable" {
-		items = config.Genealogy.Swap.Items.Unavailable
+		items = config.Genealogy.Swap.Items.Unavailable // 原始表头
 	} else {
-		items = config.Genealogy.Swap.Items.Available
+		items = config.Genealogy.Swap.Items.Available // 原始表头
 	}
 
-	// 组装表
-	tableHeader = []string{} // 表头
-	tableData = [][]string{} // 表数据
-	rowData = []string{}     // 行数据
-	for _, item := range items {
-		itemI18n := func() string {
-			itemName := general.GenealogyName[item][general.Language]
-			if itemName == "" {
-				itemName = item
-			}
-			return itemName
-		}()
-		tableHeader = append(tableHeader, itemI18n)
-		rowData = append(rowData, color.Sprintf("%v", swapInfo[item]))
-	}
-	tableData = append(tableData, rowData)
-
-	// 获取随机颜色
-	oddRowColor = colors[0]
-	evenRowColor = colors[1]
-	colors = colors[2:]
-
-	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-	dataTable = table.New()
-	dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-	dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-	dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-		var style lipgloss.Style
-
-		switch {
-		case row == 0:
-			return general.HeaderStyle // 第一行为表头
-		case row%2 == 0:
-			style = evenRowStyle // 偶数行
-		default:
-			style = oddRowStyle // 奇数行
+	// 未配置表头时不显示该项
+	if len(items) != 0 {
+		// 组装表
+		tableHeader = []string{} // 表头
+		tableData = [][]string{} // 表数据
+		rowData = []string{}     // 行数据
+		for _, item := range items {
+			itemI18n := func() string {
+				itemName := general.GenealogyName[item][general.Language]
+				if itemName == "" {
+					itemName = item
+				}
+				return itemName
+			}()
+			tableHeader = append(tableHeader, itemI18n)
+			rowData = append(rowData, color.Sprintf("%v", swapInfo[item]))
 		}
+		tableData = append(tableData, rowData)
 
-		return style
-	})
+		// 获取随机颜色
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
-	dataTable.Headers(tableHeader...) // 设置表头
-	dataTable.Rows(tableData...)      // 设置单元格
+		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 
-	tabs = append(tabs, swapPart)
-	tabContents = append(tabContents, dataTable.String())
+		dataTable = table.New()
+		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
+
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = evenRowStyle // 偶数行
+			default:
+				style = oddRowStyle // 奇数行
+			}
+
+			return style
+		})
+
+		dataTable.Headers(tableHeader...) // 设置表头
+		dataTable.Rows(tableData...)      // 设置单元格
+
+		tabs = append(tabs, swapPart)
+		tabContents = append(tabContents, dataTable.String())
+	}
 
 	// ---------- Storage
 	diskPart := func() string {
@@ -1243,61 +1311,64 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	}()
 
 	// 获取数据
-	storageInfo := general.GetStorageInfo()
-	items = config.Genealogy.Storage.Items
+	storageInfo := general.GetStorageInfo() // 原始数据
+	items = config.Genealogy.Storage.Items  // 原始表头
 
-	// 组装表
-	tableHeader = []string{} // 表头
-	tableData = [][]string{} // 表数据
-	for _, item := range items {
-		itemI18n := func() string {
-			itemName := general.GenealogyName[item][general.Language]
-			if itemName == "" {
-				itemName = item
-			}
-			return itemName
-		}()
-		tableHeader = append(tableHeader, itemI18n)
-	}
-	for index := 1; index <= len(storageInfo); index++ {
-		rowData = []string{} // 行数据
+	// 未配置表头时不显示该项
+	if len(items) != 0 {
+		// 组装表
+		tableHeader = []string{} // 表头
+		tableData = [][]string{} // 表数据
 		for _, item := range items {
-			rowData = append(rowData, storageInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string))
+			itemI18n := func() string {
+				itemName := general.GenealogyName[item][general.Language]
+				if itemName == "" {
+					itemName = item
+				}
+				return itemName
+			}()
+			tableHeader = append(tableHeader, itemI18n)
 		}
-		tableData = append(tableData, rowData)
+		for index := 1; index <= len(storageInfo); index++ {
+			rowData = []string{} // 行数据
+			for _, item := range items {
+				rowData = append(rowData, storageInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string))
+			}
+			tableData = append(tableData, rowData)
+		}
+
+		// 获取随机颜色
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
+
+		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
+
+		dataTable = table.New()
+		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
+
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = evenRowStyle // 偶数行
+			default:
+				style = oddRowStyle // 奇数行
+			}
+
+			return style
+		})
+
+		dataTable.Headers(tableHeader...) // 设置表头
+		dataTable.Rows(tableData...)      // 设置单元格
+
+		tabs = append(tabs, diskPart)
+		tabContents = append(tabContents, dataTable.String())
 	}
-
-	// 获取随机颜色
-	oddRowColor = colors[0]
-	evenRowColor = colors[1]
-	colors = colors[2:]
-
-	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-	dataTable = table.New()
-	dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-	dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-	dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-		var style lipgloss.Style
-
-		switch {
-		case row == 0:
-			return general.HeaderStyle // 第一行为表头
-		case row%2 == 0:
-			style = evenRowStyle // 偶数行
-		default:
-			style = oddRowStyle // 奇数行
-		}
-
-		return style
-	})
-
-	dataTable.Headers(tableHeader...) // 设置表头
-	dataTable.Rows(tableData...)      // 设置单元格
-
-	tabs = append(tabs, diskPart)
-	tabContents = append(tabContents, dataTable.String())
 
 	// ---------- OS
 	osPart := func() string {
@@ -1309,57 +1380,60 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	}()
 
 	// 获取数据
-	osInfo := general.GetOSInfo(sysInfo)
-	items = config.Genealogy.OS.Items
+	osInfo := general.GetOSInfo(sysInfo) // 原始数据
+	items = config.Genealogy.OS.Items    // 原始表头
 
-	// 组装表
-	tableHeader = []string{} // 表头
-	tableData = [][]string{} // 表数据
-	rowData = []string{}     // 行数据
-	for _, item := range items {
-		itemI18n := func() string {
-			itemName := general.GenealogyName[item][general.Language]
-			if itemName == "" {
-				itemName = item
-			}
-			return itemName
-		}()
-		tableHeader = append(tableHeader, itemI18n)
-		rowData = append(rowData, osInfo[item].(string))
-	}
-	tableData = append(tableData, rowData)
-
-	// 获取随机颜色
-	oddRowColor = colors[0]
-	evenRowColor = colors[1]
-	colors = colors[2:]
-
-	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-	dataTable = table.New()
-	dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-	dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-	dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-		var style lipgloss.Style
-
-		switch {
-		case row == 0:
-			return general.HeaderStyle // 第一行为表头
-		case row%2 == 0:
-			style = evenRowStyle // 偶数行
-		default:
-			style = oddRowStyle // 奇数行
+	// 未配置表头时不显示该项
+	if len(items) != 0 {
+		// 组装表
+		tableHeader = []string{} // 表头
+		tableData = [][]string{} // 表数据
+		rowData = []string{}     // 行数据
+		for _, item := range items {
+			itemI18n := func() string {
+				itemName := general.GenealogyName[item][general.Language]
+				if itemName == "" {
+					itemName = item
+				}
+				return itemName
+			}()
+			tableHeader = append(tableHeader, itemI18n)
+			rowData = append(rowData, osInfo[item].(string))
 		}
+		tableData = append(tableData, rowData)
 
-		return style
-	})
+		// 获取随机颜色
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
-	dataTable.Headers(tableHeader...) // 设置表头
-	dataTable.Rows(tableData...)      // 设置单元格
+		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 
-	tabs = append(tabs, osPart)
-	tabContents = append(tabContents, dataTable.String())
+		dataTable = table.New()
+		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
+
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = evenRowStyle // 偶数行
+			default:
+				style = oddRowStyle // 奇数行
+			}
+
+			return style
+		})
+
+		dataTable.Headers(tableHeader...) // 设置表头
+		dataTable.Rows(tableData...)      // 设置单元格
+
+		tabs = append(tabs, osPart)
+		tabContents = append(tabContents, dataTable.String())
+	}
 
 	// ---------- Load
 	loadPart := func() string {
@@ -1371,67 +1445,70 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	}()
 
 	// 获取数据
-	loadInfo := general.GetLoadInfo()
-	items = config.Genealogy.Load.Items
+	loadInfo := general.GetLoadInfo()   // 原始数据
+	items = config.Genealogy.Load.Items // 原始表头
 
-	// 组装表
-	tableHeader = []string{} // 表头
-	tableData = [][]string{} // 表数据
-	rowData = []string{}     // 行数据
-	for _, item := range items {
-		itemI18n := func() string {
-			itemName := general.GenealogyName[item][general.Language]
-			if itemName == "" {
-				itemName = item
+	// 未配置表头时不显示该项
+	if len(items) != 0 {
+		// 组装表
+		tableHeader = []string{} // 表头
+		tableData = [][]string{} // 表数据
+		rowData = []string{}     // 行数据
+		for _, item := range items {
+			itemI18n := func() string {
+				itemName := general.GenealogyName[item][general.Language]
+				if itemName == "" {
+					itemName = item
+				}
+				return itemName
+			}()
+			tableHeader = append(tableHeader, itemI18n)
+
+			var cellData string
+			switch info := loadInfo[item].(type) {
+			case uint64:
+				cellData = color.Sprintf("%d", info)
+			case float64:
+				cellData = color.Sprintf("%.2f", info)
+			default:
+				cellData = color.Sprintf("%v", info)
 			}
-			return itemName
-		}()
-		tableHeader = append(tableHeader, itemI18n)
-
-		var cellData string
-		switch info := loadInfo[item].(type) {
-		case uint64:
-			cellData = color.Sprintf("%d", info)
-		case float64:
-			cellData = color.Sprintf("%.2f", info)
-		default:
-			cellData = color.Sprintf("%v", info)
+			rowData = append(rowData, cellData)
 		}
-		rowData = append(rowData, cellData)
+		tableData = append(tableData, rowData)
+
+		// 获取随机颜色
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
+
+		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
+
+		dataTable = table.New()
+		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
+
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = evenRowStyle // 偶数行
+			default:
+				style = oddRowStyle // 奇数行
+			}
+
+			return style
+		})
+
+		dataTable.Headers(tableHeader...) // 设置表头
+		dataTable.Rows(tableData...)      // 设置单元格
+
+		tabs = append(tabs, loadPart)
+		tabContents = append(tabContents, dataTable.String())
 	}
-	tableData = append(tableData, rowData)
-
-	// 获取随机颜色
-	oddRowColor = colors[0]
-	evenRowColor = colors[1]
-	colors = colors[2:]
-
-	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-	dataTable = table.New()
-	dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-	dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-	dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-		var style lipgloss.Style
-
-		switch {
-		case row == 0:
-			return general.HeaderStyle // 第一行为表头
-		case row%2 == 0:
-			style = evenRowStyle // 偶数行
-		default:
-			style = oddRowStyle // 奇数行
-		}
-
-		return style
-	})
-
-	dataTable.Headers(tableHeader...) // 设置表头
-	dataTable.Rows(tableData...)      // 设置单元格
-
-	tabs = append(tabs, loadPart)
-	tabContents = append(tabContents, dataTable.String())
 
 	// ---------- User
 	userPart := func() string {
@@ -1443,58 +1520,62 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	}()
 
 	// 获取数据
-	userInfo := general.GetUserInfo()
-	items = config.Genealogy.User.Items
+	userInfo := general.GetUserInfo()   // 原始数据
+	items = config.Genealogy.User.Items // 原始表头
 
-	// 组装表
-	tableHeader = []string{} // 表头
-	tableData = [][]string{} // 表数据
-	rowData = []string{}     // 行数据
-	for _, item := range items {
-		itemI18n := func() string {
-			itemName := general.GenealogyName[item][general.Language]
-			if itemName == "" {
-				itemName = item
-			}
-			return itemName
-		}()
-		tableHeader = append(tableHeader, itemI18n)
-		rowData = append(rowData, userInfo[item].(string))
-	}
-	tableData = append(tableData, rowData)
-
-	// 获取随机颜色
-	oddRowColor = colors[0]
-	evenRowColor = colors[1]
-	colors = colors[2:]
-
-	oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
-	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-	dataTable = table.New()
-	dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
-	dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
-	dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
-		var style lipgloss.Style
-
-		switch {
-		case row == 0:
-			return general.HeaderStyle // 第一行为表头
-		case row%2 == 0:
-			style = evenRowStyle // 偶数行
-		default:
-			style = oddRowStyle // 奇数行
+	// 未配置表头时不显示该项
+	if len(items) != 0 {
+		// 组装表
+		tableHeader = []string{} // 表头
+		tableData = [][]string{} // 表数据
+		rowData = []string{}     // 行数据
+		for _, item := range items {
+			itemI18n := func() string {
+				itemName := general.GenealogyName[item][general.Language]
+				if itemName == "" {
+					itemName = item
+				}
+				return itemName
+			}()
+			tableHeader = append(tableHeader, itemI18n)
+			rowData = append(rowData, userInfo[item].(string))
 		}
+		tableData = append(tableData, rowData)
 
-		return style
-	})
+		// 获取随机颜色
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
 
-	dataTable.Headers(tableHeader...) // 设置表头
-	dataTable.Rows(tableData...)      // 设置单元格
+		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
 
-	tabs = append(tabs, userPart)
-	tabContents = append(tabContents, dataTable.String())
+		dataTable = table.New()
+		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
 
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = evenRowStyle // 偶数行
+			default:
+				style = oddRowStyle // 奇数行
+			}
+
+			return style
+		})
+
+		dataTable.Headers(tableHeader...) // 设置表头
+		dataTable.Rows(tableData...)      // 设置单元格
+
+		tabs = append(tabs, userPart)
+		tabContents = append(tabContents, dataTable.String())
+	}
+
+	// 输出 Tab
 	if err := general.TabSelector(tabs, tabContents); err != nil {
 		fileName, lineNo := general.GetCallerInfo()
 		color.Danger.Printf("Tab selector error (%s:%d): %s\n", fileName, lineNo+1, err)
