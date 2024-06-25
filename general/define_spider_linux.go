@@ -356,13 +356,13 @@ func GetCPUInfo(sysInfo sysinfo.SysInfo, dataUnit string) map[string]interface{}
 //   - 系统信息 (OS Info)
 func GetOSInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
 	osInfo := make(map[string]interface{})
-	osInfo["OS"] = UpperStringFirstChar(sysInfo.OS.Name)         // 操作系统
-	osInfo["Arch"] = sysInfo.OS.Architecture                     // 系统架构
-	osInfo["CurrentKernel"] = sysInfo.Kernel.Release             // 当前内核版本
-	osInfo["LatestKernel"] = GetLatestKernelVersion()            // 本地最新内核版本
-	osInfo["Platform"] = UpperStringFirstChar(sysInfo.OS.Vendor) // 平台
-	osInfo["Hostname"] = hostData.Hostname                       // 主机名
-	osInfo["TimeZone"] = sysInfo.Node.Timezone                   // 时区
+	osInfo["OS"] = UpperFirstChar(sysInfo.OS.Name)         // 操作系统
+	osInfo["Arch"] = sysInfo.OS.Architecture               // 系统架构
+	osInfo["CurrentKernel"] = sysInfo.Kernel.Release       // 当前内核版本
+	osInfo["LatestKernel"] = GetLatestKernelVersion()      // 本地最新内核版本
+	osInfo["Platform"] = UpperFirstChar(sysInfo.OS.Vendor) // 平台
+	osInfo["Hostname"] = hostData.Hostname                 // 主机名
+	osInfo["TimeZone"] = sysInfo.Node.Timezone             // 时区
 
 	return osInfo
 }
@@ -467,7 +467,7 @@ func GetUpdateDaemonInfo() (map[string]interface{}, error) {
 			return nil, err
 		}
 
-		daemonInfo["UpdateDaemonStatus"] = updateDaemonIsActive
+		daemonInfo["UpdateDaemonStatus"] = UpperFirstChar(updateDaemonIsActive)
 	case "disabled":
 		daemonInfo["UpdateDaemonStatus"] = "disabled"
 	default:
