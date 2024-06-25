@@ -77,14 +77,14 @@ func UnixTime2TimeString(unixTime uint64) string {
 	return time.Unix(int64(unixTime), 0).Format("2006-01-02 15:04:05")
 }
 
-// UpperStringFirstChar 最大化字符串的第一个字母
+// UpperFirstChar 最大化字符串的第一个字母
 //
 // 参数：
 //   - str: 需要处理的字符串
 //
 // 返回：
 //   - 处理后的字符串
-func UpperStringFirstChar(str string) string {
+func UpperFirstChar(str string) string {
 	if len(str) == 0 {
 		return str
 	}
