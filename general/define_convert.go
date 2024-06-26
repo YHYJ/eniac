@@ -10,43 +10,9 @@ Description: 单位和格式数据转换
 package general
 
 import (
-	"strconv"
 	"strings"
 	"time"
-
-	"github.com/gookit/color"
 )
-
-// BubbleSort 冒泡排序
-//
-// 参数：
-//   - arr: 需要排序的切片
-func BubbleSort(arr []float64) {
-	n := len(arr)
-
-	for i := 0; i < n-1; i++ {
-		for j := 0; j < n-i-1; j++ {
-			if arr[j] > arr[j+1] {
-				// 交换 arr[j] 和 arr[j+1] 的位置
-				arr[j], arr[j+1] = arr[j+1], arr[j]
-			}
-		}
-	}
-}
-
-// FormatFloat 动态计算浮点数长度并输出合适的格式字符串
-//
-// 参数：
-//   - value: 需要处理的浮点数
-//   - precision: 期望的小数位数
-//
-// 返回：
-//   - 格式化后的字符串
-func FormatFloat(value float64, precision int) string {
-	digits := len(strconv.Itoa(int(value))) + 1 + precision // 整数部分长度 + 小数点 + 小数部分长度
-	formatString := "%" + color.Sprintf("%d.1f ", digits) + "%s"
-	return formatString
-}
 
 // UnixTime2DayHourMinuteSecond Unix 时间戳转换为天、小时、分钟、秒
 //
