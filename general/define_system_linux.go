@@ -73,9 +73,8 @@ func readOSRelease(filePath string) (string, error) {
 func getLatestKernelVersionForArch() string {
 	var latestKernelVersion string
 
-	command := "pacman"
 	args := []string{"-Q", "linux"}
-	kernelVersion, _ := RunCommandGetResult(command, args)
+	kernelVersion, _, _ := RunCommandToBuffer("pacman", args)
 	if len(kernelVersion) != 0 {
 		latestKernelVersion = strings.Split(kernelVersion, " ")[1]
 	}

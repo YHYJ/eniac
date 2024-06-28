@@ -394,7 +394,7 @@ func GetTimeInfo() (map[string]interface{}, error) {
 	result := color.Sprintf("%vd %vh %vm %vs", day, hour, minute, second)
 	timeInfo["Uptime"] = result // 系统运行时间
 	starttimeArgs := []string{"time"}
-	StartTime, err := RunCommandGetResult("systemd-analyze", starttimeArgs)
+	StartTime, _, err := RunCommandToBuffer("systemd-analyze", starttimeArgs)
 	if err != nil {
 		return nil, err
 	}
@@ -456,16 +456,13 @@ func GetUpdateDaemonInfo() (map[string]interface{}, error) {
 
 	// 检查更新检测服务是否可用（值为 enabled, disabled 或空字符串）
 	daemonIsEnabledArgs := []string{"is-enabled", basis}
-	updateDaemonIsEnabled, _ := RunCommandGetResult("systemctl", daemonIsEnabledArgs)
+	updateDaemonIsEnabled, _, _ := RunCommandToBuffer("systemctl", daemonIsEnabledArgs)
 
 	switch updateDaemonIsEnabled {
 	case "enabled":
 		// 检查更新检测服务是否处于活动状态
 		daemonIsActiveArgs := []string{"is-active", basis}
-		updateDaemonIsActive, err := RunCommandGetResult("systemctl", daemonIsActiveArgs)
-		if err != nil {
-			return nil, err
-		}
+		updateDaemonIsActive, _, _ := RunCommandToBuffer("systemctl", daemonIsActiveArgs)
 
 		daemonInfo["UpdateDaemonStatus"] = UpperFirstChar(updateDaemonIsActive)
 	case "disabled":

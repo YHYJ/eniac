@@ -236,7 +236,7 @@ func GetTimeInfo() (map[string]interface{}, error) {
 	result := color.Sprintf("%vd %vh %vm %vs", day, hour, minute, second)
 	timeInfo["Uptime"] = result // 系统运行时间
 	starttimeArgs := []string{"time"}
-	StartTime, err := RunCommandGetResult("systemd-analyze", starttimeArgs)
+	StartTime, _, err := RunCommandToBuffer("systemd-analyze", starttimeArgs)
 	if err != nil {
 		return nil, err
 	}
