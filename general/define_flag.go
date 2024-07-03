@@ -14,3 +14,7 @@ var (
 	Separator2st = "-" // 分隔符 - 2级
 	Separator3st = "·" // 分隔符 - 3级
 )
+
+var (
+	ErrorInfoFlag = "•" // 身份符号 - 报错信息
+)

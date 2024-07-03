@@ -139,7 +139,7 @@ func GetGPUInfo() map[string]interface{} {
 	var gpuDataJ2S GPUDataJ2S
 	if err := json.Unmarshal([]byte(gpuDataJson), &gpuDataJ2S); err != nil {
 		fileName, lineNo := GetCallerInfo()
-		color.Printf("%s %s -> Unable to parse JSON: %s\n", DangerText("Error:"), SecondaryText("[", fileName, ":", lineNo+1, "]"), err)
+		color.Printf("%s %s %s\n", DangerText(ErrorInfoFlag), SecondaryText("[", fileName, ":", lineNo+1, "]"), err)
 	}
 
 	gpuInfo := make(map[string]interface{})
@@ -175,7 +175,7 @@ func GetNicInfo() map[string]interface{} {
 	var networkDataJ2S map[string]NetworkDataJ2S
 	if err := json.Unmarshal([]byte(networkDataJson), &networkDataJ2S); err != nil {
 		fileName, lineNo := GetCallerInfo()
-		color.Printf("%s %s -> Unable to parse JSON: %s\n", DangerText("Error:"), SecondaryText("[", fileName, ":", lineNo+1, "]"), err)
+		color.Printf("%s %s %s\n", DangerText(ErrorInfoFlag), SecondaryText("[", fileName, ":", lineNo+1, "]"), err)
 	}
 
 	// 访问解析后的数据
