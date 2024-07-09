@@ -24,7 +24,7 @@ import (
 //   - hour: 小时
 //   - minute: 分钟
 //   - second: 秒
-func UnixTime2DayHourMinuteSecond(unixTime uint64) (day, hour, minute, second uint64) {
+func UnixTime2DayHourMinuteSecond(unixTime int64) (day, hour, minute, second int64) {
 	day = unixTime / 86400
 	hour = (unixTime - day*86400) / 3600
 	minute = (unixTime - day*86400 - hour*3600) / 60
@@ -32,15 +32,15 @@ func UnixTime2DayHourMinuteSecond(unixTime uint64) (day, hour, minute, second ui
 	return day, hour, minute, second
 }
 
-// UnixTime2TimeString uint64 格式的 Unix 时间戳转换为字符串格式
+// UnixTime2TimeString Unix 时间戳转换为字符串格式
 //
 // 参数：
 //   - timeStamp: Unix 时间戳
 //
 // 返回：
 //   - 格式化的 Unix 时间戳字符串
-func UnixTime2TimeString(unixTime uint64) string {
-	return time.Unix(int64(unixTime), 0).Format("2006-01-02 15:04:05")
+func UnixTime2TimeString(unixTime int64) string {
+	return time.Unix(unixTime, 0).Format("2006-01-02 15:04:05")
 }
 
 // UpperFirstChar 最大化字符串的第一个字母

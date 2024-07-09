@@ -231,8 +231,8 @@ func GetProductInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
 //   - 错误信息
 func GetTimeInfo() (map[string]interface{}, error) {
 	timeInfo := make(map[string]interface{})
-	timeInfo["BootTime"] = UnixTime2TimeString(hostData.BootTime) // 系统启动时间
-	day, hour, minute, second := UnixTime2DayHourMinuteSecond(hostData.Uptime)
+	timeInfo["BootTime"] = UnixTime2TimeString(int64(hostData.BootTime)) // 系统启动时间
+	day, hour, minute, second := UnixTime2DayHourMinuteSecond(int64(hostData.Uptime))
 	result := color.Sprintf("%vd %vh %vm %vs", day, hour, minute, second)
 	timeInfo["Uptime"] = result // 系统运行时间
 	starttimeArgs := []string{"time"}
