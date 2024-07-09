@@ -4,7 +4,7 @@ Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2024-06-07 14:39:41
 
-Description: 关于日期和时间的方法
+Description: 处理日期/时间
 */
 
 package general
