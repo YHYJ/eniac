@@ -80,7 +80,7 @@ func GetStorageInfo() map[string]interface{} {
 			storageValue["StorageRemovable"] = strconv.FormatBool(disk.IsRemovable)
 			storageValue["StorageSerial"] = disk.SerialNumber
 			storageSize, storageSizeUnit := Human(float64(disk.SizeBytes), "B")
-			storageValue["StorageSize"] = color.Sprintf("%.2f %s", storageSize, storageSizeUnit)
+			storageValue["StorageSize"] = color.Sprintf("%.1f %s", storageSize, storageSizeUnit)
 			storageInfo[color.Sprintf("%d", index)] = storageValue
 			index += 1
 		}
@@ -255,7 +255,7 @@ func GetMemoryInfo(dataUnit string, percentUnit string) map[string]interface{} {
 	memBuffCache, memBuffCacheUnit := Human(float64(memData.Buffers+memData.Cached), "B")
 	memAvail, memAvailUnit := Human(float64(memData.Available), "B")
 
-	formatString := "%.2f %s"
+	formatString := "%.1f %s"
 
 	memoryInfo := make(map[string]interface{})
 	memoryInfo["MemoryTotal"] = color.Sprintf(formatString, memTotal, memTotalUnit)             // 内存总量
@@ -280,7 +280,7 @@ func GetSwapInfo(dataUnit string) map[string]interface{} {
 	swapTotal, swapTotalUnit := Human(float64(memData.SwapTotal), "B")
 	swapFree, swapFreeUnit := Human(float64(memData.SwapFree), "B")
 
-	formatString := "%.2f %s"
+	formatString := "%.1f %s"
 
 	swapInfo := make(map[string]interface{})
 	swapInfo["SwapStatus"] = func() string {
