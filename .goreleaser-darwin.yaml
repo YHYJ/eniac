@@ -13,15 +13,10 @@ builds:
       - -X github.com/yhyj/{{ .ProjectName }}/general.BuildTime={{.Timestamp}}
       - -X github.com/yhyj/{{ .ProjectName }}/general.BuildBy=goreleaser
     goos:
-      - linux
       - darwin
     goarch:
       - amd64
       - arm64
-      - arm
-    goarm:
-      - "6"
-      - "7"
 
 archives:
   - format: tar.gz
