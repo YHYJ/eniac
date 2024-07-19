@@ -1,12 +1,12 @@
 //go:build linux
 
 /*
-File: define_system_linux.go
+File: define_os_linux.go
 Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2024-06-04 11:03:33
 
-Description: 系统相关方法
+Description: 操作系统相关方法
 */
 
 package general
@@ -16,6 +16,8 @@ import (
 	"strings"
 )
 
+const osReleaseFile = "/etc/os-release"
+
 // GetLatestKernelVersion 获取本地最新内核版本
 //
 // 返回：
@@ -23,8 +25,7 @@ import (
 func GetLatestKernelVersion() string {
 	var latestKernelVersion string
 
-	releaseInfoFile := "/etc/os-release"
-	id, _ := readOSRelease(releaseInfoFile)
+	id, _ := readOSRelease(osReleaseFile)
 	switch id {
 	case "arch":
 		latestKernelVersion = getLatestKernelVersionForArch()

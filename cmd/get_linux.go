@@ -93,7 +93,7 @@ func init() {
 	getCmd.Flags().Bool("gpu", false, "Get GPU information")
 	getCmd.Flags().Bool("load", false, "Get Load information")
 	getCmd.Flags().Bool("memory", false, "Get Memory information")
-	getCmd.Flags().Bool("os", false, "Get OS information")
+	getCmd.Flags().Bool("os", false, "Get Operating System information")
 	getCmd.Flags().Bool("product", false, "Get Product information")
 	getCmd.Flags().Bool("storage", false, "Get Storage information")
 	getCmd.Flags().Bool("swap", false, "Get Swap information")

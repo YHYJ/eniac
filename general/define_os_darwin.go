@@ -1,12 +1,12 @@
 //go:build darwin
 
 /*
-File: define_system_darwin.go
+File: define_os_darwin.go
 Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2024-06-04 11:03:33
 
-Description: 系统相关方法
+Description: 操作系统相关方法
 */
 
 package general
@@ -42,17 +42,30 @@ var versionCode = map[versionRange]string{
 	{Lower: "13.6.7", Upper: "14.5"}:     "macOS Sonoma",
 }
 
-// inVersionRange 检查指定的版本是否在指定的版本范围内
-func inVersionRange(version string, vRange versionRange) bool {
-	return version > vRange.Lower && version <= vRange.Upper
-}
-
-// FindSystemCode 根据系统版本查找其对应的系统代号
-func FindSystemCode(version string) string {
+// FindOSCode 根据操作系统版本查找其对应的代号
+//
+// 参数：
+//   - version: 操作系统版本
+//
+// 返回：
+//   - 代号
+func FindOSCode(version string) string {
 	for vRange, code := range versionCode {
 		if inVersionRange(version, vRange) {
 			return code
 		}
 	}
 	return ""
+}
+
+// inVersionRange 检查指定的版本是否在指定的版本范围内
+//
+// 参数：
+//   - version: 操作系统版本
+//   - vRange: 版本范围
+//
+// 返回：
+//   - 是否在范围内，true 表示在范围内，false 表示不在范围内
+func inVersionRange(version string, vRange versionRange) bool {
+	return version > vRange.Lower && version <= vRange.Upper
 }
