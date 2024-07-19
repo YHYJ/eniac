@@ -35,6 +35,7 @@ type GenealogyConfig struct {
 	Memory  MemoryConfig  `toml:"memory"`
 	Nic     NicConfig     `toml:"nic"`
 	OS      OSConfig      `toml:"os"`
+	Package PackageConfig `toml:"package"`
 	Product ProductConfig `toml:"product"`
 	Storage StorageConfig `toml:"storage"`
 	Swap    SwapConfig    `toml:"swap"`
@@ -71,6 +72,9 @@ type NicConfig struct {
 	Items []string `toml:"items"`
 }
 type OSConfig struct {
+	Items []string `toml:"items"`
+}
+type PackageConfig struct {
 	Items []string `toml:"items"`
 }
 type ProductConfig struct {

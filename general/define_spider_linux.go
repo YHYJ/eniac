@@ -367,6 +367,25 @@ func GetOSInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
 	return osInfo
 }
 
+// GetPackageInfo 获取安装包信息
+//
+// 返回：
+//   - 安装包信息
+//   - 错误信息
+func GetPackageInfo() (map[string]interface{}, error) {
+	packageInfo := make(map[string]interface{})
+	packageData, err := GetInstalledPackageData()
+	if err != nil {
+		return nil, err
+	}
+	packageInfo["PackageTotalCount"] = packageData.PackageTotalCount                                                       // 已安装包总数
+	packageInfo["AsExplicitCount"] = packageData.AsExplicitCount                                                           // 单独指定安装包总数
+	packageInfo["AsDependencyCount"] = packageData.AsDependencyCount                                                       // 作为依赖安装包总数
+	packageInfo["PackageTotalSize"] = color.Sprintf("%.2f %s", packageData.PackageTotalSize, packageData.PackageTotalUnit) // 已安装包总大小
+
+	return packageInfo, nil
+}
+
 // GetProductInfo 获取产品信息
 //
 // 参数：
@@ -403,7 +422,7 @@ func GetTimeInfo() (map[string]interface{}, error) {
 	return timeInfo, nil
 }
 
-// GetPackageInfo 读取可更新包信息
+// GetUpdatablePackageInfo 读取可更新包信息
 //
 // 参数：
 //   - filePath: 更新信息记录文件路径
@@ -412,7 +431,7 @@ func GetTimeInfo() (map[string]interface{}, error) {
 // 返回：
 //   - 可更新包信息
 //   - 错误信息
-func GetPackageInfo(filePath string, line int) (map[string]interface{}, error) {
+func GetUpdatablePackageInfo(filePath string, line int) (map[string]interface{}, error) {
 	var packageSlice []string
 	if filePath != "" && FileExist(filePath) {
 		// 打开文件
@@ -443,12 +462,12 @@ func GetPackageInfo(filePath string, line int) (map[string]interface{}, error) {
 	return updateInfo, nil
 }
 
-// GetUpdateDaemonInfo 获取更新检测服务的信息
+// GetCheckUpdateDaemonInfo 获取更新检测服务的信息
 //
 // 返回：
 //   - 更新检测服务的信息
 //   - 错误信息
-func GetUpdateDaemonInfo() (map[string]interface{}, error) {
+func GetCheckUpdateDaemonInfo() (map[string]interface{}, error) {
 	daemonInfo := make(map[string]interface{})
 
 	// 判断更新检测服务状态的依据

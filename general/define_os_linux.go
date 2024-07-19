@@ -6,17 +6,14 @@ Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2024-06-04 11:03:33
 
-Description: 操作系统相关方法
+Description: 操作系统信息
 */
 
 package general
 
 import (
-	"os"
 	"strings"
 )
-
-const osReleaseFile = "/etc/os-release"
 
 // GetLatestKernelVersion 获取本地最新内核版本
 //
@@ -25,7 +22,7 @@ const osReleaseFile = "/etc/os-release"
 func GetLatestKernelVersion() string {
 	var latestKernelVersion string
 
-	id, _ := readOSRelease(osReleaseFile)
+	id, _ := GetSystemID()
 	switch id {
 	case "arch":
 		latestKernelVersion = getLatestKernelVersionForArch()
@@ -36,35 +33,6 @@ func GetLatestKernelVersion() string {
 	}
 
 	return latestKernelVersion
-}
-
-// readOSRelease 获取系统 ID_LIKE 或 ID
-//
-// 参数：
-//   - 记录有系统发行信息的文件
-//
-// 返回：
-//   - 系统 ID_LIKE 或 ID
-//   - 错误信息
-func readOSRelease(filePath string) (string, error) {
-	file, err := os.Open(filePath)
-	if err != nil {
-		return "", err
-	}
-	defer file.Close()
-
-	var id string
-
-	id = ReadFileKey(filePath, "ID_LIKE=")
-	if id != "" {
-		id = strings.TrimPrefix(id, "ID_LIKE=")
-	} else {
-		id = ReadFileKey(filePath, "ID=")
-		id = strings.TrimPrefix(id, "ID=")
-	}
-	id = strings.Trim(id, `"`)
-
-	return id, nil
 }
 
 // getLatestKernelVersionForArch 获取本地最新内核版本，Arch 系专用

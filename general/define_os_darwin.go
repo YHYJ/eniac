@@ -6,7 +6,7 @@ Author: YJ
 Email: yj1516268@outlook.com
 Created Time: 2024-06-04 11:03:33
 
-Description: 操作系统相关方法
+Description: 操作系统信息
 */
 
 package general

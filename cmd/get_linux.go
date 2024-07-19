@@ -50,6 +50,7 @@ var getCmd = &cobra.Command{
 				allFlags["loadFlag"] = true
 				allFlags["memoryFlag"] = true
 				allFlags["osFlag"] = true
+				allFlags["packageFlag"] = true
 				allFlags["productFlag"] = true
 				allFlags["storageFlag"] = true
 				allFlags["swapFlag"] = true
@@ -66,6 +67,7 @@ var getCmd = &cobra.Command{
 				allFlags["loadFlag"], _ = cmd.Flags().GetBool("load")
 				allFlags["memoryFlag"], _ = cmd.Flags().GetBool("memory")
 				allFlags["osFlag"], _ = cmd.Flags().GetBool("os")
+				allFlags["packageFlag"], _ = cmd.Flags().GetBool("package")
 				allFlags["productFlag"], _ = cmd.Flags().GetBool("product")
 				allFlags["storageFlag"], _ = cmd.Flags().GetBool("storage")
 				allFlags["swapFlag"], _ = cmd.Flags().GetBool("swap")
@@ -94,6 +96,7 @@ func init() {
 	getCmd.Flags().Bool("load", false, "Get Load information")
 	getCmd.Flags().Bool("memory", false, "Get Memory information")
 	getCmd.Flags().Bool("os", false, "Get Operating System information")
+	getCmd.Flags().Bool("package", false, "Get Package information")
 	getCmd.Flags().Bool("product", false, "Get Product information")
 	getCmd.Flags().Bool("storage", false, "Get Storage information")
 	getCmd.Flags().Bool("swap", false, "Get Swap information")

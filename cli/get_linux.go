@@ -1063,6 +1063,86 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		}
 	}
 
+	if flags["packageFlag"] {
+		packagePart := func() string {
+			partName := general.PartName["Package"][general.Language]
+			if partName == "" {
+				partName = "Package"
+			}
+			return partName
+		}()
+
+		// 获取数据
+		packageInfo, _ := general.GetPackageInfo() // 原始数据
+		items = config.Genealogy.Package.Items     // 原始表头
+
+		// 未配置表头时不显示该项，发送通知
+		if len(items) == 0 {
+			general.Notifier = append(general.Notifier, "Package items is empty")
+		} else {
+			// 组装表
+			tableHeader = []string{""}      // 表头
+			tableData = [][]string{}        // 表数据
+			rowData = []string{packagePart} // 行数据
+			for _, item := range items {
+				itemI18n := func() string {
+					itemName := general.GenealogyName[item][general.Language]
+					if itemName == "" {
+						itemName = item
+					}
+					return itemName
+				}()
+				tableHeader = append(tableHeader, itemI18n)
+
+				var cellData string
+				switch info := packageInfo[item].(type) {
+				case int:
+					cellData = color.Sprintf("%d", info)
+				default:
+					cellData = color.Sprintf("%v", info)
+				}
+				rowData = append(rowData, cellData)
+			}
+			tableData = append(tableData, rowData)
+
+			// 获取随机颜色
+			oddRowColor = colors[0]
+			evenRowColor = colors[1]
+			colors = colors[2:]
+
+			oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+			evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
+
+			dataTable = table.New()                                 // 创建一个表格
+			dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+			dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+			dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+				var style lipgloss.Style
+
+				switch {
+				case row == 0:
+					return general.HeaderStyle // 第一行为表头
+				case row%2 == 0:
+					style = evenRowStyle // 偶数行
+				default:
+					style = oddRowStyle // 奇数行
+				}
+
+				// 设置第一列格式
+				if col == 0 {
+					style = style.Foreground(general.ColumnOneColor)
+				}
+
+				return style
+			})
+
+			dataTable.Headers(tableHeader...) // 设置表头
+			dataTable.Rows(tableData...)      // 设置单元格
+
+			color.Println(dataTable)
+		}
+	}
+
 	if flags["updateFlag"] {
 		// 获取 update 配置项
 		if config.Genealogy.Update.RecordFile != "" {
@@ -1073,8 +1153,8 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 
 		if flags["onlyFlag"] {
 			// 仅输出不带额外格式的可更新包信息，专为第三方更新检测插件服务
-			packageInfo, _ := general.GetPackageInfo(updateRecordFile, 0)
-			for num, info := range packageInfo["PackageList"].([]string) {
+			updatablePackageInfo, _ := general.GetUpdatablePackageInfo(updateRecordFile, 0)
+			for num, info := range updatablePackageInfo["PackageList"].([]string) {
 				color.Printf("%v: %v\n", num+1, info)
 			}
 		} else {
@@ -1087,14 +1167,14 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 			}()
 
 			// 获取数据
-			daemonInfo, _ := general.GetUpdateDaemonInfo()                // 原始数据
-			packageInfo, _ := general.GetPackageInfo(updateRecordFile, 0) // 原始数据
+			checkUpdateDaemonInfo, _ := general.GetCheckUpdateDaemonInfo()                  // 原始数据
+			updatablePackageInfo, _ := general.GetUpdatablePackageInfo(updateRecordFile, 0) // 原始数据
 			updateInfo := make(map[string]interface{})
 			// 合并两部分数据
-			for key, value := range daemonInfo {
+			for key, value := range checkUpdateDaemonInfo {
 				updateInfo[key] = value
 			}
-			for key, value := range packageInfo {
+			for key, value := range updatablePackageInfo {
 				updateInfo[key] = value
 			}
 			items = config.Genealogy.Update.Items // 原始表头
@@ -2104,6 +2184,78 @@ func GrabInformationToTab(configTree *toml.Tree) {
 		tabContents = append(tabContents, dataTable.String())
 	}
 
+	// ---------- Package
+	packagePart := func() string {
+		partName := general.PartName["Package"][general.Language]
+		if partName == "" {
+			partName = "Package"
+		}
+		return partName
+	}()
+
+	// 获取数据
+	packageInfo, _ := general.GetPackageInfo() // 原始数据
+	items = config.Genealogy.Package.Items     // 原始表头
+
+	// 未配置表头时不显示该项
+	if len(items) != 0 {
+		// 组装表
+		tableHeader = []string{} // 表头
+		tableData = [][]string{} // 表数据
+		rowData = []string{}     // 行数据
+		for _, item := range items {
+			itemI18n := func() string {
+				itemName := general.GenealogyName[item][general.Language]
+				if itemName == "" {
+					itemName = item
+				}
+				return itemName
+			}()
+			tableHeader = append(tableHeader, itemI18n)
+			var cellData string
+			switch info := packageInfo[item].(type) {
+			case int:
+				cellData = color.Sprintf("%d", info)
+			default:
+				cellData = color.Sprintf("%v", info)
+			}
+			rowData = append(rowData, cellData)
+		}
+		tableData = append(tableData, rowData)
+
+		// 获取随机颜色
+		oddRowColor = colors[0]
+		evenRowColor = colors[1]
+		colors = colors[2:]
+
+		oddRowStyle = general.CellStyle.Foreground(oddRowColor)   // 奇数行样式
+		evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
+
+		dataTable = table.New()
+		dataTable.Border(lipgloss.RoundedBorder())              // 设置表格边框
+		dataTable.BorderStyle(general.BorderStyle)              // 设置表格边框样式
+		dataTable.StyleFunc(func(row, col int) lipgloss.Style { // 按位置设置单元格样式
+			var style lipgloss.Style
+
+			switch {
+			case row == 0:
+				return general.HeaderStyle // 第一行为表头
+			case row%2 == 0:
+				style = evenRowStyle // 偶数行
+			default:
+				style = oddRowStyle // 奇数行
+			}
+
+			return style
+		})
+
+		dataTable.Headers(tableHeader...) // 设置表头
+		dataTable.Rows(tableData...)      // 设置单元格
+
+		tabs = append(tabs, packagePart)
+		tabContents = append(tabContents, dataTable.String())
+	}
+
 	// ---------- Update
 	updatePart := func() string {
 		partName := general.PartName["Update"][general.Language]
@@ -2121,14 +2273,14 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	}
 
 	// 获取数据
-	daemonInfo, _ := general.GetUpdateDaemonInfo()                // 原始数据
-	packageInfo, _ := general.GetPackageInfo(updateRecordFile, 0) // 原始数据
+	checkUpdateDaemonInfo, _ := general.GetCheckUpdateDaemonInfo()                  // 原始数据
+	updatablePackageInfo, _ := general.GetUpdatablePackageInfo(updateRecordFile, 0) // 原始数据
 	updateInfo := make(map[string]interface{})
 	// 合并两部分数据
-	for key, value := range daemonInfo {
+	for key, value := range checkUpdateDaemonInfo {
 		updateInfo[key] = value
 	}
-	for key, value := range packageInfo {
+	for key, value := range updatablePackageInfo {
 		updateInfo[key] = value
 	}
 	items = config.Genealogy.Update.Items // 原始表头

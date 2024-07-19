@@ -26,7 +26,7 @@ var (
 	activeTabBorder   = tabBorderWithBottom("┘", " ", "└") // 活跃标签的边框
 	docStyle          = lipgloss.NewStyle().Padding(0, 1, 0, 1)
 	inactiveTabStyle  = lipgloss.NewStyle().Border(inactiveTabBorder, true).Padding(0, 2).BorderForeground(highlightColor)
-	activeTabStyle    = inactiveTabStyle.Border(activeTabBorder, true).Padding(0, 8)
+	activeTabStyle    = inactiveTabStyle.Border(activeTabBorder, true).Padding(0, 3)
 	windowStyle       = lipgloss.NewStyle().Border(lipgloss.NormalBorder()).UnsetBorderTop().Padding(1, 0).Align(lipgloss.Center).BorderForeground(highlightColor)
 )
 
