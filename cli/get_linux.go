@@ -1154,7 +1154,7 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		if flags["onlyFlag"] {
 			// 仅输出不带额外格式的可更新包信息，专为第三方更新检测插件服务
 			updatablePackageInfo, _ := general.GetUpdatablePackageInfo(updateRecordFile, 0)
-			for num, info := range updatablePackageInfo["PackageList"].([]string) {
+			for num, info := range updatablePackageInfo["UpdatablePackageList"].([]string) {
 				color.Printf("%v: %v\n", num+1, info)
 			}
 		} else {

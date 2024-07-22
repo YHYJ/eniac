@@ -378,9 +378,9 @@ func GetPackageInfo() (map[string]interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
+	packageInfo["PackageAsExplicitCount"] = packageData.AsExplicitCount                                                    // 单独指定安装包总数
+	packageInfo["PackageAsDependencyCount"] = packageData.AsDependencyCount                                                // 作为依赖安装包总数
 	packageInfo["PackageTotalCount"] = packageData.PackageTotalCount                                                       // 已安装包总数
-	packageInfo["AsExplicitCount"] = packageData.AsExplicitCount                                                           // 单独指定安装包总数
-	packageInfo["AsDependencyCount"] = packageData.AsDependencyCount                                                       // 作为依赖安装包总数
 	packageInfo["PackageTotalSize"] = color.Sprintf("%.2f %s", packageData.PackageTotalSize, packageData.PackageTotalUnit) // 已安装包总大小
 
 	return packageInfo, nil
@@ -456,8 +456,8 @@ func GetUpdatablePackageInfo(filePath string, line int) (map[string]interface{},
 		}
 	}
 	updateInfo := make(map[string]interface{})
-	updateInfo["PackageList"] = packageSlice
-	updateInfo["PackageQuantity"] = strconv.Itoa(len(packageSlice))
+	updateInfo["UpdatablePackageList"] = packageSlice
+	updateInfo["UpdatablePackageQuantity"] = strconv.Itoa(len(packageSlice))
 
 	return updateInfo, nil
 }

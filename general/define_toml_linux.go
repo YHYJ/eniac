@@ -250,6 +250,14 @@ func WriteTomlConfig(filePath string) (int64, error) {
 					"Hostname",
 				},
 			},
+			"package": map[string]interface{}{
+				"items": []string{
+					"PackageAsExplicitCount",
+					"PackageAsDependencyCount",
+					"PackageTotalCount",
+					"PackageTotalSize",
+				},
+			},
 			"product": map[string]interface{}{
 				"items": []string{
 					"ProductVendor",
@@ -291,8 +299,8 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"update": map[string]interface{}{
 				"items": []string{
 					"UpdateDaemonStatus",
-					"PackageQuantity",
-					"PackageList",
+					"UpdatablePackageList",
+					"UpdatablePackageQuantity",
 				},
 				"record_file": genealogyUpdateRecordFile,
 			},
