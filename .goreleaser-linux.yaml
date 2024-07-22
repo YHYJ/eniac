@@ -26,17 +26,18 @@ archives:
       {{- if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
+    files:
+      - "CHANGELOG*"
+      - "changelog*"
+      - "LICENSE*"
+      - "license*"
+      - "README*"
+      - "readme*"
+      - "resources/applications/*"
+      - "resources/pixmaps/*"
     format_overrides:
       - goos: windows
         format: zip
-checksum:
-  name_template: "checksums.txt"
 snapshot:
   name_template: "{{ incpatch .Version }}-next"
-changelog:
-  sort: asc
-  filters:
-    exclude:
-      - "^docs:"
-      - "^test:"
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
