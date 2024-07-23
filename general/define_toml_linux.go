@@ -299,8 +299,8 @@ func WriteTomlConfig(filePath string) (int64, error) {
 			"update": map[string]interface{}{
 				"items": []string{
 					"UpdateDaemonStatus",
-					"UpdatablePackageList",
 					"UpdatablePackageQuantity",
+					"UpdatablePackageList",
 				},
 				"record_file": genealogyUpdateRecordFile,
 			},
