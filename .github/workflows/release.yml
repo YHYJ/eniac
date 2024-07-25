@@ -18,7 +18,7 @@ jobs:
         with:
           go-version: "1.22"
       - name: "Build via GoReleaser"
-        uses: goreleaser/goreleaser-action@v5
+        uses: goreleaser/goreleaser-action@v6
         with:
           distribution: goreleaser
           version: latest
@@ -43,7 +43,7 @@ jobs:
         with:
           go-version: "1.22"
       - name: "Build via GoReleaser"
-        uses: goreleaser/goreleaser-action@v5
+        uses: goreleaser/goreleaser-action@v6
         with:
           distribution: goreleaser
           version: latest
@@ -84,7 +84,7 @@ jobs:
           cat linux/eniac*checksums.txt >> checksums.txt && rm linux/eniac*checksums.txt
           cat darwin/eniac*checksums.txt >> checksums.txt && rm darwin/eniac*checksums.txt
       - name: "Release"
-        uses: goreleaser/goreleaser-action@v5
+        uses: goreleaser/goreleaser-action@v6
         with:
           args: release --config .goreleaser-release.yaml
         env:
