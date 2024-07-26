@@ -19,7 +19,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-var quietKey = "q"                // 默认的退出键
+var quitKey = "q"                 // 默认的退出键
 var selectorType = "program name" // 选择器主题
 
 // model 结构体，选择器的数据
@@ -49,7 +49,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		// 对按下的相应按键做出对应反应
 		switch keyPress := msg.String(); keyPress {
-		case quietKey, "ctrl+c", "esc":
+		case quitKey, "ctrl+c", "esc":
 			return m, tea.Quit
 		case "right", "l", "n", "tab":
 			m.activeTab = Min(m.activeTab+1, len(m.Tabs)-1)
