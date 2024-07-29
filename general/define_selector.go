@@ -26,7 +26,8 @@ var selectorType = "program name" // 选择器主题
 type model struct {
 	Tabs       []string // 所有标签
 	TabContent []string // 标签对应的内容
-	activeTab  int      // 当前激活的标签
+	ActiveTab  int      // 当前激活的标签
+	Cycle      bool     // 是否允许循环切换
 }
 
 // Init model 结构体的初始化方法，是 BubbleTea 框架中的一个特殊方法
@@ -51,12 +52,20 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch keyPress := msg.String(); keyPress {
 		case quitKey, "ctrl+c", "esc":
 			return m, tea.Quit
-		case "right", "l", "n", "tab":
-			m.activeTab = Min(m.activeTab+1, len(m.Tabs)-1)
-			return m, nil
 		case "left", "h", "p", "shift+tab":
-			m.activeTab = Max(m.activeTab-1, 0)
-			return m, nil
+			if m.Cycle {
+				m.ActiveTab--
+				m.fixCursor(0, len(m.Tabs)-1)
+			} else {
+				m.ActiveTab = Max(m.ActiveTab-1, 0)
+			}
+		case "right", "l", "n", "tab":
+			if m.Cycle {
+				m.ActiveTab++
+				m.fixCursor(0, len(m.Tabs)-1)
+			} else {
+				m.ActiveTab = Min(m.ActiveTab+1, len(m.Tabs)-1)
+			}
 		}
 	}
 	// 将更新后的 model 返回给 BubbleTea 进行处理
@@ -76,7 +85,7 @@ func (m model) View() string {
 
 	for i, t := range m.Tabs {
 		var style lipgloss.Style
-		isFirst, isLast, isActive := i == 0, i == len(m.Tabs)-1, i == m.activeTab
+		isFirst, isLast, isActive := i == 0, i == len(m.Tabs)-1, i == m.ActiveTab
 		if isActive {
 			style = activeTabStyle
 		} else {
@@ -99,8 +108,21 @@ func (m model) View() string {
 	row := lipgloss.JoinHorizontal(lipgloss.Top, renderedTabs...)
 	s.WriteString(row)
 	s.WriteString("\n")
-	s.WriteString(windowStyle.Width((lipgloss.Width(row) - windowStyle.GetHorizontalFrameSize())).Render(m.TabContent[m.activeTab]))
+	s.WriteString(windowStyle.Width((lipgloss.Width(row) - windowStyle.GetHorizontalFrameSize())).Render(m.TabContent[m.ActiveTab]))
 	return docStyle.Render(s.String())
+}
+
+// fixCursor 修正光标位置，防止越界
+//
+// 参数：
+//   - minIndex: 最小光标索引
+//   - maxIndex: 最大光标索引
+func (m *model) fixCursor(minIndex, maxIndex int) {
+	if m.ActiveTab > maxIndex {
+		m.ActiveTab = 0
+	} else if m.ActiveTab < minIndex {
+		m.ActiveTab = maxIndex
+	}
 }
 
 // TabSelector 标签选择器，接受一个标签切片和一个标签内容切片，显示选中的标签的内容
@@ -108,14 +130,15 @@ func (m model) View() string {
 // 参数：
 //   - tabs: 所有标签
 //   - contents: 所有标签对应的内容
+//   - cycle: 是否允许循环切换
 //
 // 返回：
 //   - 错误信息
-func TabSelector(tabs, contents []string) error {
+func TabSelector(tabs, contents []string, cycle bool) error {
 	if len(tabs) != len(contents) {
 		return fmt.Errorf("Tabs and contents must have the same length")
 	}
-	m := model{Tabs: tabs, TabContent: contents}
+	m := model{Tabs: tabs, TabContent: contents, Cycle: cycle}
 	if _, err := tea.NewProgram(m).Run(); err != nil {
 		return fmt.Errorf("Error running program: %s", err)
 	}

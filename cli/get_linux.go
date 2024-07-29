@@ -1267,6 +1267,7 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	// 设置配置项默认值
 	var (
 		colorful          bool   = config.Main.Colorful
+		cycle             bool   = config.Main.Cycle
 		cpuCacheUnit      string = "KB"
 		MemoryDataUnit    string = "GB"
 		memoryPercentUnit string = "%"
@@ -2351,7 +2352,7 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	}
 
 	// 输出 Tab
-	if err := general.TabSelector(tabs, tabContents); err != nil {
+	if err := general.TabSelector(tabs, tabContents, cycle); err != nil {
 		fileName, lineNo := general.GetCallerInfo()
 		color.Printf("%s %s %s\n", general.DangerText(general.ErrorInfoFlag), general.SecondaryText("[", fileName, ":", lineNo+1, "]"), err)
 	}

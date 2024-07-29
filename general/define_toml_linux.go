@@ -45,6 +45,7 @@ type GenealogyConfig struct {
 }
 type MainConfig struct {
 	Colorful bool `toml:"colorful"`
+	Cycle    bool `toml:"cycle"`
 }
 
 type BiosConfig struct {
@@ -172,6 +173,7 @@ func WriteTomlConfig(filePath string) (int64, error) {
 	exampleConf := map[string]interface{}{
 		"main": map[string]interface{}{
 			"colorful": true,
+			"cycle":    true,
 		},
 		"genealogy": map[string]interface{}{
 			"bios": map[string]interface{}{
