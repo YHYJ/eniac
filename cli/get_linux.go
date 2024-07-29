@@ -21,27 +21,7 @@ import (
 	"github.com/gookit/color"
 	"github.com/pelletier/go-toml"
 	"github.com/yhyj/eniac/general"
-	"github.com/zcalusic/sysinfo"
 )
-
-// 表格参数
-var (
-	items        []string                                     // 输出项名称
-	oddRowColor  = general.DefaultColor                       // 奇数行颜色
-	evenRowColor = general.DefaultColor                       // 偶数行颜色
-	oddRowStyle  = general.CellStyle.Foreground(oddRowColor)  // 奇数行样式
-	evenRowStyle = general.CellStyle.Foreground(evenRowColor) // 偶数行样式
-
-	dataTable   *table.Table // 创建一个表格
-	tableHeader []string     // 表头
-	tableData   [][]string   // 表数据
-	rowData     []string     // 行数据
-
-	colors []lipgloss.Color // 随机颜色切片
-)
-
-// 采集系统信息
-var sysInfo sysinfo.SysInfo
 
 // GrabInformationToTable 抓取信息，各种信息分别输出为表格
 //

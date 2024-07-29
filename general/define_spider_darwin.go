@@ -185,13 +185,13 @@ func GetCPUInfo(sysInfo sysinfo.SysInfo, dataUnit string) map[string]interface{}
 	return cpuInfo
 }
 
-// GetOSInfo 获取操作系统信息
+// GetOSInfo 获取系统信息
 //
 // 参数：
-//   - sysInfo: 总的系统信息
+//   - sysInfo: 总的系统信息 (System Info)
 //
 // 返回：
-//   - 操作系统信息
+//   - 系统信息 (OS Info)
 func GetOSInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
 	osInfo := make(map[string]interface{})
 
@@ -201,7 +201,7 @@ func GetOSInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
 
 	osInfo["OS"] = color.Sprintf("%s %s", osCode, hostData.PlatformVersion) // 操作系统
 	osInfo["Arch"] = hostData.KernelArch                                    // 系统架构
-	osInfo["Kernel"] = hostData.KernelVersion                               // 内核版本
+	osInfo["CurrentKernel"] = hostData.KernelVersion                        // 当前内核版本
 	osInfo["Platform"] = UpperFirstChar(hostData.Platform)                  // 平台
 	osInfo["Hostname"] = hostData.Hostname                                  // 主机名
 	osInfo["TimeZone"] = timeZone                                           // 时区
