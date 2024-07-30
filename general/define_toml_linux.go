@@ -37,7 +37,7 @@ type UpdateConfig struct {
 }
 
 // 可更新安装包记录文件
-var genealogyUpdateRecordFile = "/tmp/system-checkupdates.log"
+var UpdateRecordFile = "/tmp/system-checkupdates.log"
 
 // 默认配置
 var defaultConf = map[string]interface{}{
@@ -174,7 +174,7 @@ var defaultConf = map[string]interface{}{
 				"UpdatablePackageQuantity",
 				"UpdatablePackageList",
 			},
-			"record_file": genealogyUpdateRecordFile,
+			"record_file": UpdateRecordFile,
 		},
 		"user": map[string]interface{}{
 			"items": []string{
