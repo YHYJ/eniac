@@ -99,6 +99,16 @@ var defaultConf = map[string]interface{}{
 				"NicDuplex",
 			},
 		},
+		"os": map[string]interface{}{
+			"items": []string{
+				"OS",
+				"CurrentKernel",
+				"Platform",
+				"Arch",
+				"TimeZone",
+				"Hostname",
+			},
+		},
 		"product": map[string]interface{}{
 			"items": []string{
 				"ProductVendor",
