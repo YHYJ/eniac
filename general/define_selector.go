@@ -109,7 +109,7 @@ func (m model) View() string {
 	s.WriteString(row)
 	s.WriteString("\n")
 	s.WriteString(windowStyle.Width((lipgloss.Width(row) - windowStyle.GetHorizontalFrameSize())).Render(m.TabContent[m.ActiveTab]))
-	return docStyle.Render(s.String())
+	return tabStyle.Render(s.String())
 }
 
 // fixCursor 修正光标位置，防止越界
