@@ -2268,8 +2268,6 @@ func GrabInformationToTab(configTree *toml.Tree) {
 
 	// 未配置表头时不显示该项
 	if len(items) != 0 {
-		_, height, _ := general.GetTerminalSize()                                       // 终端尺寸
-		viewRows := height - (3 + 1) - (3 + 1) - 1 - 1 - 1 - general.TableExPaddingUD*2 // 表格行数（终端行数 -（标签头行数+标签尾行数）-（表格头行数+表格尾行数）- 为省略号留的行数 - 命令行数 - 预留行数 - 数据表外部上下边距）
 		// 组装表
 		tableHeader = []string{} // 表头
 		tableData = [][]string{} // 表数据
@@ -2287,8 +2285,14 @@ func GrabInformationToTab(configTree *toml.Tree) {
 			var cellData string
 			switch info := updateInfo[item].(type) {
 			case []string:
-				cellData = strings.Join(info[:viewRows], "\n")
-				cellData = cellData + "\n......"
+				_, height, _ := general.GetTerminalSize()                                       // 终端尺寸
+				viewRows := height - (3 + 1) - (3 + 1) - 1 - 1 - 1 - general.TableExPaddingUD*2 // 表格行数（终端行数 -（标签头行数+标签尾行数）-（表格头行数+表格尾行数）- 为省略号留的行数 - 命令行数 - 预留行数 - 数据表外部上下边距）
+				if len(info) > viewRows {
+					cellData = strings.Join(info[:viewRows], "\n")
+					cellData = cellData + "\n......"
+				} else {
+					cellData = strings.Join(info, "\n")
+				}
 			default:
 				cellData = color.Sprintf("%v", info)
 			}
