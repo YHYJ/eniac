@@ -87,9 +87,9 @@ func (m model) View() string {
 		var style lipgloss.Style
 		isFirst, isLast, isActive := i == 0, i == len(m.Tabs)-1, i == m.ActiveTab
 		if isActive {
-			style = activeTabStyle
+			style = activeTabInStyle
 		} else {
-			style = inactiveTabStyle
+			style = inactiveTabInStyle
 		}
 		border, _, _, _, _ := style.GetBorder()
 		if isFirst && isActive {
@@ -108,8 +108,8 @@ func (m model) View() string {
 	row := lipgloss.JoinHorizontal(lipgloss.Top, renderedTabs...)
 	s.WriteString(row)
 	s.WriteString("\n")
-	s.WriteString(windowStyle.Width((lipgloss.Width(row) - windowStyle.GetHorizontalFrameSize())).Render(m.TabContent[m.ActiveTab]))
-	return tabStyle.Render(s.String())
+	s.WriteString(tableExStyle.Width((lipgloss.Width(row) - tableExStyle.GetHorizontalFrameSize())).Render(m.TabContent[m.ActiveTab]))
+	return tabExStyle.Render(s.String())
 }
 
 // fixCursor 修正光标位置，防止越界
