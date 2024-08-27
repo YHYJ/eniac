@@ -171,6 +171,7 @@ var defaultConf = map[string]interface{}{
 		"update": map[string]interface{}{
 			"items": []string{
 				"UpdateDaemonStatus",
+				"LastCheckTime",
 				"UpdatablePackageQuantity",
 				"UpdatablePackageList",
 			},

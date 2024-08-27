@@ -50,12 +50,12 @@ func ReadFileKey(file, key string) string {
 // FileExist 判断文件是否存在
 //
 // 参数：
-//   - filePath: 文件路径
+//   - file: 文件路径
 //
 // 返回：
 //   - 文件存在返回 true，否则返回 false
-func FileExist(filePath string) bool {
-	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+func FileExist(file string) bool {
+	if _, err := os.Stat(file); os.IsNotExist(err) {
 		return false
 	}
 	return true
@@ -116,13 +116,30 @@ func CreateFile(file string) error {
 // DeleteFile 删除文件，如果目标是文件夹则包括其下所有文件
 //
 // 参数：
-//   - filePath: 文件路径
+//   - file: 文件路径
 //
 // 返回：
 //   - 错误信息
-func DeleteFile(filePath string) error {
-	if !FileExist(filePath) {
+func DeleteFile(file string) error {
+	if !FileExist(file) {
 		return nil
 	}
-	return os.RemoveAll(filePath)
+	return os.RemoveAll(file)
+}
+
+// GetFileModTime 获取文件的最后修改时间
+//
+// 参数：
+//   - file: 文件路径
+//
+// 返回：
+//   - 最后修改时间
+func GetFileModTime(file string) string {
+	fileInfo, err := os.Stat(file)
+	if err != nil {
+		return ""
+	}
+
+	modTime := fileInfo.ModTime()
+	return modTime.Format("2006-01-02 15:04:05")
 }

@@ -1215,7 +1215,7 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 					switch col {
 					case 0:
 						style = style.Foreground(general.ColumnOneColor)
-					case 3:
+					case len(items) + 1:
 						style = style.Align(lipgloss.Left)
 					}
 
@@ -2324,7 +2324,7 @@ func GrabInformationToTab(configTree *toml.Tree) {
 			}
 
 			// 设置特定列格式
-			if col == 2 {
+			if col == len(items) {
 				style = style.Align(lipgloss.Left)
 			}
 

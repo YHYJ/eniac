@@ -263,8 +263,14 @@ func GetPackageInfo() (map[string]interface{}, error) {
 //   - 可更新包信息
 //   - 错误信息
 func GetUpdatablePackageInfo(filePath string, line int) (map[string]interface{}, error) {
-	var packageSlice []string
+	var (
+		lastCheckTime string
+		packageSlice  []string
+	)
 	if filePath != "" && FileExist(filePath) {
+		// 获取文件最后修改时间作为最新更新检查时间
+		lastCheckTime = GetFileModTime(filePath)
+
 		// 打开文件
 		text, err := os.Open(filePath)
 		if err != nil {
@@ -287,6 +293,7 @@ func GetUpdatablePackageInfo(filePath string, line int) (map[string]interface{},
 		}
 	}
 	updateInfo := make(map[string]interface{})
+	updateInfo["LastCheckTime"] = lastCheckTime
 	updateInfo["UpdatablePackageList"] = packageSlice
 	updateInfo["UpdatablePackageQuantity"] = strconv.Itoa(len(packageSlice))
 
