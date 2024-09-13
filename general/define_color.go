@@ -67,8 +67,10 @@ var (
 
 // Tab 专用
 const (
-	TabLightColor = "#874BFD"
-	TabDarkColor  = "#7D56F4"
+	TabLightColor        = "#874BFD"
+	TabDarkColor         = "#7D56F4"
+	TabContentLightColor = "#87CEEB"
+	TabContentDarkColor  = "#C3FFFF"
 )
 
 //  Table 专用

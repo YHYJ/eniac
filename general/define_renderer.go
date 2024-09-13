@@ -27,15 +27,16 @@ var (
 	TableExPaddingUD       = 1 // 数据表外部上下边距
 	TableExPaddingLR       = 0 // 数据表外部左右边距
 
-	highlightColor = lipgloss.AdaptiveColor{Light: TabLightColor, Dark: TabDarkColor} // 高亮颜色
+	tabColor        = lipgloss.AdaptiveColor{Light: TabLightColor, Dark: TabDarkColor}               // 标签页边框颜色
+	tabContentColor = lipgloss.AdaptiveColor{Light: TabContentLightColor, Dark: TabContentDarkColor} // 选中的标签页内容的颜色
 
-	inactiveTabBorder  = tabBorderWithBottom("┴", "─", "┴")                                                                                                           // 不活跃标签页边框
-	activeTabBorder    = tabBorderWithBottom("┘", " ", "└")                                                                                                           // 活跃标签页边框
-	tabExStyle         = lipgloss.NewStyle().Padding(TabExPaddingUD, TabExPaddingLR)                                                                                  // 标签页外部样式
-	inactiveTabInStyle = lipgloss.NewStyle().Border(inactiveTabBorder, true).Padding(InactiveTabInPaddingUD, InactiveTabInPaddingLR).BorderForeground(highlightColor) // 不活跃标签页内部样式
-	activeTabInStyle   = inactiveTabInStyle.Border(activeTabBorder, true).Padding(ActiveTabInPaddingUD, ActiveTabInPaddingLR)                                         // 活跃标签页内部样式
+	inactiveTabBorder  = tabBorderWithBottom("┴", "─", "┴")                                                                                                     // 不活跃标签页边框
+	activeTabBorder    = tabBorderWithBottom("┘", " ", "└")                                                                                                     // 活跃标签页边框
+	tabExStyle         = lipgloss.NewStyle().Padding(TabExPaddingUD, TabExPaddingLR)                                                                            // 标签页外部样式
+	inactiveTabInStyle = lipgloss.NewStyle().Border(inactiveTabBorder, true).Padding(InactiveTabInPaddingUD, InactiveTabInPaddingLR).BorderForeground(tabColor) // 不活跃标签页内部样式
+	activeTabInStyle   = inactiveTabInStyle.Border(activeTabBorder, true).Padding(ActiveTabInPaddingUD, ActiveTabInPaddingLR).Foreground(tabContentColor)       // 活跃标签页内部样式
 
-	tableExStyle = lipgloss.NewStyle().Border(lipgloss.NormalBorder()).UnsetBorderTop().Padding(TableExPaddingUD, TableExPaddingLR).Align(lipgloss.Center).BorderForeground(highlightColor) // 窗口样式
+	tableExStyle = lipgloss.NewStyle().Border(lipgloss.NormalBorder()).UnsetBorderTop().Padding(TableExPaddingUD, TableExPaddingLR).Align(lipgloss.Center).BorderForeground(tabColor) // 窗口样式
 
 	renderer    = lipgloss.NewRenderer(os.Stdout)                                                                                           // 创建一个 lipgloss 渲染器
 	HeaderStyle = renderer.NewStyle().Align(lipgloss.Center).Padding(TableInPaddingUD, TableInPaddingLR).Bold(true).Foreground(HeaderColor) // 表头样式
