@@ -40,7 +40,8 @@ func CreateConfigFile(configFile string) {
 		switch overWrite {
 		case "y":
 			// 与用户交互获取配置信息
-			general.UpdateRecordFile, _ = general.GetInput(general.QuestionText(color.Sprintf(general.SetConfigItemTips, "update record file")), general.UpdateRecordFile)
+			general.ArchUpdateRecordFile, _ = general.GetInput(general.QuestionText(color.Sprintf(general.SetConfigItemTips, "official repository update record file")), general.ArchUpdateRecordFile)
+			general.AurUpdateRecordFile, _ = general.GetInput(general.QuestionText(color.Sprintf(general.SetConfigItemTips, "AUR update record file")), general.AurUpdateRecordFile)
 			if err := general.DeleteFile(configFile); err != nil {
 				fileName, lineNo := general.GetCallerInfo()
 				color.Printf("%s %s %s\n", general.DangerText(general.ErrorInfoFlag), general.SecondaryText("[", fileName, ":", lineNo+1, "]"), err)
@@ -66,7 +67,8 @@ func CreateConfigFile(configFile string) {
 		}
 	} else {
 		// 与用户交互获取配置信息
-		general.UpdateRecordFile, _ = general.GetInput(general.QuestionText(color.Sprintf(general.SetConfigItemTips, "update record file")), general.UpdateRecordFile)
+		general.ArchUpdateRecordFile, _ = general.GetInput(general.QuestionText(color.Sprintf(general.SetConfigItemTips, "official repository update record file")), general.ArchUpdateRecordFile)
+		general.AurUpdateRecordFile, _ = general.GetInput(general.QuestionText(color.Sprintf(general.SetConfigItemTips, "AUR update record file")), general.AurUpdateRecordFile)
 		if err := general.CreateFile(configFile); err != nil {
 			fileName, lineNo := general.GetCallerInfo()
 			color.Printf("%s %s %s\n", general.DangerText(general.ErrorInfoFlag), general.SecondaryText("[", fileName, ":", lineNo+1, "]"), err)

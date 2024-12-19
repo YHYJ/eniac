@@ -39,12 +39,15 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 
 	// 设置配置项默认值
 	var (
-		colorful          bool   = config.Main.Colorful
-		cpuCacheUnit      string = "KB"
-		MemoryDataUnit    string = "GB"
-		memoryPercentUnit string = "%"
-		SwapDataUnit      string = "GB"
-		updateRecordFile  string = "/tmp/system-checkupdates.log"
+		colorful             bool   = config.Main.Colorful
+		cpuCacheUnit         string = "KB"
+		memoryDataUnit       string = "GB"
+		memoryPercentUnit    string = "%"
+		swapDataUnit         string = "GB"
+		basis                string = config.Genealogy.Update.Basis
+		owner                string = "user"
+		archUpdateRecordFile string = "/tmp/checker-arch.log"
+		aurUpdateRecordFile  string = "/tmp/checker-aur.log"
 	)
 
 	// 系统信息分配到不同的参数
@@ -437,7 +440,7 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取 Memory 配置项
 		if config.Genealogy.Memory.DataUnit != "" {
-			MemoryDataUnit = config.Genealogy.Memory.DataUnit
+			memoryDataUnit = config.Genealogy.Memory.DataUnit
 		} else {
 			color.Warn.Println("Config file is missing 'memory.data_unit' item, using default value")
 		}
@@ -448,7 +451,7 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 		}
 
 		// 获取数据
-		memoryInfo := general.GetMemoryInfo(MemoryDataUnit, memoryPercentUnit) // 原始数据
+		memoryInfo := general.GetMemoryInfo(memoryDataUnit, memoryPercentUnit) // 原始数据
 		items = config.Genealogy.Memory.Items                                  // 原始表头
 
 		// 未配置表头时不显示该项，发送通知
@@ -521,13 +524,13 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 
 		// 获取 Swap 配置项
 		if config.Genealogy.Swap.DataUnit != "" {
-			SwapDataUnit = config.Genealogy.Swap.DataUnit
+			swapDataUnit = config.Genealogy.Swap.DataUnit
 		} else {
 			color.Warn.Println("Config file is missing 'swap.data_unit' item, using default value")
 		}
 
 		// 获取数据
-		swapInfo := general.GetSwapInfo(SwapDataUnit) // 原始数据
+		swapInfo := general.GetSwapInfo(swapDataUnit) // 原始数据
 		if swapInfo["SwapStatus"] == "Unavailable" {
 			items = config.Genealogy.Swap.Items.Unavailable // 原始表头
 		} else {
@@ -1125,16 +1128,27 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 
 	if flags["updateFlag"] {
 		// 获取 update 配置项
-		if config.Genealogy.Update.RecordFile != "" {
-			updateRecordFile = config.Genealogy.Update.RecordFile
+		if config.Genealogy.Update.ArchRecordFile != "" {
+			archUpdateRecordFile = config.Genealogy.Update.ArchRecordFile
 		} else {
-			color.Warn.Println("Config file is missing 'update.record_file' item, using default value")
+			color.Warn.Println("Config file is missing 'update.arch_record_file' item, using default value")
+		}
+		if config.Genealogy.Update.AurRecordFile != "" {
+			aurUpdateRecordFile = config.Genealogy.Update.AurRecordFile
+		} else {
+			color.Warn.Println("Config file is missing 'update.aur_record_file' item, using default value")
 		}
 
 		if flags["onlyFlag"] {
 			// 仅输出不带额外格式的可更新包信息，专为第三方更新检测插件服务
-			updatablePackageInfo, _ := general.GetUpdatablePackageInfo(updateRecordFile, 0)
+			updatablePackageInfo, _ := general.GetUpdatablePackageInfo(archUpdateRecordFile, aurUpdateRecordFile, 0)
+			color.Println("Arch Official Repository:")
 			for num, info := range updatablePackageInfo["UpdatablePackageList"].([]string) {
+				color.Printf("%v: %v\n", num+1, info)
+			}
+			color.Println()
+			color.Println("Arch User Repository:")
+			for num, info := range updatablePackageInfo["AurPackageList"].([]string) {
 				color.Printf("%v: %v\n", num+1, info)
 			}
 		} else {
@@ -1147,8 +1161,8 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 			}()
 
 			// 获取数据
-			checkUpdateDaemonInfo, _ := general.GetCheckUpdateDaemonInfo()                  // 原始数据
-			updatablePackageInfo, _ := general.GetUpdatablePackageInfo(updateRecordFile, 0) // 原始数据
+			checkUpdateDaemonInfo, _ := general.GetCheckUpdateDaemonInfo(basis, owner)                               // 原始数据
+			updatablePackageInfo, _ := general.GetUpdatablePackageInfo(archUpdateRecordFile, aurUpdateRecordFile, 0) // 原始数据
 			updateInfo := make(map[string]interface{})
 			// 合并两部分数据
 			for key, value := range checkUpdateDaemonInfo {
@@ -1246,13 +1260,16 @@ func GrabInformationToTab(configTree *toml.Tree) {
 
 	// 设置配置项默认值
 	var (
-		colorful          bool   = config.Main.Colorful
-		cycle             bool   = config.Main.Cycle
-		cpuCacheUnit      string = "KB"
-		MemoryDataUnit    string = "GB"
-		memoryPercentUnit string = "%"
-		SwapDataUnit      string = "GB"
-		updateRecordFile  string = "/tmp/system-checkupdates.log"
+		colorful             bool   = config.Main.Colorful
+		cycle                bool   = config.Main.Cycle
+		cpuCacheUnit         string = "KB"
+		memoryDataUnit       string = "GB"
+		memoryPercentUnit    string = "%"
+		swapDataUnit         string = "GB"
+		basis                string = config.Genealogy.Update.Basis
+		owner                string = "user"
+		archUpdateRecordFile string = "/tmp/checker-arch.log"
+		aurUpdateRecordFile  string = "/tmp/checker-aur.log"
 	)
 
 	// Tab 参数
@@ -1615,7 +1632,7 @@ func GrabInformationToTab(configTree *toml.Tree) {
 
 	// 获取 Memory 配置项
 	if config.Genealogy.Memory.DataUnit != "" {
-		MemoryDataUnit = config.Genealogy.Memory.DataUnit
+		memoryDataUnit = config.Genealogy.Memory.DataUnit
 	} else {
 		color.Warn.Println("Config file is missing 'memory.data_unit' item, using default value")
 	}
@@ -1626,7 +1643,7 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	}
 
 	// 获取数据
-	memoryInfo := general.GetMemoryInfo(MemoryDataUnit, memoryPercentUnit) // 原始数据
+	memoryInfo := general.GetMemoryInfo(memoryDataUnit, memoryPercentUnit) // 原始数据
 	items = config.Genealogy.Memory.Items                                  // 原始表头
 
 	// 未配置表头时不显示该项
@@ -1692,13 +1709,13 @@ func GrabInformationToTab(configTree *toml.Tree) {
 
 	// 获取 Swap 配置项
 	if config.Genealogy.Swap.DataUnit != "" {
-		SwapDataUnit = config.Genealogy.Swap.DataUnit
+		swapDataUnit = config.Genealogy.Swap.DataUnit
 	} else {
 		color.Warn.Println("Config file is missing 'swap.data_unit' item, using default value")
 	}
 
 	// 获取数据
-	swapInfo := general.GetSwapInfo(SwapDataUnit) // 原始数据
+	swapInfo := general.GetSwapInfo(swapDataUnit) // 原始数据
 	if swapInfo["SwapStatus"] == "Unavailable" {
 		items = config.Genealogy.Swap.Items.Unavailable // 原始表头
 	} else {
@@ -2247,15 +2264,20 @@ func GrabInformationToTab(configTree *toml.Tree) {
 	}()
 
 	// 获取 update 配置项
-	if config.Genealogy.Update.RecordFile != "" {
-		updateRecordFile = config.Genealogy.Update.RecordFile
+	if config.Genealogy.Update.ArchRecordFile != "" {
+		archUpdateRecordFile = config.Genealogy.Update.ArchRecordFile
 	} else {
-		color.Warn.Println("Config file is missing 'update.record_file' item, using default value")
+		color.Warn.Println("Config file is missing 'update.arch_record_file' item, using default value")
+	}
+	if config.Genealogy.Update.AurRecordFile != "" {
+		aurUpdateRecordFile = config.Genealogy.Update.AurRecordFile
+	} else {
+		color.Warn.Println("Config file is missing 'update.aur_record_file' item, using default value")
 	}
 
 	// 获取数据
-	checkUpdateDaemonInfo, _ := general.GetCheckUpdateDaemonInfo()                  // 原始数据
-	updatablePackageInfo, _ := general.GetUpdatablePackageInfo(updateRecordFile, 0) // 原始数据
+	checkUpdateDaemonInfo, _ := general.GetCheckUpdateDaemonInfo(basis, owner)                               // 原始数据
+	updatablePackageInfo, _ := general.GetUpdatablePackageInfo(archUpdateRecordFile, aurUpdateRecordFile, 0) // 原始数据
 	updateInfo := make(map[string]interface{})
 	// 合并两部分数据
 	for key, value := range checkUpdateDaemonInfo {

@@ -256,23 +256,27 @@ func GetPackageInfo() (map[string]interface{}, error) {
 // GetUpdatablePackageInfo 读取可更新包信息
 //
 // 参数：
-//   - filePath: 更新信息记录文件路径
+//   - archFilePath: Arch Linux 官方仓库更新信息记录文件路径
+//   - aurFilePath: AUR 更新信息记录文件路径
 //   - line: 读取指定行，等于 0 时读取全部行
 //
 // 返回：
 //   - 可更新包信息
 //   - 错误信息
-func GetUpdatablePackageInfo(filePath string, line int) (map[string]interface{}, error) {
+func GetUpdatablePackageInfo(archFilePath string, aurFilePath string, line int) (map[string]interface{}, error) {
 	var (
-		lastCheckTime string
-		packageSlice  []string
+		lastCheckTime    string
+		archPackageSlice []string
+		aurPackageSlice  []string
 	)
-	if filePath != "" && FileExist(filePath) {
+
+	// Arch Linux 官方仓库可更新包
+	if archFilePath != "" && FileExist(archFilePath) {
 		// 获取文件最后修改时间作为最新更新检查时间
-		lastCheckTime = GetFileModTime(filePath)
+		lastCheckTime = GetFileModTime(archFilePath)
 
 		// 打开文件
-		text, err := os.Open(filePath)
+		text, err := os.Open(archFilePath)
 		if err != nil {
 			return nil, err
 		}
@@ -285,40 +289,73 @@ func GetUpdatablePackageInfo(filePath string, line int) (map[string]interface{},
 		// 逐行读取，输出指定行
 		for scanner.Scan() {
 			if line == count {
-				packageSlice = append(packageSlice, scanner.Text())
+				archPackageSlice = append(archPackageSlice, scanner.Text())
 				break
 			}
-			packageSlice = append(packageSlice, scanner.Text())
+			archPackageSlice = append(archPackageSlice, scanner.Text())
 			count++
 		}
 	}
+
+	// AUR 可更新包
+	if aurFilePath != "" && FileExist(aurFilePath) {
+		// 获取文件最后修改时间作为最新更新检查时间
+		lastCheckTime = GetFileModTime(aurFilePath)
+
+		// 打开文件
+		text, err := os.Open(aurFilePath)
+		if err != nil {
+			return nil, err
+		}
+		defer text.Close()
+
+		// 创建一个扫描器对象按行遍历
+		scanner := bufio.NewScanner(text)
+		// 行计数
+		count := 1
+		// 逐行读取，输出指定行
+		for scanner.Scan() {
+			if line == count {
+				aurPackageSlice = append(aurPackageSlice, scanner.Text())
+				break
+			}
+			aurPackageSlice = append(aurPackageSlice, scanner.Text())
+			count++
+		}
+	}
+
 	updateInfo := make(map[string]interface{})
 	updateInfo["LastCheckTime"] = lastCheckTime
-	updateInfo["UpdatablePackageList"] = packageSlice
-	updateInfo["UpdatablePackageQuantity"] = strconv.Itoa(len(packageSlice))
+	updateInfo["UpdatablePackageList"] = append(archPackageSlice, aurPackageSlice...)
+	updateInfo["UpdatablePackageQuantity"] = strconv.Itoa(len(archPackageSlice) + len(aurPackageSlice))
 
 	return updateInfo, nil
 }
 
 // GetCheckUpdateDaemonInfo 获取更新检测服务的信息
 //
+// 参数：
+//   - basis: 判断更新检测服务状态的依据
+//
 // 返回：
 //   - 更新检测服务的信息
 //   - 错误信息
-func GetCheckUpdateDaemonInfo() (map[string]interface{}, error) {
+func GetCheckUpdateDaemonInfo(basis string, owner string) (map[string]interface{}, error) {
+	manager := "--system"
+	if owner == "user" {
+		manager = "--user"
+	}
+
 	daemonInfo := make(map[string]interface{})
 
-	// 判断更新检测服务状态的依据
-	const basis = "system-checkupdates.timer"
-
 	// 检查更新检测服务是否可用（值为 enabled, disabled 或空字符串）
-	daemonIsEnabledArgs := []string{"is-enabled", basis}
+	daemonIsEnabledArgs := []string{manager, "is-enabled", basis}
 	updateDaemonIsEnabled, _, _ := RunCommandToBuffer("systemctl", daemonIsEnabledArgs)
 
 	switch updateDaemonIsEnabled {
 	case "enabled":
 		// 检查更新检测服务是否处于活动状态
-		daemonIsActiveArgs := []string{"is-active", basis}
+		daemonIsActiveArgs := []string{manager, "is-active", basis}
 		updateDaemonIsActive, _, _ := RunCommandToBuffer("systemctl", daemonIsActiveArgs)
 
 		daemonInfo["UpdateCheckDaemonStatus"] = UpperFirstChar(updateDaemonIsActive)

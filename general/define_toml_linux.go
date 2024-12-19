@@ -32,12 +32,17 @@ type PackageConfig struct {
 	Items []string `toml:"items"`
 }
 type UpdateConfig struct {
-	Items      []string `toml:"items"`
-	RecordFile string   `toml:"record_file"`
+	Items          []string `toml:"items"`
+	Basis          string   `toml:"basis"`
+	ArchRecordFile string   `toml:"arch_record_file"`
+	AurRecordFile  string   `toml:"aur_record_file"`
 }
 
-// 可更新安装包记录文件
-var UpdateRecordFile = "/tmp/system-checkupdates.log"
+var (
+	basis                = "update-checker.timer"  // 更新检测服务状态判断依据
+	ArchUpdateRecordFile = "/tmp/checker-arch.log" // Arch Linux 官方仓库可更新包记录文件
+	AurUpdateRecordFile  = "/tmp/checker-aur.log"  // AUR 可更新包记录文件
+)
 
 // 默认配置
 var defaultConf = map[string]interface{}{
@@ -175,7 +180,9 @@ var defaultConf = map[string]interface{}{
 				"UpdatablePackageQuantity",
 				"UpdatablePackageList",
 			},
-			"record_file": UpdateRecordFile,
+			"basis":            basis,
+			"arch_record_file": ArchUpdateRecordFile,
+			"aur_record_file":  AurUpdateRecordFile,
 		},
 		"user": map[string]interface{}{
 			"items": []string{
