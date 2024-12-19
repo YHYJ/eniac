@@ -39,7 +39,7 @@ type UpdateConfig struct {
 }
 
 var (
-	basis                = "update-checker.timer"  // 更新检测服务状态判断依据
+	UpdateBasis          = "update-checker.timer"  // 更新检测服务状态判断依据
 	ArchUpdateRecordFile = "/tmp/checker-arch.log" // Arch Linux 官方仓库可更新包记录文件
 	AurUpdateRecordFile  = "/tmp/checker-aur.log"  // AUR 可更新包记录文件
 )
@@ -180,7 +180,7 @@ var defaultConf = map[string]interface{}{
 				"UpdatablePackageQuantity",
 				"UpdatablePackageList",
 			},
-			"basis":            basis,
+			"basis":            UpdateBasis,
 			"arch_record_file": ArchUpdateRecordFile,
 			"aur_record_file":  AurUpdateRecordFile,
 		},

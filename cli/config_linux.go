@@ -40,6 +40,7 @@ func CreateConfigFile(configFile string) {
 		switch overWrite {
 		case "y":
 			// 与用户交互获取配置信息
+			general.UpdateBasis, _ = general.GetInput(general.QuestionText(color.Sprintf(general.SetConfigItemTips, "the name of the update checker service")), general.UpdateBasis)
 			general.ArchUpdateRecordFile, _ = general.GetInput(general.QuestionText(color.Sprintf(general.SetConfigItemTips, "official repository update record file")), general.ArchUpdateRecordFile)
 			general.AurUpdateRecordFile, _ = general.GetInput(general.QuestionText(color.Sprintf(general.SetConfigItemTips, "AUR update record file")), general.AurUpdateRecordFile)
 			if err := general.DeleteFile(configFile); err != nil {
@@ -67,6 +68,7 @@ func CreateConfigFile(configFile string) {
 		}
 	} else {
 		// 与用户交互获取配置信息
+		general.UpdateBasis, _ = general.GetInput(general.QuestionText(color.Sprintf(general.SetConfigItemTips, "the name of the update checker service")), general.UpdateBasis)
 		general.ArchUpdateRecordFile, _ = general.GetInput(general.QuestionText(color.Sprintf(general.SetConfigItemTips, "official repository update record file")), general.ArchUpdateRecordFile)
 		general.AurUpdateRecordFile, _ = general.GetInput(general.QuestionText(color.Sprintf(general.SetConfigItemTips, "AUR update record file")), general.AurUpdateRecordFile)
 		if err := general.CreateFile(configFile); err != nil {
