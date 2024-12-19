@@ -296,6 +296,7 @@ func GetUpdatablePackageInfo(archFilePath string, aurFilePath string, line int) 
 			count++
 		}
 	}
+	archPackageSliceLength := len(archPackageSlice)
 
 	// AUR 可更新包
 	if aurFilePath != "" && FileExist(aurFilePath) {
@@ -323,11 +324,22 @@ func GetUpdatablePackageInfo(archFilePath string, aurFilePath string, line int) 
 			count++
 		}
 	}
+	aurPackageSliceLength := len(aurPackageSlice)
+
+	// 获取到 AUR 可更新数量后为可更新包名前加一个空行和 Arch 官方仓库可更新报名作区分
+	aurPackageSlice = func() []string {
+		if len(aurPackageSlice) == 0 {
+			return aurPackageSlice
+		}
+		newAurPackageSlice := make([]string, len(aurPackageSlice)+1)
+		copy(newAurPackageSlice[1:], aurPackageSlice)
+		return newAurPackageSlice
+	}()
 
 	updateInfo := make(map[string]interface{})
 	updateInfo["LastCheckTime"] = lastCheckTime
 	updateInfo["UpdatablePackageList"] = append(archPackageSlice, aurPackageSlice...)
-	updateInfo["UpdatablePackageQuantity"] = strconv.Itoa(len(archPackageSlice) + len(aurPackageSlice))
+	updateInfo["UpdatablePackageQuantity"] = strconv.Itoa(archPackageSliceLength + aurPackageSliceLength)
 
 	return updateInfo, nil
 }
