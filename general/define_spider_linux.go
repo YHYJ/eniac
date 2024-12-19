@@ -321,11 +321,11 @@ func GetCheckUpdateDaemonInfo() (map[string]interface{}, error) {
 		daemonIsActiveArgs := []string{"is-active", basis}
 		updateDaemonIsActive, _, _ := RunCommandToBuffer("systemctl", daemonIsActiveArgs)
 
-		daemonInfo["UpdateDaemonStatus"] = UpperFirstChar(updateDaemonIsActive)
+		daemonInfo["UpdateCheckDaemonStatus"] = UpperFirstChar(updateDaemonIsActive)
 	case "disabled":
-		daemonInfo["UpdateDaemonStatus"] = "disabled"
+		daemonInfo["UpdateCheckDaemonStatus"] = "disabled"
 	default:
-		daemonInfo["UpdateDaemonStatus"] = "not-found"
+		daemonInfo["UpdateCheckDaemonStatus"] = "not-found"
 	}
 	return daemonInfo, nil
 }
