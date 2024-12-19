@@ -28,7 +28,14 @@ var getCmd = &cobra.Command{
 		configFile, _ := cmd.Flags().GetString("config")
 
 		// 读取配置文件
-		confTree, err := general.GetTomlConfig(configFile)
+		configTree, err := general.GetTomlConfig(configFile)
+		if err != nil {
+			fileName, lineNo := general.GetCallerInfo()
+			color.Printf("%s %s %s\n", general.DangerText(general.ErrorInfoFlag), general.SecondaryText("[", fileName, ":", lineNo+1, "]"), err)
+			return
+		}
+		// 获取配置项
+		config, err := general.LoadConfigToStruct(configTree)
 		if err != nil {
 			fileName, lineNo := general.GetCallerInfo()
 			color.Printf("%s %s %s\n", general.DangerText(general.ErrorInfoFlag), general.SecondaryText("[", fileName, ":", lineNo+1, "]"), err)
@@ -37,7 +44,7 @@ var getCmd = &cobra.Command{
 
 		if cmd.Flags().NFlag() == 0 {
 			// 抓取系统信息
-			cli.GrabInformationToTab(confTree)
+			cli.GrabInformationToTab(config)
 		} else {
 			// 解析参数
 			allFlag, _ := cmd.Flags().GetBool("all")
@@ -79,7 +86,7 @@ var getCmd = &cobra.Command{
 			}
 
 			// 抓取系统信息
-			cli.GrabInformationToTable(confTree, allFlags)
+			cli.GrabInformationToTable(config, allFlags)
 
 			// 显示通知
 			general.Notification()

@@ -18,24 +18,15 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
 	"github.com/gookit/color"
-	"github.com/pelletier/go-toml"
 	"github.com/yhyj/eniac/general"
 )
 
 // GrabInformationToTable 抓取信息，各种信息分别输出为表格
 //
 // 参数：
-//   - configTree: 解析 toml 配置文件得到的配置树
+//   - config: 解析 toml 配置文件得到的配置项
 //   - flags: 系统信息各部分的开关
-func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
-	// 获取配置项
-	config, err := general.LoadConfigToStruct(configTree)
-	if err != nil {
-		fileName, lineNo := general.GetCallerInfo()
-		color.Printf("%s %s %s\n", general.DangerText(general.ErrorInfoFlag), general.SecondaryText("[", fileName, ":", lineNo+1, "]"), err)
-		return
-	}
-
+func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 	// 设置配置项默认值
 	var (
 		colorful          bool   = config.Main.Colorful
@@ -825,16 +816,8 @@ func GrabInformationToTable(configTree *toml.Tree, flags map[string]bool) {
 // GrabInformationToTab 抓取信息，各种信息通过标签交互展示
 //
 // 参数：
-//   - configTree: 解析 toml 配置文件得到的配置树
-func GrabInformationToTab(configTree *toml.Tree) {
-	// 获取配置项
-	config, err := general.LoadConfigToStruct(configTree)
-	if err != nil {
-		fileName, lineNo := general.GetCallerInfo()
-		color.Printf("%s %s %s\n", general.DangerText(general.ErrorInfoFlag), general.SecondaryText("[", fileName, ":", lineNo+1, "]"), err)
-		return
-	}
-
+//   - config: 解析 toml 配置文件得到的配置项
+func GrabInformationToTab(config *general.Config) {
 	// 设置配置项默认值
 	var (
 		colorful          bool   = config.Main.Colorful
