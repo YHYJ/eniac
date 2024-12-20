@@ -257,18 +257,18 @@ func GetPackageInfo() (map[string]interface{}, error) {
 //
 // 参数：
 //   - archFilePath: Arch Linux 官方仓库更新信息记录文件路径
+//   - archDividing: 记录文件中 Arch Linux 官方仓库更新信息的开始符
 //   - aurFilePath: AUR 更新信息记录文件路径
+//   - aurDividing: 记录文件中 AUR 更新信息的开始符
 //   - line: 读取指定行，等于 0 时读取全部行
 //
 // 返回：
 //   - 可更新包信息
 //   - 错误信息
-func GetUpdatablePackageInfo(archFilePath string, aurFilePath string, line int) (map[string]interface{}, error) {
-	var (
-		lastCheckTime    string
-		archPackageSlice []string
-		aurPackageSlice  []string
-	)
+func GetUpdatablePackageInfo(archFilePath, archDividing string, aurFilePath, aurDividing string, line int) (map[string]interface{}, error) {
+	var lastCheckTime string
+	var archPackageSlice = []string{archDividing}
+	var aurPackageSlice = []string{aurDividing}
 
 	// Arch Linux 官方仓库可更新包
 	if archFilePath != "" && FileExist(archFilePath) {
@@ -296,7 +296,7 @@ func GetUpdatablePackageInfo(archFilePath string, aurFilePath string, line int) 
 			count++
 		}
 	}
-	archPackageSliceLength := len(archPackageSlice)
+	archPackageSliceLength := len(archPackageSlice) - 1
 
 	// AUR 可更新包
 	if aurFilePath != "" && FileExist(aurFilePath) {
@@ -324,9 +324,9 @@ func GetUpdatablePackageInfo(archFilePath string, aurFilePath string, line int) 
 			count++
 		}
 	}
-	aurPackageSliceLength := len(aurPackageSlice)
+	aurPackageSliceLength := len(aurPackageSlice) - 1
 
-	// 获取到 AUR 可更新数量后为可更新包名前加一个空行和 Arch 官方仓库可更新报名作区分
+	// 获取到 AUR 可更新数量后为可更新包名前加一个空行和 Arch 官方仓库可更新包名作区分
 	aurPackageSlice = func() []string {
 		if len(aurPackageSlice) == 0 {
 			return aurPackageSlice

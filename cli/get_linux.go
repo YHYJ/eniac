@@ -37,8 +37,10 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 		swapDataUnit         string = "GB"
 		basis                string = config.Genealogy.Update.Basis
 		owner                string = "user"
-		archUpdateRecordFile string = "/tmp/checker-arch.log"
-		aurUpdateRecordFile  string = "/tmp/checker-aur.log"
+		archUpdateRecordFile string = config.Genealogy.Update.ArchRecordFile
+		archDividing         string = "······Arch Official Repository······"
+		aurUpdateRecordFile  string = config.Genealogy.Update.AurRecordFile
+		aurDividing          string = "········Arch User Repository········"
 	)
 
 	// 系统信息分配到不同的参数
@@ -1119,28 +1121,28 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 
 	if flags["updateFlag"] {
 		// 获取 update 配置项
-		if config.Genealogy.Update.ArchRecordFile != "" {
-			archUpdateRecordFile = config.Genealogy.Update.ArchRecordFile
+		if config.Genealogy.Update.ArchDividing != "" {
+			archDividing = config.Genealogy.Update.ArchDividing
 		} else {
-			color.Warn.Println("Config file is missing 'update.arch_record_file' item, using default value")
+			color.Warn.Println("Config file is missing 'update.arch_dividing' item, using default value")
 		}
-		if config.Genealogy.Update.AurRecordFile != "" {
-			aurUpdateRecordFile = config.Genealogy.Update.AurRecordFile
+		if config.Genealogy.Update.AurDividing != "" {
+			aurDividing = config.Genealogy.Update.AurDividing
 		} else {
-			color.Warn.Println("Config file is missing 'update.aur_record_file' item, using default value")
+			color.Warn.Println("Config file is missing 'update.aur_dividing' item, using default value")
 		}
 
 		if flags["onlyFlag"] {
 			// 仅输出不带额外格式的可更新包信息，专为第三方更新检测插件服务
-			updatablePackageInfo, _ := general.GetUpdatablePackageInfo(archUpdateRecordFile, aurUpdateRecordFile, 0)
-			color.Println("Arch Official Repository:")
-			for num, info := range updatablePackageInfo["UpdatablePackageList"].([]string) {
-				color.Printf("%v: %v\n", num+1, info)
-			}
-			color.Println()
-			color.Println("Arch User Repository:")
-			for num, info := range updatablePackageInfo["AurPackageList"].([]string) {
-				color.Printf("%v: %v\n", num+1, info)
+			updatablePackageInfo, _ := general.GetUpdatablePackageInfo(archUpdateRecordFile, archDividing, aurUpdateRecordFile, aurDividing, 0)
+			num := 1
+			for _, info := range updatablePackageInfo["UpdatablePackageList"].([]string) {
+				if info == archDividing || info == aurDividing || info == "" {
+					color.Printf("%v\n", info)
+					continue
+				}
+				color.Printf("%v: %v\n", num, info)
+				num += 1
 			}
 		} else {
 			updatePart := func() string {
@@ -1152,8 +1154,8 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 			}()
 
 			// 获取数据
-			checkUpdateDaemonInfo, _ := general.GetCheckUpdateDaemonInfo(basis, owner)                               // 原始数据
-			updatablePackageInfo, _ := general.GetUpdatablePackageInfo(archUpdateRecordFile, aurUpdateRecordFile, 0) // 原始数据
+			checkUpdateDaemonInfo, _ := general.GetCheckUpdateDaemonInfo(basis, owner)                                                          // 原始数据
+			updatablePackageInfo, _ := general.GetUpdatablePackageInfo(archUpdateRecordFile, archDividing, aurUpdateRecordFile, aurDividing, 0) // 原始数据
 			updateInfo := make(map[string]interface{})
 			// 合并两部分数据
 			for key, value := range checkUpdateDaemonInfo {
@@ -1251,8 +1253,10 @@ func GrabInformationToTab(config *general.Config) {
 		swapDataUnit         string = "GB"
 		basis                string = config.Genealogy.Update.Basis
 		owner                string = "user"
-		archUpdateRecordFile string = "/tmp/checker-arch.log"
-		aurUpdateRecordFile  string = "/tmp/checker-aur.log"
+		archUpdateRecordFile string = config.Genealogy.Update.ArchRecordFile
+		archDividing         string = "······Arch Official Repository······"
+		aurUpdateRecordFile  string = config.Genealogy.Update.AurRecordFile
+		aurDividing          string = "········Arch User Repository········"
 	)
 
 	// Tab 参数
@@ -2247,20 +2251,20 @@ func GrabInformationToTab(config *general.Config) {
 	}()
 
 	// 获取 update 配置项
-	if config.Genealogy.Update.ArchRecordFile != "" {
-		archUpdateRecordFile = config.Genealogy.Update.ArchRecordFile
+	if config.Genealogy.Update.ArchDividing != "" {
+		archDividing = config.Genealogy.Update.ArchDividing
 	} else {
-		color.Warn.Println("Config file is missing 'update.arch_record_file' item, using default value")
+		color.Warn.Println("Config file is missing 'update.arch_dividing' item, using default value")
 	}
-	if config.Genealogy.Update.AurRecordFile != "" {
-		aurUpdateRecordFile = config.Genealogy.Update.AurRecordFile
+	if config.Genealogy.Update.AurDividing != "" {
+		aurDividing = config.Genealogy.Update.AurDividing
 	} else {
-		color.Warn.Println("Config file is missing 'update.aur_record_file' item, using default value")
+		color.Warn.Println("Config file is missing 'update.aur_dividing' item, using default value")
 	}
 
 	// 获取数据
-	checkUpdateDaemonInfo, _ := general.GetCheckUpdateDaemonInfo(basis, owner)                               // 原始数据
-	updatablePackageInfo, _ := general.GetUpdatablePackageInfo(archUpdateRecordFile, aurUpdateRecordFile, 0) // 原始数据
+	checkUpdateDaemonInfo, _ := general.GetCheckUpdateDaemonInfo(basis, owner)                                                          // 原始数据
+	updatablePackageInfo, _ := general.GetUpdatablePackageInfo(archUpdateRecordFile, archDividing, aurUpdateRecordFile, aurDividing, 0) // 原始数据
 	updateInfo := make(map[string]interface{})
 	// 合并两部分数据
 	for key, value := range checkUpdateDaemonInfo {

@@ -36,6 +36,8 @@ type UpdateConfig struct {
 	Basis          string   `toml:"basis"`
 	ArchRecordFile string   `toml:"arch_record_file"`
 	AurRecordFile  string   `toml:"aur_record_file"`
+	ArchDividing   string   `toml:"arch_dividing"`
+	AurDividing    string   `toml:"aur_dividing"`
 }
 
 var (
@@ -180,9 +182,11 @@ var defaultConf = map[string]interface{}{
 				"UpdatablePackageQuantity",
 				"UpdatablePackageList",
 			},
-			"basis":            UpdateBasis,
-			"arch_record_file": ArchUpdateRecordFile,
-			"aur_record_file":  AurUpdateRecordFile,
+			"basis":              UpdateBasis,
+			"arch_record_file":   ArchUpdateRecordFile,
+			"aur_record_file":    AurUpdateRecordFile,
+			"dividing_line_arch": "······Arch Official Repository······",
+			"dividing_line_aur":  "········Arch User Repository········",
 		},
 		"user": map[string]interface{}{
 			"items": []string{
