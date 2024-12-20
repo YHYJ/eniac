@@ -182,11 +182,11 @@ var defaultConf = map[string]interface{}{
 				"UpdatablePackageQuantity",
 				"UpdatablePackageList",
 			},
-			"basis":              UpdateBasis,
-			"arch_record_file":   ArchUpdateRecordFile,
-			"aur_record_file":    AurUpdateRecordFile,
-			"dividing_line_arch": "······Arch Official Repository······",
-			"dividing_line_aur":  "········Arch User Repository········",
+			"basis":            UpdateBasis,
+			"arch_record_file": ArchUpdateRecordFile,
+			"aur_record_file":  AurUpdateRecordFile,
+			"arch_dividing":    "······Arch Official Repository······",
+			"aur_dividing":     "········Arch User Repository········",
 		},
 		"user": map[string]interface{}{
 			"items": []string{
