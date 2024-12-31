@@ -830,7 +830,7 @@ func GrabInformationToTab(config *general.Config) {
 
 	// Tab 参数
 	var (
-		tabs        []string // 标签内容
+		tabName     []string // 标签名称
 		tabContents []string // 标签内容
 	)
 
@@ -906,7 +906,7 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
-		tabs = append(tabs, productPart)
+		tabName = append(tabName, productPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
@@ -971,7 +971,7 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
-		tabs = append(tabs, boardPart)
+		tabName = append(tabName, boardPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
@@ -1036,7 +1036,7 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
-		tabs = append(tabs, biosPart)
+		tabName = append(tabName, biosPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
@@ -1108,7 +1108,7 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
-		tabs = append(tabs, cpuPart)
+		tabName = append(tabName, cpuPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
@@ -1185,7 +1185,7 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
-		tabs = append(tabs, memoryPart)
+		tabName = append(tabName, memoryPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
@@ -1261,7 +1261,7 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
-		tabs = append(tabs, swapPart)
+		tabName = append(tabName, swapPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
@@ -1330,7 +1330,7 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
-		tabs = append(tabs, diskPart)
+		tabName = append(tabName, diskPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
@@ -1395,7 +1395,7 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
-		tabs = append(tabs, osPart)
+		tabName = append(tabName, osPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
@@ -1470,7 +1470,7 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
-		tabs = append(tabs, loadPart)
+		tabName = append(tabName, loadPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
@@ -1535,12 +1535,12 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
-		tabs = append(tabs, userPart)
+		tabName = append(tabName, userPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
 	// 输出 Tab
-	if err := general.TabSelector(tabs, tabContents, cycle); err != nil {
+	if err := general.TabSelector(tabName, tabContents, cycle); err != nil {
 		fileName, lineNo := general.GetCallerInfo()
 		color.Printf("%s %s %s\n", general.DangerText(general.ErrorInfoFlag), general.SecondaryText("[", fileName, ":", lineNo+1, "]"), err)
 	}
