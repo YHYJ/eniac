@@ -56,15 +56,6 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 
 	// 执行对应函数
 	if flags["productFlag"] {
-		productPart := func() string {
-			partName := general.PartName["Product"][general.Language]
-			if partName == "" {
-				partName = "Product"
-			}
-			return partName
-		}()
-
-		// 获取数据
 		productInfo := general.GetProductInfo(sysInfo) // 原始数据
 		items = config.Genealogy.Product.Items         // 原始表头
 
@@ -72,6 +63,15 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 		if len(items) == 0 {
 			general.Notifier = append(general.Notifier, "Product items is empty")
 		} else {
+			// i18n
+			productPart := func() string {
+				partName := general.PartName["Product"][general.Language]
+				if partName == "" {
+					partName = "Product"
+				}
+				return partName
+			}()
+
 			// 组装表
 			tableHeader = []string{""}      // 表头
 			tableData = [][]string{}        // 表数据
@@ -128,15 +128,6 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 	}
 
 	if flags["boardFlag"] {
-		boardPart := func() string {
-			partName := general.PartName["Board"][general.Language]
-			if partName == "" {
-				partName = "Board"
-			}
-			return partName
-		}()
-
-		// 获取数据
 		boardInfo := general.GetBoardInfo(sysInfo) // 原始数据
 		items = config.Genealogy.Board.Items       // 原始表头
 
@@ -144,6 +135,15 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 		if len(items) == 0 {
 			general.Notifier = append(general.Notifier, "Board items is empty")
 		} else {
+			// i18n
+			boardPart := func() string {
+				partName := general.PartName["Board"][general.Language]
+				if partName == "" {
+					partName = "Board"
+				}
+				return partName
+			}()
+
 			// 组装表
 			tableHeader = []string{""}    // 表头
 			tableData = [][]string{}      // 表数据
@@ -200,15 +200,6 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 	}
 
 	if flags["biosFlag"] {
-		biosPart := func() string {
-			partName := general.PartName["BIOS"][general.Language]
-			if partName == "" {
-				partName = "BIOS"
-			}
-			return partName
-		}()
-
-		// 获取数据
 		biosInfo := general.GetBIOSInfo(sysInfo) // 原始数据
 		items = config.Genealogy.Bios.Items      // 原始表头
 
@@ -216,6 +207,15 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 		if len(items) == 0 {
 			general.Notifier = append(general.Notifier, "BIOS items is empty")
 		} else {
+			// i18n
+			biosPart := func() string {
+				partName := general.PartName["BIOS"][general.Language]
+				if partName == "" {
+					partName = "BIOS"
+				}
+				return partName
+			}()
+
 			// 组装表
 			tableHeader = []string{""}   // 表头
 			tableData = [][]string{}     // 表数据
@@ -272,14 +272,6 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 	}
 
 	if flags["cpuFlag"] {
-		cpuPart := func() string {
-			partName := general.PartName["CPU"][general.Language]
-			if partName == "" {
-				partName = "CPU"
-			}
-			return partName
-		}()
-
 		// 获取 CPU 配置项
 		if config.Genealogy.CPU.CacheUnit != "" {
 			cpuCacheUnit = config.Genealogy.CPU.CacheUnit
@@ -287,7 +279,6 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 			color.Warn.Println("Config file is missing 'cpu.cache_unit' item, using default value")
 		}
 
-		// 获取数据
 		cpuInfo := general.GetCPUInfo(sysInfo, cpuCacheUnit) // 原始数据
 		items = config.Genealogy.CPU.Items                   // 原始表头
 
@@ -295,6 +286,15 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 		if len(items) == 0 {
 			general.Notifier = append(general.Notifier, "CPU items is empty")
 		} else {
+			// i18n
+			cpuPart := func() string {
+				partName := general.PartName["CPU"][general.Language]
+				if partName == "" {
+					partName = "CPU"
+				}
+				return partName
+			}()
+
 			// 组装表
 			tableHeader = []string{""}  // 表头
 			tableData = [][]string{}    // 表数据
@@ -351,15 +351,6 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 	}
 
 	if flags["gpuFlag"] {
-		gpuPart := func() string {
-			partName := general.PartName["GPU"][general.Language]
-			if partName == "" {
-				partName = "GPU"
-			}
-			return partName
-		}()
-
-		// 获取数据
 		gpuInfo := general.GetGPUInfo()    // 原始数据
 		items = config.Genealogy.GPU.Items // 原始表头
 
@@ -367,6 +358,15 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 		if len(items) == 0 {
 			general.Notifier = append(general.Notifier, "GPU items is empty")
 		} else {
+			// i18n
+			gpuPart := func() string {
+				partName := general.PartName["GPU"][general.Language]
+				if partName == "" {
+					partName = "GPU"
+				}
+				return partName
+			}()
+
 			// 组装表
 			tableHeader = []string{""}  // 表头
 			tableData = [][]string{}    // 表数据
@@ -423,14 +423,6 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 	}
 
 	if flags["memoryFlag"] {
-		memoryPart := func() string {
-			partName := general.PartName["Memory"][general.Language]
-			if partName == "" {
-				partName = "Memory"
-			}
-			return partName
-		}()
-
 		// 获取 Memory 配置项
 		if config.Genealogy.Memory.DataUnit != "" {
 			memoryDataUnit = config.Genealogy.Memory.DataUnit
@@ -443,7 +435,6 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 			color.Warn.Println("Config file is missing 'memory.percent_unit' item, using default value")
 		}
 
-		// 获取数据
 		memoryInfo := general.GetMemoryInfo(memoryDataUnit, memoryPercentUnit) // 原始数据
 		items = config.Genealogy.Memory.Items                                  // 原始表头
 
@@ -451,6 +442,15 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 		if len(items) == 0 {
 			general.Notifier = append(general.Notifier, "Memory items is empty")
 		} else {
+			// i18n
+			memoryPart := func() string {
+				partName := general.PartName["Memory"][general.Language]
+				if partName == "" {
+					partName = "Memory"
+				}
+				return partName
+			}()
+
 			// 组装表
 			tableHeader = []string{""}     // 表头
 			tableData = [][]string{}       // 表数据
@@ -507,14 +507,6 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 	}
 
 	if flags["swapFlag"] {
-		swapPart := func() string {
-			partName := general.PartName["Swap"][general.Language]
-			if partName == "" {
-				partName = "Swap"
-			}
-			return partName
-		}()
-
 		// 获取 Swap 配置项
 		if config.Genealogy.Swap.DataUnit != "" {
 			swapDataUnit = config.Genealogy.Swap.DataUnit
@@ -522,7 +514,6 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 			color.Warn.Println("Config file is missing 'swap.data_unit' item, using default value")
 		}
 
-		// 获取数据
 		swapInfo := general.GetSwapInfo(swapDataUnit) // 原始数据
 		if swapInfo["SwapStatus"] == "Unavailable" {
 			items = config.Genealogy.Swap.Items.Unavailable // 原始表头
@@ -534,6 +525,15 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 		if len(items) == 0 {
 			general.Notifier = append(general.Notifier, "Swap items is empty")
 		} else {
+			// i18n
+			swapPart := func() string {
+				partName := general.PartName["Swap"][general.Language]
+				if partName == "" {
+					partName = "Swap"
+				}
+				return partName
+			}()
+
 			// 组装表
 			tableHeader = []string{""}   // 表头
 			tableData = [][]string{}     // 表数据
@@ -590,15 +590,6 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 	}
 
 	if flags["storageFlag"] {
-		diskPart := func() string {
-			partName := general.PartName["Disk"][general.Language]
-			if partName == "" {
-				partName = "Disk"
-			}
-			return partName
-		}()
-
-		// 获取数据
 		storageInfo := general.GetStorageInfo() // 原始数据
 		items = config.Genealogy.Storage.Items  // 原始表头
 
@@ -606,6 +597,15 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 		if len(items) == 0 {
 			general.Notifier = append(general.Notifier, "Storage items is empty")
 		} else {
+			// i18n
+			diskPart := func() string {
+				partName := general.PartName["Disk"][general.Language]
+				if partName == "" {
+					partName = "Disk"
+				}
+				return partName
+			}()
+
 			// 组装表
 			tableHeader = []string{""} // 表头
 			tableData = [][]string{}   // 表数据
@@ -666,15 +666,6 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 	}
 
 	if flags["nicFlag"] {
-		nicPart := func() string {
-			partName := general.PartName["NIC"][general.Language]
-			if partName == "" {
-				partName = "NIC"
-			}
-			return partName
-		}()
-
-		// 获取数据
 		nicInfo := general.GetNicInfo()    // 原始数据
 		items = config.Genealogy.Nic.Items // 原始表头
 
@@ -682,6 +673,15 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 		if len(items) == 0 {
 			general.Notifier = append(general.Notifier, "Nic items is empty")
 		} else {
+			// i18n
+			nicPart := func() string {
+				partName := general.PartName["NIC"][general.Language]
+				if partName == "" {
+					partName = "NIC"
+				}
+				return partName
+			}()
+
 			// 组装表
 			tableHeader = []string{""} // 表头
 			tableData = [][]string{}   // 表数据
@@ -742,15 +742,6 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 	}
 
 	if flags["osFlag"] {
-		osPart := func() string {
-			partNname := general.PartName["OS"][general.Language]
-			if partNname == "" {
-				partNname = "OS"
-			}
-			return partNname
-		}()
-
-		// 获取数据
 		osInfo := general.GetOSInfo(sysInfo) // 原始数据
 		items = config.Genealogy.OS.Items    // 原始表头
 
@@ -758,6 +749,15 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 		if len(items) == 0 {
 			general.Notifier = append(general.Notifier, "OS items is empty")
 		} else {
+			// i18n
+			osPart := func() string {
+				partNname := general.PartName["OS"][general.Language]
+				if partNname == "" {
+					partNname = "OS"
+				}
+				return partNname
+			}()
+
 			// 组装表
 			tableHeader = []string{""} // 表头
 			tableData = [][]string{}   // 表数据
@@ -814,15 +814,6 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 	}
 
 	if flags["loadFlag"] {
-		loadPart := func() string {
-			partName := general.PartName["Load"][general.Language]
-			if partName == "" {
-				partName = "Load"
-			}
-			return partName
-		}()
-
-		// 获取数据
 		loadInfo := general.GetLoadInfo()   // 原始数据
 		items = config.Genealogy.Load.Items // 原始表头
 
@@ -830,6 +821,15 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 		if len(items) == 0 {
 			general.Notifier = append(general.Notifier, "Load items is empty")
 		} else {
+			// i18n
+			loadPart := func() string {
+				partName := general.PartName["Load"][general.Language]
+				if partName == "" {
+					partName = "Load"
+				}
+				return partName
+			}()
+
 			// 组装表
 			tableHeader = []string{""}   // 表头
 			tableData = [][]string{}     // 表数据
@@ -896,15 +896,6 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 	}
 
 	if flags["timeFlag"] {
-		timePart := func() string {
-			partName := general.PartName["Time"][general.Language]
-			if partName == "" {
-				partName = "Time"
-			}
-			return partName
-		}()
-
-		// 获取数据
 		timeInfo, _ := general.GetTimeInfo() // 原始数据
 		items = config.Genealogy.Time.Items  // 原始表头
 
@@ -912,6 +903,15 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 		if len(items) == 0 {
 			general.Notifier = append(general.Notifier, "Time items is empty")
 		} else {
+			// i18n
+			timePart := func() string {
+				partName := general.PartName["Time"][general.Language]
+				if partName == "" {
+					partName = "Time"
+				}
+				return partName
+			}()
+
 			// 组装表
 			tableHeader = []string{""}   // 表头
 			tableData = [][]string{}     // 表数据
@@ -968,15 +968,6 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 	}
 
 	if flags["userFlag"] {
-		userPart := func() string {
-			partName := general.PartName["User"][general.Language]
-			if partName == "" {
-				partName = "User"
-			}
-			return partName
-		}()
-
-		// 获取数据
 		userInfo := general.GetUserInfo()   // 原始数据
 		items = config.Genealogy.User.Items // 原始表头
 
@@ -984,6 +975,15 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 		if len(items) == 0 {
 			general.Notifier = append(general.Notifier, "User items is empty")
 		} else {
+			// i18n
+			userPart := func() string {
+				partName := general.PartName["User"][general.Language]
+				if partName == "" {
+					partName = "User"
+				}
+				return partName
+			}()
+
 			// 组装表
 			tableHeader = []string{""}   // 表头
 			tableData = [][]string{}     // 表数据
@@ -1040,15 +1040,6 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 	}
 
 	if flags["packageFlag"] {
-		packagePart := func() string {
-			partName := general.PartName["Package"][general.Language]
-			if partName == "" {
-				partName = "Package"
-			}
-			return partName
-		}()
-
-		// 获取数据
 		packageInfo, _ := general.GetPackageInfo() // 原始数据
 		items = config.Genealogy.Package.Items     // 原始表头
 
@@ -1056,6 +1047,15 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 		if len(items) == 0 {
 			general.Notifier = append(general.Notifier, "Package items is empty")
 		} else {
+			// i18n
+			packagePart := func() string {
+				partName := general.PartName["Package"][general.Language]
+				if partName == "" {
+					partName = "Package"
+				}
+				return partName
+			}()
+
 			// 组装表
 			tableHeader = []string{""}      // 表头
 			tableData = [][]string{}        // 表数据
@@ -1145,15 +1145,6 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 				num += 1
 			}
 		} else {
-			updatePart := func() string {
-				partName := general.PartName["Update"][general.Language]
-				if partName == "" {
-					partName = "Update"
-				}
-				return partName
-			}()
-
-			// 获取数据
 			checkUpdateDaemonInfo, _ := general.GetCheckUpdateDaemonInfo(basis, owner)                                                          // 原始数据
 			updatablePackageInfo, _ := general.GetUpdatablePackageInfo(archUpdateRecordFile, archDividing, aurUpdateRecordFile, aurDividing, 0) // 原始数据
 			updateInfo := make(map[string]interface{})
@@ -1170,6 +1161,15 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 			if len(items) == 0 {
 				general.Notifier = append(general.Notifier, "Update items is empty")
 			} else {
+				// i18n
+				updatePart := func() string {
+					partName := general.PartName["Update"][general.Language]
+					if partName == "" {
+						partName = "Update"
+					}
+					return partName
+				}()
+
 				// 组装表
 				tableHeader = []string{""}     // 表头
 				tableData = [][]string{}       // 表数据
