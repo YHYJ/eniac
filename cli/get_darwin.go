@@ -846,15 +846,6 @@ func GrabInformationToTab(config *general.Config) {
 	}
 
 	// ---------- Product
-	productPart := func() string {
-		partName := general.PartName["Product"][general.Language]
-		if partName == "" {
-			partName = "Product"
-		}
-		return partName
-	}()
-
-	// 获取数据
 	productInfo := general.GetProductInfo(sysInfo) // 原始数据
 	items = config.Genealogy.Product.Items         // 原始表头
 
@@ -906,20 +897,20 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
+		// i18n
+		productPart := func() string {
+			partName := general.PartName["Product"][general.Language]
+			if partName == "" {
+				partName = "Product"
+			}
+			return partName
+		}()
+
 		tabName = append(tabName, productPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
 	// ---------- Board
-	boardPart := func() string {
-		partName := general.PartName["Board"][general.Language]
-		if partName == "" {
-			partName = "Board"
-		}
-		return partName
-	}()
-
-	// 获取数据
 	boardInfo := general.GetBoardInfo(sysInfo) // 原始数据
 	items = config.Genealogy.Board.Items       // 原始表头
 
@@ -971,20 +962,20 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
+		// i18n
+		boardPart := func() string {
+			partName := general.PartName["Board"][general.Language]
+			if partName == "" {
+				partName = "Board"
+			}
+			return partName
+		}()
+
 		tabName = append(tabName, boardPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
 	// ---------- Bios
-	biosPart := func() string {
-		partName := general.PartName["BIOS"][general.Language]
-		if partName == "" {
-			partName = "BIOS"
-		}
-		return partName
-	}()
-
-	// 获取数据
 	biosInfo := general.GetBIOSInfo(sysInfo) // 原始数据
 	items = config.Genealogy.Bios.Items      // 原始表头
 
@@ -1036,19 +1027,20 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
+		// i18n
+		biosPart := func() string {
+			partName := general.PartName["BIOS"][general.Language]
+			if partName == "" {
+				partName = "BIOS"
+			}
+			return partName
+		}()
+
 		tabName = append(tabName, biosPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
 	// ---------- CPU
-	cpuPart := func() string {
-		partName := general.PartName["CPU"][general.Language]
-		if partName == "" {
-			partName = "CPU"
-		}
-		return partName
-	}()
-
 	// 获取 CPU 配置项
 	if config.Genealogy.CPU.CacheUnit != "" {
 		cpuCacheUnit = config.Genealogy.CPU.CacheUnit
@@ -1056,7 +1048,6 @@ func GrabInformationToTab(config *general.Config) {
 		color.Warn.Println("Config file is missing 'cpu.cache_unit' item, using default value")
 	}
 
-	// 获取数据
 	cpuInfo := general.GetCPUInfo(sysInfo, cpuCacheUnit) // 原始数据
 	items = config.Genealogy.CPU.Items                   // 原始表头
 
@@ -1108,19 +1099,20 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
+		// i18n
+		cpuPart := func() string {
+			partName := general.PartName["CPU"][general.Language]
+			if partName == "" {
+				partName = "CPU"
+			}
+			return partName
+		}()
+
 		tabName = append(tabName, cpuPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
 	// ---------- Memory
-	memoryPart := func() string {
-		partName := general.PartName["Memory"][general.Language]
-		if partName == "" {
-			partName = "Memory"
-		}
-		return partName
-	}()
-
 	// 获取 Memory 配置项
 	if config.Genealogy.Memory.DataUnit != "" {
 		MemoryDataUnit = config.Genealogy.Memory.DataUnit
@@ -1133,7 +1125,6 @@ func GrabInformationToTab(config *general.Config) {
 		color.Warn.Println("Config file is missing 'memory.percent_unit' item, using default value")
 	}
 
-	// 获取数据
 	memoryInfo := general.GetMemoryInfo(MemoryDataUnit, memoryPercentUnit) // 原始数据
 	items = config.Genealogy.Memory.Items                                  // 原始表头
 
@@ -1185,19 +1176,20 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
+		// i18n
+		memoryPart := func() string {
+			partName := general.PartName["Memory"][general.Language]
+			if partName == "" {
+				partName = "Memory"
+			}
+			return partName
+		}()
+
 		tabName = append(tabName, memoryPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
 	// ---------- Swap
-	swapPart := func() string {
-		partName := general.PartName["Swap"][general.Language]
-		if partName == "" {
-			partName = "Swap"
-		}
-		return partName
-	}()
-
 	// 获取 Swap 配置项
 	if config.Genealogy.Swap.DataUnit != "" {
 		SwapDataUnit = config.Genealogy.Swap.DataUnit
@@ -1205,7 +1197,6 @@ func GrabInformationToTab(config *general.Config) {
 		color.Warn.Println("Config file is missing 'swap.data_unit' item, using default value")
 	}
 
-	// 获取数据
 	swapInfo := general.GetSwapInfo(SwapDataUnit) // 原始数据
 	if swapInfo["SwapStatus"] == "Unavailable" {
 		items = config.Genealogy.Swap.Items.Unavailable // 原始表头
@@ -1261,20 +1252,20 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
+		// i18n
+		swapPart := func() string {
+			partName := general.PartName["Swap"][general.Language]
+			if partName == "" {
+				partName = "Swap"
+			}
+			return partName
+		}()
+
 		tabName = append(tabName, swapPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
 	// ---------- Storage
-	diskPart := func() string {
-		partName := general.PartName["Disk"][general.Language]
-		if partName == "" {
-			partName = "Disk"
-		}
-		return partName
-	}()
-
-	// 获取数据
 	storageInfo := general.GetStorageInfo() // 原始数据
 	items = config.Genealogy.Storage.Items  // 原始表头
 
@@ -1330,20 +1321,20 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
+		// i18n
+		diskPart := func() string {
+			partName := general.PartName["Disk"][general.Language]
+			if partName == "" {
+				partName = "Disk"
+			}
+			return partName
+		}()
+
 		tabName = append(tabName, diskPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
 	// ---------- OS
-	osPart := func() string {
-		partNname := general.PartName["OS"][general.Language]
-		if partNname == "" {
-			partNname = "OS"
-		}
-		return partNname
-	}()
-
-	// 获取数据
 	osInfo := general.GetOSInfo(sysInfo) // 原始数据
 	items = config.Genealogy.OS.Items    // 原始表头
 
@@ -1395,20 +1386,20 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
+		// i18n
+		osPart := func() string {
+			partNname := general.PartName["OS"][general.Language]
+			if partNname == "" {
+				partNname = "OS"
+			}
+			return partNname
+		}()
+
 		tabName = append(tabName, osPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
 	// ---------- Load
-	loadPart := func() string {
-		partName := general.PartName["Load"][general.Language]
-		if partName == "" {
-			partName = "Load"
-		}
-		return partName
-	}()
-
-	// 获取数据
 	loadInfo := general.GetLoadInfo()   // 原始数据
 	items = config.Genealogy.Load.Items // 原始表头
 
@@ -1470,20 +1461,20 @@ func GrabInformationToTab(config *general.Config) {
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
 
+		// i18n
+		loadPart := func() string {
+			partName := general.PartName["Load"][general.Language]
+			if partName == "" {
+				partName = "Load"
+			}
+			return partName
+		}()
+
 		tabName = append(tabName, loadPart)
 		tabContents = append(tabContents, dataTable.String())
 	}
 
 	// ---------- User
-	userPart := func() string {
-		partName := general.PartName["User"][general.Language]
-		if partName == "" {
-			partName = "User"
-		}
-		return partName
-	}()
-
-	// 获取数据
 	userInfo := general.GetUserInfo()   // 原始数据
 	items = config.Genealogy.User.Items // 原始表头
 
@@ -1534,6 +1525,15 @@ func GrabInformationToTab(config *general.Config) {
 
 		dataTable.Headers(tableHeader...) // 设置表头
 		dataTable.Rows(tableData...)      // 设置单元格
+
+		// i18n
+		userPart := func() string {
+			partName := general.PartName["User"][general.Language]
+			if partName == "" {
+				partName = "User"
+			}
+			return partName
+		}()
 
 		tabName = append(tabName, userPart)
 		tabContents = append(tabContents, dataTable.String())
