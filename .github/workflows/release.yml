@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-linux-version:
-    runs-on: self-hosted
+    runs-on: [self-hosted, ArchLinux]
     steps:
       - name: "Checkout code"
         uses: actions/checkout@v4
