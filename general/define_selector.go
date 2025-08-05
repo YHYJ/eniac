@@ -19,8 +19,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-var quitKey = "q"                 // 默认的退出键
-var selectorType = "program name" // 选择器主题
+var quitKey = "q" // 默认的退出键
 
 // model 结构体，选择器的数据
 type model struct {

@@ -622,7 +622,7 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 			for index := 1; index <= len(storageInfo); index++ {
 				rowData = []string{diskPart + strconv.Itoa(index)} // 行数据
 				for _, item := range items {
-					rowData = append(rowData, storageInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string))
+					rowData = append(rowData, storageInfo[strconv.Itoa(index)].(map[string]any)[item].(string))
 				}
 				tableData = append(tableData, rowData)
 			}
@@ -698,7 +698,7 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 			for index := 1; index <= len(nicInfo); index++ {
 				rowData = []string{nicPart + strconv.Itoa(index)} // 行数据
 				for _, item := range items {
-					rowData = append(rowData, nicInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string))
+					rowData = append(rowData, nicInfo[strconv.Itoa(index)].(map[string]any)[item].(string))
 				}
 				tableData = append(tableData, rowData)
 			}
@@ -1147,7 +1147,7 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 		} else {
 			checkUpdateDaemonInfo, _ := general.GetCheckUpdateDaemonInfo(basis, owner)                                                          // 原始数据
 			updatablePackageInfo, _ := general.GetUpdatablePackageInfo(archUpdateRecordFile, archDividing, aurUpdateRecordFile, aurDividing, 0) // 原始数据
-			updateInfo := make(map[string]interface{})
+			updateInfo := make(map[string]any)
 			// 合并两部分数据
 			for key, value := range checkUpdateDaemonInfo {
 				updateInfo[key] = value
@@ -1783,7 +1783,7 @@ func GrabInformationToTab(config *general.Config) {
 		for index := 1; index <= len(storageInfo); index++ {
 			rowData = []string{} // 行数据
 			for _, item := range items {
-				rowData = append(rowData, storageInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string))
+				rowData = append(rowData, storageInfo[strconv.Itoa(index)].(map[string]any)[item].(string))
 			}
 			tableData = append(tableData, rowData)
 		}
@@ -1852,7 +1852,7 @@ func GrabInformationToTab(config *general.Config) {
 		for index := 1; index <= len(nicInfo); index++ {
 			rowData = []string{} // 行数据
 			for _, item := range items {
-				rowData = append(rowData, nicInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string))
+				rowData = append(rowData, nicInfo[strconv.Itoa(index)].(map[string]any)[item].(string))
 			}
 			tableData = append(tableData, rowData)
 		}
@@ -2256,7 +2256,7 @@ func GrabInformationToTab(config *general.Config) {
 
 	checkUpdateDaemonInfo, _ := general.GetCheckUpdateDaemonInfo(basis, owner)                                                          // 原始数据
 	updatablePackageInfo, _ := general.GetUpdatablePackageInfo(archUpdateRecordFile, archDividing, aurUpdateRecordFile, aurDividing, 0) // 原始数据
-	updateInfo := make(map[string]interface{})
+	updateInfo := make(map[string]any)
 	// 合并两部分数据
 	for key, value := range checkUpdateDaemonInfo {
 		updateInfo[key] = value

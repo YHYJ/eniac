@@ -36,11 +36,11 @@ var (
 //
 // 返回：
 //   - 存储设备信息
-func GetStorageInfo() map[string]interface{} {
-	storageInfo := make(map[string]interface{})
+func GetStorageInfo() map[string]any {
+	storageInfo := make(map[string]any)
 	index := 1 // 排除编号为0的虚拟设备
 	for _, disk := range blockData.Disks {
-		storageValue := make(map[string]interface{})
+		storageValue := make(map[string]any)
 		if disk.SizeBytes > 0 && disk.DriveType.String() != "virtual" {
 			storageValue["StorageName"] = disk.Name
 			storageValue["StorageDriver"] = disk.StorageController.String()
@@ -84,7 +84,7 @@ func GetStorageInfo() map[string]interface{} {
 //
 // 返回：
 //   - 显卡信息
-func GetGPUInfo() map[string]interface{} {
+func GetGPUInfo() map[string]any {
 	type GPUDataJ2S struct {
 		GPU struct {
 			Cards []struct {
@@ -133,7 +133,7 @@ func GetGPUInfo() map[string]interface{} {
 		color.Printf("%s %s %s\n", DangerText(ErrorInfoFlag), SecondaryText("[", fileName, ":", lineNo+1, "]"), err)
 	}
 
-	gpuInfo := make(map[string]interface{})
+	gpuInfo := make(map[string]any)
 	gpuInfo["GPUDriver"] = gpuDataJ2S.GPU.Cards[0].PCI.Driver
 	gpuInfo["GPUAddress"] = gpuDataJ2S.GPU.Cards[0].PCI.Address
 	gpuInfo["GPUVendor"] = gpuDataJ2S.GPU.Cards[0].PCI.Vendor.NAME
@@ -146,7 +146,7 @@ func GetGPUInfo() map[string]interface{} {
 //
 // 返回：
 //   - 网卡信息
-func GetNicInfo() map[string]interface{} {
+func GetNicInfo() map[string]any {
 	type NICDataJ2S struct {
 		Name       string `json:"name"`
 		MacAddress string `json:"mac_address"`
@@ -170,11 +170,11 @@ func GetNicInfo() map[string]interface{} {
 	}
 
 	// 访问解析后的数据
-	networkInfo := make(map[string]interface{})
+	networkInfo := make(map[string]any)
 	network := networkDataJ2S["network"]
 	index := 1 // 排除编号为0的虚拟网卡
 	for _, nic := range network.Nics {
-		networkValue := make(map[string]interface{})
+		networkValue := make(map[string]any)
 		if !nic.IsVirtual {
 			networkValue["NicName"] = nic.Name
 			if nic.PCIAddress != "" {
@@ -221,8 +221,8 @@ func GetNicInfo() map[string]interface{} {
 //
 // 返回：
 //   - 系统信息 (OS Info)
-func GetOSInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
-	osInfo := make(map[string]interface{})
+func GetOSInfo(sysInfo sysinfo.SysInfo) map[string]any {
+	osInfo := make(map[string]any)
 	osInfo["OS"] = UpperFirstChar(sysInfo.OS.Name)         // 操作系统
 	osInfo["Arch"] = sysInfo.OS.Architecture               // 系统架构
 	osInfo["CurrentKernel"] = sysInfo.Kernel.Release       // 当前内核版本
@@ -239,8 +239,8 @@ func GetOSInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
 // 返回：
 //   - 安装包信息
 //   - 错误信息
-func GetPackageInfo() (map[string]interface{}, error) {
-	packageInfo := make(map[string]interface{})
+func GetPackageInfo() (map[string]any, error) {
+	packageInfo := make(map[string]any)
 	packageData, err := GetInstalledPackageData()
 	if err != nil {
 		return nil, err
@@ -265,7 +265,7 @@ func GetPackageInfo() (map[string]interface{}, error) {
 // 返回：
 //   - 可更新包信息
 //   - 错误信息
-func GetUpdatablePackageInfo(archFilePath, archDividing string, aurFilePath, aurDividing string, line int) (map[string]interface{}, error) {
+func GetUpdatablePackageInfo(archFilePath, archDividing string, aurFilePath, aurDividing string, line int) (map[string]any, error) {
 	var lastCheckTime string
 	var archPackageSlice = []string{archDividing}
 	var aurPackageSlice = []string{aurDividing}
@@ -336,7 +336,7 @@ func GetUpdatablePackageInfo(archFilePath, archDividing string, aurFilePath, aur
 		return newAurPackageSlice
 	}()
 
-	updateInfo := make(map[string]interface{})
+	updateInfo := make(map[string]any)
 	updateInfo["LastCheckTime"] = lastCheckTime
 	updateInfo["UpdatablePackageList"] = append(archPackageSlice, aurPackageSlice...)
 	updateInfo["UpdatablePackageQuantity"] = strconv.Itoa(archPackageSliceLength + aurPackageSliceLength)
@@ -352,13 +352,13 @@ func GetUpdatablePackageInfo(archFilePath, archDividing string, aurFilePath, aur
 // 返回：
 //   - 更新检测服务的信息
 //   - 错误信息
-func GetCheckUpdateDaemonInfo(basis string, owner string) (map[string]interface{}, error) {
+func GetCheckUpdateDaemonInfo(basis string, owner string) (map[string]any, error) {
 	manager := "--system"
 	if owner == "user" {
 		manager = "--user"
 	}
 
-	daemonInfo := make(map[string]interface{})
+	daemonInfo := make(map[string]any)
 
 	// 检查更新检测服务是否可用（值为 enabled, disabled 或空字符串）
 	daemonIsEnabledArgs := []string{manager, "is-enabled", basis}

@@ -33,8 +33,8 @@ var (
 //
 // 返回：
 //   - 系统负载信息
-func GetLoadInfo() map[string]interface{} {
-	loadInfo := make(map[string]interface{})
+func GetLoadInfo() map[string]any {
+	loadInfo := make(map[string]any)
 	loadInfo["Load1"] = loadData.Load1   // 1分钟内的负载
 	loadInfo["Load5"] = loadData.Load5   // 5分钟内的负载
 	loadInfo["Load15"] = loadData.Load15 // 15分钟内的负载
@@ -51,7 +51,7 @@ func GetLoadInfo() map[string]interface{} {
 //
 // 返回：
 //   - 内存信息
-func GetMemoryInfo(dataUnit string, percentUnit string) map[string]interface{} {
+func GetMemoryInfo(dataUnit string, percentUnit string) map[string]any {
 	// 内存数据
 	memTotal, memTotalUnit := Human(float64(memData.Total), "B")
 	memUsed, memUsedUnit := Human(float64(memData.Used), "B")
@@ -63,7 +63,7 @@ func GetMemoryInfo(dataUnit string, percentUnit string) map[string]interface{} {
 
 	formatString := "%.1f %s"
 
-	memoryInfo := make(map[string]interface{})
+	memoryInfo := make(map[string]any)
 	memoryInfo["MemoryTotal"] = color.Sprintf(formatString, memTotal, memTotalUnit)             // 内存总量
 	memoryInfo["MemoryUsed"] = color.Sprintf(formatString, memUsed, memUsedUnit)                // 已用内存
 	memoryInfo["MemoryUsedPercent"] = color.Sprintf("%.1f%s", memUsedPercent, percentUnit)      // 内存使用率
@@ -82,13 +82,13 @@ func GetMemoryInfo(dataUnit string, percentUnit string) map[string]interface{} {
 //
 // 返回：
 //   - 交换分区信息
-func GetSwapInfo(dataUnit string) map[string]interface{} {
+func GetSwapInfo(dataUnit string) map[string]any {
 	swapTotal, swapTotalUnit := Human(float64(memData.SwapTotal), "B")
 	swapFree, swapFreeUnit := Human(float64(memData.SwapFree), "B")
 
 	formatString := "%.1f %s"
 
-	swapInfo := make(map[string]interface{})
+	swapInfo := make(map[string]any)
 	swapInfo["SwapStatus"] = func() string {
 		if swapTotal == 0 {
 			return "Unavailable"
@@ -108,8 +108,8 @@ func GetSwapInfo(dataUnit string) map[string]interface{} {
 //
 // 返回：
 //   - BIOS 信息
-func GetBIOSInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
-	biosInfo := make(map[string]interface{})
+func GetBIOSInfo(sysInfo sysinfo.SysInfo) map[string]any {
+	biosInfo := make(map[string]any)
 	biosInfo["BIOSVendor"] = sysInfo.BIOS.Vendor   // BIOS 厂商
 	biosInfo["BIOSVersion"] = sysInfo.BIOS.Version // BIOS 版本
 	biosInfo["BIOSDate"] = sysInfo.BIOS.Date       // BIOS 日期
@@ -124,8 +124,8 @@ func GetBIOSInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
 //
 // 返回：
 //   - 主板信息
-func GetBoardInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
-	boardInfo := make(map[string]interface{})
+func GetBoardInfo(sysInfo sysinfo.SysInfo) map[string]any {
+	boardInfo := make(map[string]any)
 	boardInfo["BoardVendor"] = sysInfo.Board.Vendor   // 主板厂商
 	boardInfo["BoardName"] = sysInfo.Board.Name       // 主板名称
 	boardInfo["BoardVersion"] = sysInfo.Board.Version // 主板版本
@@ -141,8 +141,8 @@ func GetBoardInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
 //
 // 返回：
 //   - CPU 信息
-func GetCPUInfo(sysInfo sysinfo.SysInfo, dataUnit string) map[string]interface{} {
-	cpuInfo := make(map[string]interface{})
+func GetCPUInfo(sysInfo sysinfo.SysInfo, dataUnit string) map[string]any {
+	cpuInfo := make(map[string]any)
 	cpuInfo["CPUModel"] = sysInfo.CPU.Model                            // CPU 型号
 	cpuInfo["CPUNumber"] = sysInfo.CPU.Cpus                            // CPU 数量
 	cpuInfo["CPUCores"] = sysInfo.CPU.Cores                            // CPU 核心数
@@ -160,8 +160,8 @@ func GetCPUInfo(sysInfo sysinfo.SysInfo, dataUnit string) map[string]interface{}
 //
 // 返回：
 //   - 产品信息
-func GetProductInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
-	productInfo := make(map[string]interface{})
+func GetProductInfo(sysInfo sysinfo.SysInfo) map[string]any {
+	productInfo := make(map[string]any)
 	productInfo["ProductVendor"] = sysInfo.Product.Vendor // 产品厂商
 	productInfo["ProductName"] = sysInfo.Product.Name     // 产品名称
 
@@ -173,8 +173,8 @@ func GetProductInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
 // 返回：
 //   - 时间信息
 //   - 错误信息
-func GetTimeInfo() (map[string]interface{}, error) {
-	timeInfo := make(map[string]interface{})
+func GetTimeInfo() (map[string]any, error) {
+	timeInfo := make(map[string]any)
 	timeInfo["BootTime"] = UnixTime2TimeString(int64(hostData.BootTime)) // 系统启动时间
 	day, hour, minute, second := UnixTime2DayHourMinuteSecond(int64(hostData.Uptime))
 	result := color.Sprintf("%vd %vh %vm %vs", day, hour, minute, second)
@@ -193,8 +193,8 @@ func GetTimeInfo() (map[string]interface{}, error) {
 //
 // 返回：
 //   - 用户信息
-func GetUserInfo() map[string]interface{} {
-	userInfo := make(map[string]interface{})
+func GetUserInfo() map[string]any {
+	userInfo := make(map[string]any)
 	userInfo["User"] = userData.Name           // 用户名称
 	userInfo["UserName"] = userData.Username   // 用户昵称
 	userInfo["UserUid"] = userData.Uid         // 用户 ID

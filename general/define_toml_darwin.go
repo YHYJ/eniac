@@ -28,27 +28,27 @@ type GenealogyConfig struct {
 }
 
 // 默认配置
-var defaultConf = map[string]interface{}{
-	"main": map[string]interface{}{
+var defaultConf = map[string]any{
+	"main": map[string]any{
 		"colorful": true,
 		"cycle":    true,
 	},
-	"genealogy": map[string]interface{}{
-		"bios": map[string]interface{}{
+	"genealogy": map[string]any{
+		"bios": map[string]any{
 			"items": []string{
 				"BIOSVendor",
 				"BIOSVersion",
 				"BIOSDate",
 			},
 		},
-		"board": map[string]interface{}{
+		"board": map[string]any{
 			"items": []string{
 				"BoardVendor",
 				"BoardName",
 				"BoardVersion",
 			},
 		},
-		"cpu": map[string]interface{}{
+		"cpu": map[string]any{
 			"items": []string{
 				"CPUModel",
 				"CPUNumber",
@@ -58,7 +58,7 @@ var defaultConf = map[string]interface{}{
 			},
 			"cache_unit": "KB",
 		},
-		"gpu": map[string]interface{}{
+		"gpu": map[string]any{
 			"items": []string{
 				"GPUAddress",
 				"GPUDriver",
@@ -66,7 +66,7 @@ var defaultConf = map[string]interface{}{
 				"GPUVendor",
 			},
 		},
-		"load": map[string]interface{}{
+		"load": map[string]any{
 			"items": []string{
 				"Load1",
 				"Load5",
@@ -74,7 +74,7 @@ var defaultConf = map[string]interface{}{
 				"Process",
 			},
 		},
-		"memory": map[string]interface{}{
+		"memory": map[string]any{
 			"items": []string{
 				"MemoryUsedPercent",
 				"MemoryTotal",
@@ -87,7 +87,7 @@ var defaultConf = map[string]interface{}{
 			"data_unit":    "GB",
 			"percent_unit": "%",
 		},
-		"nic": map[string]interface{}{
+		"nic": map[string]any{
 			"items": []string{
 				"NicName",
 				"NicMacAddress",
@@ -99,7 +99,7 @@ var defaultConf = map[string]interface{}{
 				"NicDuplex",
 			},
 		},
-		"os": map[string]interface{}{
+		"os": map[string]any{
 			"items": []string{
 				"OS",
 				"CurrentKernel",
@@ -109,13 +109,13 @@ var defaultConf = map[string]interface{}{
 				"Hostname",
 			},
 		},
-		"product": map[string]interface{}{
+		"product": map[string]any{
 			"items": []string{
 				"ProductVendor",
 				"ProductName",
 			},
 		},
-		"storage": map[string]interface{}{
+		"storage": map[string]any{
 			"items": []string{
 				"StorageName",
 				"StorageSize",
@@ -127,8 +127,8 @@ var defaultConf = map[string]interface{}{
 				"StorageRemovable",
 			},
 		},
-		"swap": map[string]interface{}{
-			"items": map[string]interface{}{
+		"swap": map[string]any{
+			"items": map[string]any{
 				"available": []string{
 					"SwapTotal",
 					"SwapFree",
@@ -140,14 +140,14 @@ var defaultConf = map[string]interface{}{
 			"data_unit":    "GB",
 			"percent_unit": "%",
 		},
-		"time": map[string]interface{}{
+		"time": map[string]any{
 			"items": []string{
 				"StartTime",
 				"Uptime",
 				"BootTime",
 			},
 		},
-		"user": map[string]interface{}{
+		"user": map[string]any{
 			"items": []string{
 				"UserName",
 				"User",

@@ -543,7 +543,7 @@ func GrabInformationToTable(config *general.Config, flags map[string]bool) {
 			for index := 1; index <= len(storageInfo); index++ {
 				rowData = []string{diskPart + strconv.Itoa(index)} // 行数据
 				for _, item := range items {
-					rowData = append(rowData, storageInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string))
+					rowData = append(rowData, storageInfo[strconv.Itoa(index)].(map[string]any)[item].(string))
 				}
 				tableData = append(tableData, rowData)
 			}
@@ -1287,7 +1287,7 @@ func GrabInformationToTab(config *general.Config) {
 		for index := 1; index <= len(storageInfo); index++ {
 			rowData = []string{} // 行数据
 			for _, item := range items {
-				rowData = append(rowData, storageInfo[strconv.Itoa(index)].(map[string]interface{})[item].(string))
+				rowData = append(rowData, storageInfo[strconv.Itoa(index)].(map[string]any)[item].(string))
 			}
 			tableData = append(tableData, rowData)
 		}

@@ -22,11 +22,11 @@ import (
 //
 // 返回：
 //   - 存储设备信息
-func GetStorageInfo() map[string]interface{} {
-	storageInfo := make(map[string]interface{})
+func GetStorageInfo() map[string]any {
+	storageInfo := make(map[string]any)
 	index := 1 // 排除编号为0的虚拟设备
 	for _, disk := range blockData.Disks {
-		storageValue := make(map[string]interface{})
+		storageValue := make(map[string]any)
 		if disk.SizeBytes > 0 && disk.DriveType.String() != "virtual" {
 			storageValue["StorageName"] = disk.Name
 			storageValue["StorageDriver"] = disk.StorageController.String()
@@ -52,8 +52,8 @@ func GetStorageInfo() map[string]interface{} {
 //
 // 返回：
 //   - 系统信息 (OS Info)
-func GetOSInfo(sysInfo sysinfo.SysInfo) map[string]interface{} {
-	osInfo := make(map[string]interface{})
+func GetOSInfo(sysInfo sysinfo.SysInfo) map[string]any {
+	osInfo := make(map[string]any)
 
 	// 需要额外步骤获取的信息
 	osCode := FindOSCode(hostData.PlatformVersion) // 系统代号
