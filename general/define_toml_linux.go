@@ -32,170 +32,198 @@ type PackageConfig struct {
 	Items []string `toml:"items"`
 }
 type UpdateConfig struct {
-	Items          []string `toml:"items"`
 	Basis          string   `toml:"basis"`
 	ArchRecordFile string   `toml:"arch_record_file"`
 	AurRecordFile  string   `toml:"aur_record_file"`
 	ArchDividing   string   `toml:"arch_dividing"`
 	AurDividing    string   `toml:"aur_dividing"`
+	Items          []string `toml:"items"`
 }
 
+// 配置项
 var (
+	// 允许用户修改的配置项
 	UpdateBasis          = "update-checker.timer"  // 更新检测服务状态判断依据
 	ArchUpdateRecordFile = "/tmp/checker-arch.log" // Arch Linux 官方仓库可更新包记录文件
 	AurUpdateRecordFile  = "/tmp/checker-aur.log"  // AUR 可更新包记录文件
+	// 使用默认值的配置项
+	colorful  = true
+	cycle     = true
+	biosItems = []string{
+		"BIOSVendor",
+		"BIOSVersion",
+		"BIOSDate",
+	}
+	boardItems = []string{
+		"BoardVendor",
+		"BoardName",
+		"BoardVersion",
+	}
+	cpuItems = []string{
+		"CPUModel",
+		"CPUNumber",
+		"CPUCores",
+		"CPUThreads",
+		"CPUCache",
+	}
+	cpuCacheUnit = "KB"
+	gpuItems     = []string{
+		"GPUAddress",
+		"GPUDriver",
+		"GPUProduct",
+		"GPUVendor",
+	}
+	loadItems = []string{
+		"Load1",
+		"Load5",
+		"Load15",
+		"Process",
+	}
+	memoryItems = []string{
+		"MemoryUsedPercent",
+		"MemoryTotal",
+		"MemoryUsed",
+		"MemoryAvail",
+		"MemoryFree",
+		"MemoryBuffCache",
+		"MemoryShared",
+	}
+	memoryDataUnit    = "GB"
+	memoryPercentUnit = "%"
+	nicItems          = []string{
+		"NicName",
+		"NicMacAddress",
+		"NicDriver",
+		"NicVendor",
+		"NicProduct",
+		"NicPCIAddress",
+		"NicSpeed",
+		"NicDuplex",
+	}
+	osItems = []string{
+		"OS",
+		"CurrentKernel",
+		"LatestKernel",
+		"Platform",
+		"Arch",
+		"TimeZone",
+		"Hostname",
+	}
+	packageItems = []string{
+		"PackageAsExplicitCount",
+		"PackageAsDependencyCount",
+		"PackageTotalCount",
+		"PackageTotalSize",
+	}
+	productItems = []string{
+		"ProductVendor",
+		"ProductName",
+	}
+	storageItems = []string{
+		"StorageName",
+		"StorageSize",
+		"StorageType",
+		"StorageDriver",
+		"StorageVendor",
+		"StorageModel",
+		"StorageSerial",
+		"StorageRemovable",
+	}
+	swapItemsAvailable = []string{
+		"SwapTotal",
+		"SwapFree",
+	}
+	swapItemsUnavailable = []string{
+		"SwapStatus",
+	}
+	swapDataUnit    = "GB"
+	swapPercentUnit = "%"
+	timeItems       = []string{
+		"StartTime",
+		"Uptime",
+		"BootTime",
+	}
+	updateItems = []string{
+		"UpdateCheckDaemonStatus",
+		"LastCheckTime",
+		"UpdatablePackageQuantity",
+		"UpdatablePackageList",
+	}
+	updateArchDividing = "······Arch Official Repository······"
+	updateAurDividing  = "········Arch User Repository········"
+	userItems          = []string{
+		"UserName",
+		"User",
+		"UserUid",
+		"UserGid",
+		"UserHomeDir",
+	}
 )
 
-// 默认配置
-var defaultConf = map[string]any{
-	"main": map[string]any{
-		"colorful": true,
-		"cycle":    true,
+// 配置
+var appConfig = Config{
+	Main: MainConfig{
+		Colorful: colorful,
+		Cycle:    cycle,
 	},
-	"genealogy": map[string]any{
-		"bios": map[string]any{
-			"items": []string{
-				"BIOSVendor",
-				"BIOSVersion",
-				"BIOSDate",
+	Genealogy: GenealogyConfig{
+		Bios: BiosConfig{
+			Items: biosItems,
+		},
+		Board: BoardConfig{
+			Items: boardItems,
+		},
+		CPU: CPUConfig{
+			CacheUnit: cpuCacheUnit,
+			Items:     cpuItems,
+		},
+		GPU: GPUConfig{
+			Items: gpuItems,
+		},
+		Load: LoadConfig{
+			Items: loadItems,
+		},
+		Memory: MemoryConfig{
+			DataUnit:    memoryDataUnit,
+			PercentUnit: memoryPercentUnit,
+			Items:       memoryItems,
+		},
+		Nic: NicConfig{
+			Items: nicItems,
+		},
+		OS: OSConfig{
+			Items: osItems,
+		},
+		Package: PackageConfig{
+			Items: packageItems,
+		},
+		Product: ProductConfig{
+			Items: productItems,
+		},
+		Storage: StorageConfig{
+			Items: storageItems,
+		},
+		Swap: SwapConfig{
+			DataUnit:    swapDataUnit,
+			PercentUnit: swapPercentUnit,
+			Items: SwapItemsConfig{
+				Available:   swapItemsAvailable,
+				Unavailable: swapItemsUnavailable,
 			},
 		},
-		"board": map[string]any{
-			"items": []string{
-				"BoardVendor",
-				"BoardName",
-				"BoardVersion",
-			},
+		Time: TimeConfig{
+			Items: timeItems,
 		},
-		"cpu": map[string]any{
-			"items": []string{
-				"CPUModel",
-				"CPUNumber",
-				"CPUCores",
-				"CPUThreads",
-				"CPUCache",
-			},
-			"cache_unit": "KB",
+		Update: UpdateConfig{
+			Basis:          UpdateBasis,
+			ArchRecordFile: ArchUpdateRecordFile,
+			AurRecordFile:  AurUpdateRecordFile,
+			ArchDividing:   updateArchDividing,
+			AurDividing:    updateAurDividing,
+			Items:          updateItems,
 		},
-		"gpu": map[string]any{
-			"items": []string{
-				"GPUAddress",
-				"GPUDriver",
-				"GPUProduct",
-				"GPUVendor",
-			},
-		},
-		"load": map[string]any{
-			"items": []string{
-				"Load1",
-				"Load5",
-				"Load15",
-				"Process",
-			},
-		},
-		"memory": map[string]any{
-			"items": []string{
-				"MemoryUsedPercent",
-				"MemoryTotal",
-				"MemoryUsed",
-				"MemoryAvail",
-				"MemoryFree",
-				"MemoryBuffCache",
-				"MemoryShared",
-			},
-			"data_unit":    "GB",
-			"percent_unit": "%",
-		},
-		"nic": map[string]any{
-			"items": []string{
-				"NicName",
-				"NicMacAddress",
-				"NicDriver",
-				"NicVendor",
-				"NicProduct",
-				"NicPCIAddress",
-				"NicSpeed",
-				"NicDuplex",
-			},
-		},
-		"os": map[string]any{
-			"items": []string{
-				"OS",
-				"CurrentKernel",
-				"LatestKernel",
-				"Platform",
-				"Arch",
-				"TimeZone",
-				"Hostname",
-			},
-		},
-		"package": map[string]any{
-			"items": []string{
-				"PackageAsExplicitCount",
-				"PackageAsDependencyCount",
-				"PackageTotalCount",
-				"PackageTotalSize",
-			},
-		},
-		"product": map[string]any{
-			"items": []string{
-				"ProductVendor",
-				"ProductName",
-			},
-		},
-		"storage": map[string]any{
-			"items": []string{
-				"StorageName",
-				"StorageSize",
-				"StorageType",
-				"StorageDriver",
-				"StorageVendor",
-				"StorageModel",
-				"StorageSerial",
-				"StorageRemovable",
-			},
-		},
-		"swap": map[string]any{
-			"items": map[string]any{
-				"available": []string{
-					"SwapTotal",
-					"SwapFree",
-				},
-				"unavailable": []string{
-					"SwapStatus",
-				},
-			},
-			"data_unit":    "GB",
-			"percent_unit": "%",
-		},
-		"time": map[string]any{
-			"items": []string{
-				"StartTime",
-				"Uptime",
-				"BootTime",
-			},
-		},
-		"update": map[string]any{
-			"items": []string{
-				"UpdateCheckDaemonStatus",
-				"LastCheckTime",
-				"UpdatablePackageQuantity",
-				"UpdatablePackageList",
-			},
-			"basis":            UpdateBasis,
-			"arch_record_file": ArchUpdateRecordFile,
-			"aur_record_file":  AurUpdateRecordFile,
-			"arch_dividing":    "······Arch Official Repository······",
-			"aur_dividing":     "········Arch User Repository········",
-		},
-		"user": map[string]any{
-			"items": []string{
-				"UserName",
-				"User",
-				"UserUid",
-				"UserGid",
-				"UserHomeDir",
-			},
+		User: UserConfig{
+			Items: userItems,
 		},
 	},
 }

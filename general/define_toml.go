@@ -13,7 +13,9 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
+	"github.com/gookit/color"
 	"github.com/pelletier/go-toml"
 )
 
@@ -22,7 +24,6 @@ type Config struct {
 	Main      MainConfig      `toml:"main"`
 	Genealogy GenealogyConfig `toml:"genealogy"`
 }
-
 type MainConfig struct {
 	Colorful bool `toml:"colorful"`
 	Cycle    bool `toml:"cycle"`
@@ -35,8 +36,8 @@ type BoardConfig struct {
 	Items []string `toml:"items"`
 }
 type CPUConfig struct {
-	Items     []string `toml:"items"`
 	CacheUnit string   `toml:"cache_unit"`
+	Items     []string `toml:"items"`
 }
 type GPUConfig struct {
 	Items []string `toml:"items"`
@@ -45,9 +46,9 @@ type LoadConfig struct {
 	Items []string `toml:"items"`
 }
 type MemoryConfig struct {
-	Items       []string `toml:"items"`
 	DataUnit    string   `toml:"data_unit"`
 	PercentUnit string   `toml:"percent_unit"`
+	Items       []string `toml:"items"`
 }
 type NicConfig struct {
 	Items []string `toml:"items"`
@@ -62,9 +63,9 @@ type StorageConfig struct {
 	Items []string `toml:"items"`
 }
 type SwapConfig struct {
-	Items       SwapItemsConfig `toml:"items"`
 	DataUnit    string          `toml:"data_unit"`
 	PercentUnit string          `toml:"percent_unit"`
+	Items       SwapItemsConfig `toml:"items"`
 }
 type SwapItemsConfig struct {
 	Available   []string `toml:"available"`
@@ -138,23 +139,28 @@ func LoadConfigToStruct(configTree *toml.Tree) (*Config, error) {
 //   - 写入的字节数
 //   - 错误信息
 func WriteTomlConfig(filePath string) (int64, error) {
-	// 检测配置文件是否存在
-	if !FileExist(filePath) {
-		return 0, fmt.Errorf("Open %s: no such file or directory", filePath)
-	}
-	// 检测配置文件是否是 toml 文件
-	if !isTomlFile(filePath) {
-		return 0, fmt.Errorf("Open %s: is not a toml file", filePath)
-	}
-	// 把默认配置转换为 *toml.Tree 类型
-	tree, err := toml.TreeFromMap(defaultConf)
-	if err != nil {
-		return 0, err
-	}
-	// 打开一个文件并获取 io.Writer 接口
+	// 打开配置文件
 	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
 		return 0, err
 	}
-	return tree.WriteTo(file)
+	defer file.Close()
+
+	// 写入注释
+	manual := color.Sprintf("##\n## %s - %s\n## Generaled on %s\n##\n\n", Name, Version, time.Now().Format("2006-01-02 15:04:05"))
+	n, err := file.WriteString(manual)
+	if err != nil {
+		return int64(n), err
+	}
+
+	// 创建编码器并设置顺序保留
+	encoder := toml.NewEncoder(file)
+	encoder.Order(toml.OrderPreserve)
+
+	if err := encoder.Encode(appConfig); err != nil {
+		return int64(n), err
+	}
+
+	stat, _ := file.Stat()
+	return stat.Size(), nil
 }

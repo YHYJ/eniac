@@ -27,134 +27,161 @@ type GenealogyConfig struct {
 	User    UserConfig    `toml:"user"`
 }
 
-// 默认配置
-var defaultConf = map[string]any{
-	"main": map[string]any{
-		"colorful": true,
-		"cycle":    true,
+// 配置项
+var (
+	// 允许用户修改的配置项
+	// 使用默认值的配置项
+	colorful  = true
+	cycle     = true
+	biosItems = []string{
+		"BIOSVendor",
+		"BIOSVersion",
+		"BIOSDate",
+	}
+	boardItems = []string{
+		"BoardVendor",
+		"BoardName",
+		"BoardVersion",
+	}
+	cpuItems = []string{
+		"CPUModel",
+		"CPUNumber",
+		"CPUCores",
+		"CPUThreads",
+		"CPUCache",
+	}
+	cpuCacheUnit = "KB"
+	gpuItems     = []string{
+		"GPUAddress",
+		"GPUDriver",
+		"GPUProduct",
+		"GPUVendor",
+	}
+	loadItems = []string{
+		"Load1",
+		"Load5",
+		"Load15",
+		"Process",
+	}
+	memoryItems = []string{
+		"MemoryUsedPercent",
+		"MemoryTotal",
+		"MemoryUsed",
+		"MemoryAvail",
+		"MemoryFree",
+		"MemoryBuffCache",
+		"MemoryShared",
+	}
+	memoryDataUnit    = "GB"
+	memoryPercentUnit = "%"
+	nicItems          = []string{
+		"NicName",
+		"NicMacAddress",
+		"NicDriver",
+		"NicVendor",
+		"NicProduct",
+		"NicPCIAddress",
+		"NicSpeed",
+		"NicDuplex",
+	}
+	osItems = []string{
+		"OS",
+		"CurrentKernel",
+		"Platform",
+		"Arch",
+		"TimeZone",
+		"Hostname",
+	}
+	productItems = []string{
+		"ProductVendor",
+		"ProductName",
+	}
+	storageItems = []string{
+		"StorageName",
+		"StorageSize",
+		"StorageType",
+		"StorageDriver",
+		"StorageVendor",
+		"StorageModel",
+		"StorageSerial",
+		"StorageRemovable",
+	}
+	swapItemsAvailable = []string{
+		"SwapTotal",
+		"SwapFree",
+	}
+	swapItemsUnavailable = []string{
+		"SwapStatus",
+	}
+	swapDataUnit    = "GB"
+	swapPercentUnit = "%"
+	timeItems       = []string{
+		"StartTime",
+		"Uptime",
+		"BootTime",
+	}
+	userItems = []string{
+		"UserName",
+		"User",
+		"UserUid",
+		"UserGid",
+		"UserHomeDir",
+	}
+)
+
+// 配置
+var appConfig = Config{
+	Main: MainConfig{
+		Colorful: colorful,
+		Cycle:    cycle,
 	},
-	"genealogy": map[string]any{
-		"bios": map[string]any{
-			"items": []string{
-				"BIOSVendor",
-				"BIOSVersion",
-				"BIOSDate",
+	Genealogy: GenealogyConfig{
+		Bios: BiosConfig{
+			Items: biosItems,
+		},
+		Board: BoardConfig{
+			Items: boardItems,
+		},
+		CPU: CPUConfig{
+			CacheUnit: cpuCacheUnit,
+			Items:     cpuItems,
+		},
+		GPU: GPUConfig{
+			Items: gpuItems,
+		},
+		Load: LoadConfig{
+			Items: loadItems,
+		},
+		Memory: MemoryConfig{
+			DataUnit:    memoryDataUnit,
+			PercentUnit: memoryPercentUnit,
+			Items:       memoryItems,
+		},
+		Nic: NicConfig{
+			Items: nicItems,
+		},
+		OS: OSConfig{
+			Items: osItems,
+		},
+		Product: ProductConfig{
+			Items: productItems,
+		},
+		Storage: StorageConfig{
+			Items: storageItems,
+		},
+		Swap: SwapConfig{
+			DataUnit:    swapDataUnit,
+			PercentUnit: swapPercentUnit,
+			Items: SwapItemsConfig{
+				Available:   swapItemsAvailable,
+				Unavailable: swapItemsUnavailable,
 			},
 		},
-		"board": map[string]any{
-			"items": []string{
-				"BoardVendor",
-				"BoardName",
-				"BoardVersion",
-			},
+		Time: TimeConfig{
+			Items: timeItems,
 		},
-		"cpu": map[string]any{
-			"items": []string{
-				"CPUModel",
-				"CPUNumber",
-				"CPUCores",
-				"CPUThreads",
-				"CPUCache",
-			},
-			"cache_unit": "KB",
-		},
-		"gpu": map[string]any{
-			"items": []string{
-				"GPUAddress",
-				"GPUDriver",
-				"GPUProduct",
-				"GPUVendor",
-			},
-		},
-		"load": map[string]any{
-			"items": []string{
-				"Load1",
-				"Load5",
-				"Load15",
-				"Process",
-			},
-		},
-		"memory": map[string]any{
-			"items": []string{
-				"MemoryUsedPercent",
-				"MemoryTotal",
-				"MemoryUsed",
-				"MemoryAvail",
-				"MemoryFree",
-				"MemoryBuffCache",
-				"MemoryShared",
-			},
-			"data_unit":    "GB",
-			"percent_unit": "%",
-		},
-		"nic": map[string]any{
-			"items": []string{
-				"NicName",
-				"NicMacAddress",
-				"NicDriver",
-				"NicVendor",
-				"NicProduct",
-				"NicPCIAddress",
-				"NicSpeed",
-				"NicDuplex",
-			},
-		},
-		"os": map[string]any{
-			"items": []string{
-				"OS",
-				"CurrentKernel",
-				"Platform",
-				"Arch",
-				"TimeZone",
-				"Hostname",
-			},
-		},
-		"product": map[string]any{
-			"items": []string{
-				"ProductVendor",
-				"ProductName",
-			},
-		},
-		"storage": map[string]any{
-			"items": []string{
-				"StorageName",
-				"StorageSize",
-				"StorageType",
-				"StorageDriver",
-				"StorageVendor",
-				"StorageModel",
-				"StorageSerial",
-				"StorageRemovable",
-			},
-		},
-		"swap": map[string]any{
-			"items": map[string]any{
-				"available": []string{
-					"SwapTotal",
-					"SwapFree",
-				},
-				"unavailable": []string{
-					"SwapStatus",
-				},
-			},
-			"data_unit":    "GB",
-			"percent_unit": "%",
-		},
-		"time": map[string]any{
-			"items": []string{
-				"StartTime",
-				"Uptime",
-				"BootTime",
-			},
-		},
-		"user": map[string]any{
-			"items": []string{
-				"UserName",
-				"User",
-				"UserUid",
-				"UserGid",
-				"UserHomeDir",
-			},
+		User: UserConfig{
+			Items: userItems,
 		},
 	},
 }
